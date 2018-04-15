@@ -14,15 +14,17 @@
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:clipToPadding="false"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:paddingLeft="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingRight="16dp">
 
         <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_search"
-                android:contentDescription="@string/search"
-                android:paddingLeft="16dp"
-                android:paddingStart="16dp"/>
+                android:contentDescription="@string/search"/>
 
         <EditText
                 android:hint="@string/search"
@@ -30,13 +32,22 @@
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
                 android:background="@null"
                 android:id="@+id/search"
                 android:paddingTop="16dp"
                 android:paddingBottom="16dp"
-                android:paddingEnd="16dp"
-                android:paddingRight="16dp"
                 android:inputType="textNoSuggestions" />
+
+        <ImageView
+                android:id="@+id/clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_clear"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:contentDescription="@string/clear"
+                android:visibility="gone"/>
     </LinearLayout>
 
 </android.support.v7.widget.CardView>

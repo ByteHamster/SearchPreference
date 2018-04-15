@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import com.bytehamster.preferencesearch.PreferenceActivity;
@@ -22,6 +23,8 @@ public class PreferenceSearchActivity extends AppCompatActivity implements Adapt
     static final String EXTRA_INDEX_FILES = "files";
     private PreferenceSearcher searcher;
     private ArrayList<PreferenceSearcher.SearchResult> results;
+    private ImageView clearButton;
+    private EditText searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +37,21 @@ public class PreferenceSearchActivity extends AppCompatActivity implements Adapt
         for (Integer file : files) {
             searcher.addResourceFile(file);
         }
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        searchView = findViewById(R.id.search);
+        clearButton = findViewById(R.id.clear);
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchView.setText("");
+            }
+        });
 
         updateSearchResults("");
         ((ListView) findViewById(R.id.list)).setOnItemClickListener(this);
-        ((EditText) findViewById(R.id.search)).addTextChangedListener(textWatcher);
+        searchView.addTextChangedListener(textWatcher);
     }
 
     @Override
@@ -81,14 +93,17 @@ public class PreferenceSearchActivity extends AppCompatActivity implements Adapt
 
     private TextWatcher textWatcher = new TextWatcher() {
         @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
 
         @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
 
         @Override
         public void afterTextChanged(Editable editable) {
             updateSearchResults(editable.toString());
+            clearButton.setVisibility(editable.toString().isEmpty() ? View.GONE : View.VISIBLE);
         }
     };
 }

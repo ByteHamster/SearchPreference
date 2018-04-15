@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">PreferenceSearch</string>
     <string name="search">Search…</string>
+    <string name="clear">Clear</string>
 </resources>
