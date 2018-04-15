@@ -18,11 +18,6 @@ public class SearchPreference extends Preference implements View.OnClickListener
     private ArrayList<Integer> filesToIndex = new ArrayList<>();
 
     @SuppressWarnings("unused")
-    public SearchPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
-
-    @SuppressWarnings("unused")
     public SearchPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
