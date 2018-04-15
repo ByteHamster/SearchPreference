@@ -20,9 +20,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 public class PreferenceSearchActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     static final String EXTRA_INDEX_FILES = "files";
@@ -32,6 +30,7 @@ public class PreferenceSearchActivity extends AppCompatActivity implements Adapt
     static final String EXTRA_BREADCRUMBS_ENABLED = "breadcrumbs_enabled";
 
     private static final String SHARED_PREFS_FILE = "preferenceSearch";
+    private static final int MAX_HISTORY = 5;
     private PreferenceSearcher searcher;
     private ArrayList<PreferenceSearcher.SearchResult> results;
     private ArrayList<String> history;
@@ -100,11 +99,23 @@ public class PreferenceSearchActivity extends AppCompatActivity implements Adapt
 
     private void loadHistory() {
         history = new ArrayList<>();
-
-        if (getIntent().getBooleanExtra(EXTRA_HISTORY_ENABLED, true)) {
-            Set<String> set = prefs.getStringSet("history", new HashSet<String>());
-            history.addAll(set);
+        if (!getIntent().getBooleanExtra(EXTRA_HISTORY_ENABLED, true)) {
+            return;
         }
+
+        int size = prefs.getInt("history_size", 0);
+        for (int i = 0; i < size; i++) {
+            history.add(prefs.getString("history_" + i, null));
+        }
+    }
+
+    private void saveHistory() {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("history_size", history.size());
+        for (int i = 0; i < history.size(); i++) {
+            editor.putString("history_" + i, history.get(i));
+        }
+        editor.apply();
     }
 
     private void clearHistory() {
@@ -116,15 +127,13 @@ public class PreferenceSearchActivity extends AppCompatActivity implements Adapt
 
     private void addHistoryEntry(String entry) {
         if (!history.contains(entry)) {
-            history.add(entry);
+            if (history.size() >= MAX_HISTORY) {
+                history.remove(history.size() - 1);
+            }
+            history.add(0, entry);
             saveHistory();
             updateSearchResults();
         }
-    }
-
-    private void saveHistory() {
-        Set<String> set = new HashSet<>(history);
-        prefs.edit().putStringSet("history", set).apply();
     }
 
     @Override
