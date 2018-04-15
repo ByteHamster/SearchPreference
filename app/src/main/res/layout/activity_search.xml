@@ -10,7 +10,7 @@
     <include layout="@layout/search_view" />
 
     <ListView
-            android:paddingTop="16dp"
+            android:paddingTop="8dp"
             android:clipToPadding="false"
             android:id="@+id/list"
             android:layout_width="match_parent"

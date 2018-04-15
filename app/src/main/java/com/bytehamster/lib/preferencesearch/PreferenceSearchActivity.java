@@ -61,8 +61,8 @@ public class PreferenceSearchActivity extends AppCompatActivity implements Adapt
                 m.put("summary", result.summary);
                 results2.add(m);
             }
-            SimpleAdapter sa = new SimpleAdapter(this, results2, android.R.layout.simple_list_item_2,
-                    new String[]{"title", "summary"}, new int[]{android.R.id.text1, android.R.id.text2});
+            SimpleAdapter sa = new SimpleAdapter(this, results2, R.layout.search_result_item,
+                    new String[]{"title", "summary"}, new int[]{R.id.title, R.id.summary});
             ((ListView) findViewById(R.id.list)).setAdapter(sa);
         } catch (Exception e) {
             e.printStackTrace();
