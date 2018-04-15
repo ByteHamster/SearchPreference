@@ -91,10 +91,6 @@ class PreferenceSearcher {
     ArrayList<SearchResult> searchFor(final String keyword) {
         ArrayList<SearchResult> results = new ArrayList<>();
 
-        if (TextUtils.isEmpty(keyword)) {
-            return results;
-        }
-
         for (SearchResult res : allEntries) {
             if (res.contains(keyword)) {
                 results.add(res);
