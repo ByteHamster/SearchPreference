@@ -9,11 +9,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#000"
+            android:textSize="18sp"
             android:id="@+id/title"/>
 
     <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#777"
+            android:textColor="#000"
+            android:textSize="14sp"
             android:id="@+id/summary"/>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#777"
+            android:textSize="14sp"
+            android:id="@+id/breadcrumbs"/>
 </LinearLayout>

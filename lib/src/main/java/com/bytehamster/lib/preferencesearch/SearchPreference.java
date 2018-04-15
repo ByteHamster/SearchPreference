@@ -16,7 +16,9 @@ import java.util.ArrayList;
 
 public class SearchPreference extends Preference implements View.OnClickListener {
     private ArrayList<Integer> filesToIndex = new ArrayList<>();
+    private ArrayList<String> breadcrumbsToIndex = new ArrayList<>();
     private boolean historyEnabled = true;
+    private boolean breadcrumbsEnabled = true;
     private Class classToBeCalled;
 
     @SuppressWarnings("unused")
@@ -56,13 +58,20 @@ public class SearchPreference extends Preference implements View.OnClickListener
     public void onClick(View view) {
         Intent i = new Intent(getContext(), PreferenceSearchActivity.class);
         i.putExtra(PreferenceSearchActivity.EXTRA_INDEX_FILES, filesToIndex);
+        i.putExtra(PreferenceSearchActivity.EXTRA_INDEX_BREADCRUMBS, breadcrumbsToIndex);
         i.putExtra(PreferenceSearchActivity.EXTRA_HISTORY_ENABLED, historyEnabled);
         i.putExtra(PreferenceSearchActivity.EXTRA_CLASS_TO_BE_CALLED, classToBeCalled);
+        i.putExtra(PreferenceSearchActivity.EXTRA_BREADCRUMBS_ENABLED, breadcrumbsEnabled);
         getContext().startActivity(i);
     }
 
     public void addResourceFileToIndex(@XmlRes int resId) {
+        addResourceFileToIndex(resId, "");
+    }
+
+    public void addResourceFileToIndex(@XmlRes int resId, String breadcrumb) {
         filesToIndex.add(resId);
+        breadcrumbsToIndex.add(breadcrumb);
     }
 
     public void setHistoryEnabled(boolean historyEnabled) {
@@ -71,5 +80,9 @@ public class SearchPreference extends Preference implements View.OnClickListener
 
     public void openActivityOnResultClick(Class<? extends Activity> classToBeCalled) {
         this.classToBeCalled = classToBeCalled;
+    }
+
+    public void setBreadcrumbsEnabled(boolean breadcrumbsEnabled) {
+        this.breadcrumbsEnabled = breadcrumbsEnabled;
     }
 }

@@ -29,8 +29,10 @@ public class PreferenceActivity extends AppCompatActivity {
 
             searchPreference = (SearchPreference) findPreference("searchPreference");
             searchPreference.openActivityOnResultClick(PreferenceActivity.class);
-            searchPreference.addResourceFileToIndex(R.xml.preferences);
             searchPreference.setHistoryEnabled(true);
+
+            searchPreference.setBreadcrumbsEnabled(false);
+            searchPreference.addResourceFileToIndex(R.xml.preferences);
         }
 
         @Override

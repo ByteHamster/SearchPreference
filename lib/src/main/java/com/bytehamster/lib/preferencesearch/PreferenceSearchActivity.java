@@ -26,8 +26,11 @@ import java.util.Set;
 
 public class PreferenceSearchActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     static final String EXTRA_INDEX_FILES = "files";
+    static final String EXTRA_INDEX_BREADCRUMBS = "breadcrumbs";
     static final String EXTRA_HISTORY_ENABLED = "history_enabled";
     static final String EXTRA_CLASS_TO_BE_CALLED = "class_to_be_called";
+    static final String EXTRA_BREADCRUMBS_ENABLED = "breadcrumbs_enabled";
+
     private static final String SHARED_PREFS_FILE = "preferenceSearch";
     private PreferenceSearcher searcher;
     private ArrayList<PreferenceSearcher.SearchResult> results;
@@ -48,8 +51,12 @@ public class PreferenceSearchActivity extends AppCompatActivity implements Adapt
         searcher = new PreferenceSearcher(this);
 
         ArrayList<Integer> files = getIntent().getIntegerArrayListExtra(EXTRA_INDEX_FILES);
-        for (Integer file : files) {
-            searcher.addResourceFile(file);
+        ArrayList<String> breadcrumbs = getIntent().getStringArrayListExtra(EXTRA_INDEX_BREADCRUMBS);
+        if (files.size() != files.size()) {
+            throw new AssertionError();
+        }
+        for (int i = 0; i < files.size(); i++) {
+            searcher.addResourceFile(files.get(i), breadcrumbs.get(i));
         }
 
         if (getSupportActionBar() != null) {
@@ -149,10 +156,13 @@ public class PreferenceSearchActivity extends AppCompatActivity implements Adapt
                 Map<String, String> m = new HashMap<>();
                 m.put("title", result.title);
                 m.put("summary", result.summary);
+                if (getIntent().getBooleanExtra(EXTRA_BREADCRUMBS_ENABLED, true)) {
+                    m.put("breadcrumbs", result.breadcrumbs);
+                }
                 results2.add(m);
             }
             SimpleAdapter sa = new SimpleAdapter(this, results2, R.layout.search_result_item,
-                    new String[]{"title", "summary"}, new int[]{R.id.title, R.id.summary});
+                    new String[]{"title", "summary", "breadcrumbs"}, new int[]{R.id.title, R.id.summary, R.id.breadcrumbs});
             listView.setAdapter(sa);
             showingHistory = false;
 
