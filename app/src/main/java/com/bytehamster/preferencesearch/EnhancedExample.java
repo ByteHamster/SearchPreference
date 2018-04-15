@@ -6,6 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import com.bytehamster.lib.preferencesearch.SearchPreference;
 import com.bytehamster.lib.preferencesearch.SearchPreferenceResult;
 
+/**
+ * This file demonstrates some additional features that might not be needed when setting it up for the first time
+ */
 public class EnhancedExample extends AppCompatActivity {
 
     @Override
@@ -41,9 +44,10 @@ public class EnhancedExample extends AppCompatActivity {
                 if (result.getResourceFile() == R.xml.preferences) {
                     getPreferenceScreen().removePreference(searchPreference); // Do not allow to click search multiple times
                     result.scrollTo();
-                    result.setIcon();
+                    findPreference(result.getKey()).setTitle("RESULT: " + findPreference(result.getKey()).getTitle());
                 } else {
                     // Result was found in the other file
+                    getPreferenceScreen().removeAll();
                     addPreferencesFromResource(R.xml.preferences2);
                     result.scrollTo();
                     result.setIcon();

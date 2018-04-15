@@ -6,6 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import com.bytehamster.lib.preferencesearch.SearchPreferenceResult;
 import com.bytehamster.lib.preferencesearch.SearchPreference;
 
+/**
+ * This file contains a minimal working example for the library
+ */
 public class SimpleExample extends AppCompatActivity {
 
     @Override

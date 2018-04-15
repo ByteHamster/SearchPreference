@@ -136,7 +136,8 @@ class PreferenceSearcher {
         }
 
         private boolean contains(String keyword) {
-            return stringContains(title, keyword) || stringContains(summary, keyword) || stringContains(entries, keyword);
+            return stringContains(title, keyword) || stringContains(summary, keyword)
+                    || stringContains(entries, keyword) || stringContains(breadcrumbs, keyword);
         }
 
         @Override
