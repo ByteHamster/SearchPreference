@@ -3,6 +3,7 @@ package com.bytehamster.lib.preferencesearch;
 import android.content.Context;
 import android.content.Intent;
 import android.preference.Preference;
+import android.support.annotation.XmlRes;
 import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -11,7 +12,11 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import com.bytehamster.preferencesearch.R;
 
+import java.util.ArrayList;
+
 public class SearchPreference extends Preference implements View.OnClickListener {
+    private ArrayList<Integer> filesToIndex = new ArrayList<>();
+
     public SearchPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
@@ -42,6 +47,12 @@ public class SearchPreference extends Preference implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
-        getContext().startActivity(new Intent(getContext(), PreferenceSearchActivity.class));
+        Intent i = new Intent(getContext(), PreferenceSearchActivity.class);
+        i.putExtra(PreferenceSearchActivity.EXTRA_INDEX_FILES, filesToIndex);
+        getContext().startActivity(i);
+    }
+
+    public void addResourceFileToIndex(@XmlRes int resId) {
+        filesToIndex.add(resId);
     }
 }

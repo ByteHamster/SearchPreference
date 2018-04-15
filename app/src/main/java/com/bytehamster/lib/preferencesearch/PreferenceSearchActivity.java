@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PreferenceSearchActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+    static final String EXTRA_INDEX_FILES = "files";
     private PreferenceSearcher searcher;
     private ArrayList<PreferenceSearcher.SearchResult> results;
 
@@ -28,28 +29,17 @@ public class PreferenceSearchActivity extends AppCompatActivity implements Adapt
         setContentView(R.layout.activity_main);
 
         searcher = new PreferenceSearcher(this);
-        searcher.addResourceFile(R.xml.preferences);
+
+        ArrayList<Integer> files = getIntent().getIntegerArrayListExtra(EXTRA_INDEX_FILES);
+        for (Integer file : files) {
+            searcher.addResourceFile(file);
+        }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         updateSearchResults("");
         ((ListView) findViewById(R.id.list)).setOnItemClickListener(this);
-        ((EditText) findViewById(R.id.search)).addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                updateSearchResults(editable.toString());
-            }
-        });
+        ((EditText) findViewById(R.id.search)).addTextChangedListener(textWatcher);
     }
 
     @Override
@@ -84,7 +74,21 @@ public class PreferenceSearchActivity extends AppCompatActivity implements Adapt
         PreferenceSearcher.SearchResult r = results.get(position);
 
         Intent i = new Intent(this, PreferenceActivity.class);
-        i.putExtra("KEY", r.key);
+        i.putExtra(PreferenceSearchResult.ARGUMENT_KEY, r.key);
+        i.putExtra(PreferenceSearchResult.ARGUMENT_FILE, r.resId);
         startActivity(i);
     }
+
+    private TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            updateSearchResults(editable.toString());
+        }
+    };
 }
