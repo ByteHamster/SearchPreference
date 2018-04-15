@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import com.bytehamster.preferencesearch.R;
@@ -25,7 +26,10 @@ public class PreferenceSearchResult {
     }
 
     private ListView findListView() {
-        return fragment.getView().findViewById(android.R.id.list);
+        if (fragment.getView() != null) {
+            return fragment.getView().findViewById(android.R.id.list);
+        }
+        return null;
     }
 
     public boolean hasResult() {
@@ -38,6 +42,10 @@ public class PreferenceSearchResult {
 
     public void scrollTo() {
         final ListView listView = findListView();
+        if (listView == null) {
+            Log.e("PreferenceSearchResult", "ListView not found");
+            return;
+        }
         listView.post(new Runnable() {
             @Override
             public void run() {

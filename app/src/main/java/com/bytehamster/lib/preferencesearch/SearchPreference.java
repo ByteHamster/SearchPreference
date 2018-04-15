@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 public class SearchPreference extends Preference implements View.OnClickListener {
     private ArrayList<Integer> filesToIndex = new ArrayList<>();
+    private boolean historyEnabled = true;
 
     @SuppressWarnings("unused")
     public SearchPreference(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -36,6 +37,9 @@ public class SearchPreference extends Preference implements View.OnClickListener
     protected View onCreateView(ViewGroup parent) {
         super.onCreateView(parent);
         LayoutInflater li = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        if (li == null) {
+            return null;
+        }
         View root = li.inflate(R.layout.search_preference, parent, false);
 
         EditText searchText = root.findViewById(R.id.search);
@@ -51,10 +55,15 @@ public class SearchPreference extends Preference implements View.OnClickListener
     public void onClick(View view) {
         Intent i = new Intent(getContext(), PreferenceSearchActivity.class);
         i.putExtra(PreferenceSearchActivity.EXTRA_INDEX_FILES, filesToIndex);
+        i.putExtra(PreferenceSearchActivity.EXTRA_HISTORY_ENABLED, historyEnabled);
         getContext().startActivity(i);
     }
 
     public void addResourceFileToIndex(@XmlRes int resId) {
         filesToIndex.add(resId);
+    }
+
+    public void setHistoryEnabled(boolean historyEnabled) {
+        this.historyEnabled = historyEnabled;
     }
 }

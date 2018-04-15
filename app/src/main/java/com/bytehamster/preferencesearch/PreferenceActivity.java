@@ -3,6 +3,7 @@ package com.bytehamster.preferencesearch;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import com.bytehamster.lib.preferencesearch.PreferenceSearchResult;
 import com.bytehamster.lib.preferencesearch.SearchPreference;
 
@@ -28,6 +29,7 @@ public class PreferenceActivity extends AppCompatActivity {
 
             searchPreference = (SearchPreference) findPreference("searchPreference");
             searchPreference.addResourceFileToIndex(R.xml.preferences);
+            searchPreference.setHistoryEnabled(true);
         }
 
         @Override
@@ -36,6 +38,8 @@ public class PreferenceActivity extends AppCompatActivity {
 
             PreferenceSearchResult result = new PreferenceSearchResult(this);
             if (result.hasResult()) {
+                Log.d("PreferenceActivity", "Found " + result + " in " + result.getResourceFile());
+
                 getPreferenceScreen().removePreference(searchPreference);
                 result.scrollTo();
                 result.setIcon();

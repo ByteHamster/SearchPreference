@@ -21,7 +21,6 @@ import com.bytehamster.preferencesearch.PreferenceActivity;
 import com.bytehamster.preferencesearch.R;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -29,6 +28,7 @@ import java.util.Set;
 
 public class PreferenceSearchActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     static final String EXTRA_INDEX_FILES = "files";
+    static final String EXTRA_HISTORY_ENABLED = "history_enabled";
     private static final String SHARED_PREFS_FILE = "preferenceSearch";
     private PreferenceSearcher searcher;
     private ArrayList<PreferenceSearcher.SearchResult> results;
@@ -51,7 +51,10 @@ public class PreferenceSearchActivity extends AppCompatActivity implements Adapt
         for (Integer file : files) {
             searcher.addResourceFile(file);
         }
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         loadHistory();
         searchView = findViewById(R.id.search);
@@ -86,9 +89,12 @@ public class PreferenceSearchActivity extends AppCompatActivity implements Adapt
     }
 
     private void loadHistory() {
-        Set<String> set = prefs.getStringSet("history", new HashSet<String>());
         history = new ArrayList<>();
-        history.addAll(set);
+
+        if (getIntent().getBooleanExtra(EXTRA_HISTORY_ENABLED, true)) {
+            Set<String> set = prefs.getStringSet("history", new HashSet<String>());
+            history.addAll(set);
+        }
     }
 
     private void clearHistory() {
