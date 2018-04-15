@@ -17,18 +17,22 @@ import java.util.ArrayList;
 public class SearchPreference extends Preference implements View.OnClickListener {
     private ArrayList<Integer> filesToIndex = new ArrayList<>();
 
+    @SuppressWarnings("unused")
     public SearchPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
+    @SuppressWarnings("unused")
     public SearchPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
+    @SuppressWarnings("unused")
     public SearchPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
+    @SuppressWarnings("unused")
     public SearchPreference(Context context) {
         super(context);
     }
@@ -39,8 +43,11 @@ public class SearchPreference extends Preference implements View.OnClickListener
         LayoutInflater li = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View root = li.inflate(R.layout.search_preference, parent, false);
 
-        ((EditText) root.findViewById(R.id.search)).setInputType(InputType.TYPE_NULL);
-        root.findViewById(R.id.search).setOnClickListener(this);
+        EditText searchText = root.findViewById(R.id.search);
+        searchText.setFocusable(false);
+        searchText.setInputType(InputType.TYPE_NULL);
+        searchText.setOnClickListener(this);
+
         root.findViewById(R.id.search_card).setOnClickListener(this);
         return root;
     }
