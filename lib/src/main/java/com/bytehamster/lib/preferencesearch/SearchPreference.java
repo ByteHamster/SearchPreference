@@ -65,23 +65,45 @@ public class SearchPreference extends Preference implements View.OnClickListener
         getContext().startActivity(i);
     }
 
+    /**
+     * Makes the search index include the given R.xml resource
+     * @param resId The resource to index
+     */
     public void addResourceFileToIndex(@XmlRes int resId) {
         addResourceFileToIndex(resId, "");
     }
 
+    /**
+     * Makes the search index include the given R.xml resource
+     * @param resId The resource to index
+     * @param breadcrumb Prefix to add to breadcrumbs when displaying search results from this file
+     */
     public void addResourceFileToIndex(@XmlRes int resId, String breadcrumb) {
         filesToIndex.add(resId);
         breadcrumbsToIndex.add(breadcrumb);
     }
 
+    /**
+     * Show a history of recent search terms if nothing was typed yet
+     * @param historyEnabled True if history should be enabled
+     */
     public void setHistoryEnabled(boolean historyEnabled) {
         this.historyEnabled = historyEnabled;
     }
 
+    /**
+     * Specifies which Activity should be called when a search result was pressed
+     * @param classToBeCalled The Activity to be called
+     */
     public void openActivityOnResultClick(Class<? extends Activity> classToBeCalled) {
         this.classToBeCalled = classToBeCalled;
     }
 
+    /**
+     * Show breadcrumbs in the list of search results, containing of
+     * the prefix given in addResourceFileToIndex, PreferenceCategory and PreferenceScreen
+     * @param breadcrumbsEnabled True if breadcrumbs should be shown
+     */
     public void setBreadcrumbsEnabled(boolean breadcrumbsEnabled) {
         this.breadcrumbsEnabled = breadcrumbsEnabled;
     }

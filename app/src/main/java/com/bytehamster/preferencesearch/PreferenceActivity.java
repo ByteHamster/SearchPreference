@@ -3,7 +3,6 @@ package com.bytehamster.preferencesearch;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import com.bytehamster.lib.preferencesearch.SearchPreferenceResult;
 import com.bytehamster.lib.preferencesearch.SearchPreference;
 
@@ -13,10 +12,8 @@ public class PreferenceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        PrefsFragment details = new PrefsFragment();
-        details.setArguments(getIntent().getExtras());
         getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, details).commit();
+                .replace(android.R.id.content, new PrefsFragment()).commit();
     }
 
     public static class PrefsFragment extends PreferenceFragment {
@@ -38,10 +35,8 @@ public class PreferenceActivity extends AppCompatActivity {
         public void onStart() {
             super.onStart();
 
-            SearchPreferenceResult result = new SearchPreferenceResult(this);
+            SearchPreferenceResult result = new SearchPreferenceResult(this, getActivity().getIntent().getExtras());
             if (result.hasData()) {
-                Log.d("PreferenceActivity", "Found " + result + " in " + result.getResourceFile());
-
                 getPreferenceScreen().removePreference(searchPreference);
                 result.scrollTo();
                 result.setIcon();

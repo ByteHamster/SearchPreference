@@ -15,9 +15,14 @@ public class SearchPreferenceResult {
     private Bundle bundle;
     private PreferenceFragment fragment;
 
-    public SearchPreferenceResult(PreferenceFragment fragment) {
+    /**
+     * View the result of a possible preference search
+     * @param fragment The fragment to use for finding the preference
+     * @param bundle The arguments containing the search result (intent.getExtras or fragment.getArguments)
+     */
+    public SearchPreferenceResult(PreferenceFragment fragment, Bundle bundle) {
         this.fragment = fragment;
-        bundle = fragment.getArguments();
+        this.bundle = bundle;
     }
 
     private Preference findPreference() {
@@ -31,14 +36,25 @@ public class SearchPreferenceResult {
         return null;
     }
 
+    /**
+     * Checks if there was a search result pressed
+     * @return True if a search result was pressed
+     */
     public boolean hasData() {
         return bundle != null && !TextUtils.isEmpty(bundle.getString(ARGUMENT_KEY));
     }
 
+    /**
+     * Returns the key of the preference pressed
+     * @return The key
+     */
     public String getKey() {
         return bundle.getString(ARGUMENT_KEY);
     }
 
+    /**
+     * Scrolls the PreferenceFragment to the position of the found preference
+     */
     public void scrollTo() {
         final ListView listView = findListView();
         if (listView == null) {
@@ -63,10 +79,17 @@ public class SearchPreferenceResult {
         });
     }
 
+    /**
+     * Sets the icon of the found preference to an arrow
+     */
     public void setIcon() {
         findPreference().setIcon(R.drawable.ic_arrow_right);
     }
 
+    /**
+     * Returns the file in which the result was found
+     * @return The file in which the result was found
+     */
     public int getResourceFile() {
         return bundle.getInt(ARGUMENT_FILE);
     }
