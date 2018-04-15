@@ -33,24 +33,18 @@ class PreferenceSearcher {
                         SearchResult result = new SearchResult();
                         result.resId = resId;
                         for (int i = 0; i < xpp.getAttributeCount(); i++) {
-                            String valSanitized = xpp.getAttributeValue(i);
-                            if (valSanitized.startsWith("@")) {
-                                try {
-                                    int id = Integer.parseInt(valSanitized.substring(1));
-                                    valSanitized = activity.getString(id);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
                             switch (xpp.getAttributeName(i)) {
                                 case "title":
-                                    result.title = valSanitized;
+                                    result.title = readString(xpp.getAttributeValue(i));
                                     break;
                                 case "summary":
-                                    result.summary = valSanitized;
+                                    result.summary = readString(xpp.getAttributeValue(i));
                                     break;
                                 case "key":
-                                    result.key = valSanitized;
+                                    result.key = readString(xpp.getAttributeValue(i));
+                                    break;
+                                case "entries":
+                                    result.entries = readStringArray(xpp.getAttributeValue(i));
                                     break;
                             }
                         }
@@ -69,6 +63,31 @@ class PreferenceSearcher {
         return results;
     }
 
+    private String readStringArray(String s) {
+        if (s.startsWith("@")) {
+            try {
+                int id = Integer.parseInt(s.substring(1));
+                String[] elements = activity.getResources().getStringArray(id);
+                return TextUtils.join(",", elements);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return s;
+    }
+
+    private String readString(String s) {
+        if (s.startsWith("@")) {
+            try {
+                int id = Integer.parseInt(s.substring(1));
+                return activity.getString(id);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return s;
+    }
+
     ArrayList<SearchResult> searchFor(final String keyword) {
         ArrayList<SearchResult> results = new ArrayList<>();
 
@@ -85,7 +104,7 @@ class PreferenceSearcher {
     }
 
     class SearchResult {
-        String title, summary, key;
+        String title, summary, key, entries;
         int resId;
 
         private boolean hasData() {
@@ -93,7 +112,7 @@ class PreferenceSearcher {
         }
 
         private boolean contains(String keyword) {
-            return stringContains(title, keyword) || stringContains(summary, keyword);
+            return stringContains(title, keyword) || stringContains(summary, keyword) || stringContains(entries, keyword);
         }
 
         @Override
