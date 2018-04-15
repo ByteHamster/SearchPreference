@@ -1,66 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
     <com.bytehamster.lib.preferencesearch.SearchPreference
             android:key="searchPreference" />
 
     <CheckBoxPreference
-            android:title="AbcTitle"
-            android:summary="CdeSummary"
-            android:key="blahKey"/>
+            android:title="Checkbox"
+            android:summary="This is a checkbox preference"
+            android:key="checkbox"/>
+
+    <PreferenceCategory
+            android:title="This is a preference category">
+        <CheckBoxPreference
+                android:title="Checkbox in category"
+                android:summary="This is a checkbox preference inside a category"
+                android:key="checkbox2"/>
+    </PreferenceCategory>
+
+    <PreferenceScreen
+            android:key="screen"
+            android:title="Screen"
+            android:summary="This is a PreferenceScreen">
+        <CheckBoxPreference
+                android:title="Checkbox in screen"
+                android:summary="This is a checkbox preference inside a PreferenceScreen"
+                android:key="checkbox3"/>
+    </PreferenceScreen>
+
     <CheckBoxPreference
             android:title="@string/app_name"
-            android:summary="@string/pref_header_general"
-            android:key="dfg"/>
-    <PreferenceCategory
-            android:title="@string/pref_title_vibrate">
-        <EditTextPreference
-                android:title="@string/pref_title_add_friends_to_messages"
-                android:summary="@string/pref_title_add_friends_to_messages"
-                android:key="gfd"/>
-        <CheckBoxPreference
-                android:title="@string/pref_title_social_recommendations"
-                android:summary="@string/pref_title_ringtone"
-                android:key="dfgfg"/>
-    </PreferenceCategory>
-    <PreferenceScreen
-            android:key="gfdfg"
-            android:title="@string/pref_title_display_name"
-            android:summary="@string/pref_ringtone_silent">
-        <CheckBoxPreference
-                android:title="@string/pref_header_data_sync"
-                android:summary="@string/pref_title_display_name"
-                android:key="gfdfg"/>
-    </PreferenceScreen>
+            android:summary="This checkbox demonstrates @string resources"
+            android:key="string"/>
+
     <EditTextPreference
-            android:title="@string/pref_title_add_friends_to_messages"
-            android:summary="@string/pref_title_add_friends_to_messages"
-            android:key="fdfsd"/>
+            android:title="Edit text"
+            android:summary="This is an edit text preference"
+            android:key="edittext"/>
+
+    <SwitchPreference
+            android:title="Switch preference"
+            android:summary="This allows to use a nice switch"
+            android:key="switch"/>
+
+    <ListPreference
+            android:title="List preference"
+            android:entries="@android:array/emailAddressTypes"
+            android:entryValues="@android:array/emailAddressTypes"
+            android:key="list"
+            android:summary="This allows to select from a list" />
+
+    <MultiSelectListPreference
+            android:title="Multi select list preference"
+            android:entries="@android:array/emailAddressTypes"
+            android:entryValues="@android:array/emailAddressTypes"
+            android:key="multilist"
+            android:summary="This allows to select multiple entries from a list" />
+
     <CheckBoxPreference
-            android:title="@string/pref_title_social_recommendations"
-            android:summary="@string/pref_title_ringtone"
-            android:key="fdfsdf"/>
-    <EditTextPreference
-            android:title="@string/pref_title_add_friends_to_messages"
-            android:summary="@string/pref_title_add_friends_to_messages"
-            android:key="fdfdsd"/>
+            android:title="Checkbox 4"
+            android:summary="This checkbox is just there to fill the screen"
+            android:key="checkbox4"/>
+
     <CheckBoxPreference
-            android:title="@string/pref_title_social_recommendations"
-            android:summary="@string/pref_title_ringtone"
-            android:key="ffdsd"/>
-    <EditTextPreference
-            android:title="@string/pref_title_add_friends_to_messages"
-            android:summary="@string/pref_title_add_friends_to_messages"
-            android:key="gffdffdfd"/>
+            android:title="Checkbox 5"
+            android:summary="This checkbox is just there to fill the screen"
+            android:key="checkbox4"/>
+
     <CheckBoxPreference
-            android:title="@string/pref_title_social_recommendations"
-            android:summary="@string/pref_title_ringtone"
-            android:key="sssdf"/>
-    <EditTextPreference
-            android:title="@string/pref_title_add_friends_to_messages"
-            android:summary="@string/pref_title_add_friends_to_messages"
-            android:key="gfffdfsdffdd"/>
+            android:title="Checkbox 6"
+            android:summary="This checkbox is just there to fill the screen"
+            android:key="checkbox4"/>
+
     <CheckBoxPreference
             android:title="Far down"
-            android:summary="A preference that is very far down"
-            android:key="sdffffdsfd"/>
+            android:summary="A preference that is very far down on the screen, so it has to be scrolled to"
+            android:key="fardown"/>
 </PreferenceScreen>
