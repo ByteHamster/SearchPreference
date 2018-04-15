@@ -36,6 +36,7 @@ public class PreferenceSearchActivity extends AppCompatActivity implements Adapt
     private ImageView clearButton;
     private ImageView moreButton;
     private EditText searchView;
+    private ListView listView;
     private boolean showingHistory = false;
     private SharedPreferences prefs;
 
@@ -59,6 +60,7 @@ public class PreferenceSearchActivity extends AppCompatActivity implements Adapt
         loadHistory();
         searchView = findViewById(R.id.search);
         clearButton = findViewById(R.id.clear);
+        listView = findViewById(R.id.list);
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,7 +86,7 @@ public class PreferenceSearchActivity extends AppCompatActivity implements Adapt
                 popup.show();
             }
         });
-        ((ListView) findViewById(R.id.list)).setOnItemClickListener(this);
+        listView.setOnItemClickListener(this);
         searchView.addTextChangedListener(textWatcher);
     }
 
@@ -150,8 +152,16 @@ public class PreferenceSearchActivity extends AppCompatActivity implements Adapt
             }
             SimpleAdapter sa = new SimpleAdapter(this, results2, R.layout.search_result_item,
                     new String[]{"title", "summary"}, new int[]{R.id.title, R.id.summary});
-            ((ListView) findViewById(R.id.list)).setAdapter(sa);
+            listView.setAdapter(sa);
             showingHistory = false;
+
+            if (results.isEmpty()) {
+                findViewById(R.id.no_results).setVisibility(View.VISIBLE);
+                listView.setVisibility(View.GONE);
+            } else {
+                findViewById(R.id.no_results).setVisibility(View.GONE);
+                listView.setVisibility(View.VISIBLE);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -167,7 +177,7 @@ public class PreferenceSearchActivity extends AppCompatActivity implements Adapt
             }
             SimpleAdapter sa = new SimpleAdapter(this, results2, R.layout.search_history_item,
                     new String[]{"title"}, new int[]{R.id.title});
-            ((ListView) findViewById(R.id.list)).setAdapter(sa);
+            listView.setAdapter(sa);
             showingHistory = true;
         } catch (Exception e) {
             e.printStackTrace();
