@@ -28,6 +28,7 @@ public class PreferenceActivity extends AppCompatActivity {
             addPreferencesFromResource(R.xml.preferences);
 
             searchPreference = (SearchPreference) findPreference("searchPreference");
+            searchPreference.openActivityOnResultClick(PreferenceActivity.class);
             searchPreference.addResourceFileToIndex(R.xml.preferences);
             searchPreference.setHistoryEnabled(true);
         }

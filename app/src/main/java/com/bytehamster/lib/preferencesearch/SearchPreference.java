@@ -1,5 +1,6 @@
 package com.bytehamster.lib.preferencesearch;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.preference.Preference;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 public class SearchPreference extends Preference implements View.OnClickListener {
     private ArrayList<Integer> filesToIndex = new ArrayList<>();
     private boolean historyEnabled = true;
+    private Class classToBeCalled;
 
     @SuppressWarnings("unused")
     public SearchPreference(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -56,6 +58,7 @@ public class SearchPreference extends Preference implements View.OnClickListener
         Intent i = new Intent(getContext(), PreferenceSearchActivity.class);
         i.putExtra(PreferenceSearchActivity.EXTRA_INDEX_FILES, filesToIndex);
         i.putExtra(PreferenceSearchActivity.EXTRA_HISTORY_ENABLED, historyEnabled);
+        i.putExtra(PreferenceSearchActivity.EXTRA_CLASS_TO_BE_CALLED, classToBeCalled);
         getContext().startActivity(i);
     }
 
@@ -65,5 +68,9 @@ public class SearchPreference extends Preference implements View.OnClickListener
 
     public void setHistoryEnabled(boolean historyEnabled) {
         this.historyEnabled = historyEnabled;
+    }
+
+    public void openActivityOnResultClick(Class<? extends Activity> classToBeCalled) {
+        this.classToBeCalled = classToBeCalled;
     }
 }

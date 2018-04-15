@@ -29,6 +29,7 @@ import java.util.Set;
 public class PreferenceSearchActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     static final String EXTRA_INDEX_FILES = "files";
     static final String EXTRA_HISTORY_ENABLED = "history_enabled";
+    static final String EXTRA_CLASS_TO_BE_CALLED = "class_to_be_called";
     private static final String SHARED_PREFS_FILE = "preferenceSearch";
     private PreferenceSearcher searcher;
     private ArrayList<PreferenceSearcher.SearchResult> results;
@@ -69,7 +70,9 @@ public class PreferenceSearchActivity extends AppCompatActivity implements Adapt
         });
 
         moreButton = findViewById(R.id.more);
-        moreButton.setVisibility(View.VISIBLE);
+        if (getIntent().getBooleanExtra(EXTRA_HISTORY_ENABLED, true)) {
+            moreButton.setVisibility(View.VISIBLE);
+        }
         moreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,7 +194,8 @@ public class PreferenceSearchActivity extends AppCompatActivity implements Adapt
         } else {
             addHistoryEntry(searchView.getText().toString());
             PreferenceSearcher.SearchResult r = results.get(position);
-            Intent i = new Intent(this, PreferenceActivity.class);
+            Class toBeCalled = (Class) getIntent().getSerializableExtra(EXTRA_CLASS_TO_BE_CALLED);
+            Intent i = new Intent(this, toBeCalled);
             i.putExtra(PreferenceSearchResult.ARGUMENT_KEY, r.key);
             i.putExtra(PreferenceSearchResult.ARGUMENT_FILE, r.resId);
             startActivity(i);
