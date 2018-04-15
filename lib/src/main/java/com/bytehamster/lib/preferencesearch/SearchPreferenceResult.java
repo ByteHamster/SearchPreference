@@ -8,14 +8,14 @@ import android.util.Log;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-public class PreferenceSearchResult {
+public class SearchPreferenceResult {
     static final String ARGUMENT_KEY = "key";
     static final String ARGUMENT_FILE = "file";
 
     private Bundle bundle;
     private PreferenceFragment fragment;
 
-    public PreferenceSearchResult(PreferenceFragment fragment) {
+    public SearchPreferenceResult(PreferenceFragment fragment) {
         this.fragment = fragment;
         bundle = fragment.getArguments();
     }
@@ -31,18 +31,18 @@ public class PreferenceSearchResult {
         return null;
     }
 
-    public boolean hasResult() {
+    public boolean hasData() {
         return bundle != null && !TextUtils.isEmpty(bundle.getString(ARGUMENT_KEY));
     }
 
-    private String getKey() {
+    public String getKey() {
         return bundle.getString(ARGUMENT_KEY);
     }
 
     public void scrollTo() {
         final ListView listView = findListView();
         if (listView == null) {
-            Log.e("PreferenceSearchResult", "ListView not found");
+            Log.e(this.getClass().getSimpleName(), "ListView not found");
             return;
         }
         listView.post(new Runnable() {

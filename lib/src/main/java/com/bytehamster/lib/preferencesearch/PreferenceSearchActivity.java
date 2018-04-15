@@ -204,8 +204,8 @@ public class PreferenceSearchActivity extends AppCompatActivity implements Adapt
             PreferenceSearcher.SearchResult r = results.get(position);
             Class toBeCalled = (Class) getIntent().getSerializableExtra(EXTRA_CLASS_TO_BE_CALLED);
             Intent i = new Intent(this, toBeCalled);
-            i.putExtra(PreferenceSearchResult.ARGUMENT_KEY, r.key);
-            i.putExtra(PreferenceSearchResult.ARGUMENT_FILE, r.resId);
+            i.putExtra(SearchPreferenceResult.ARGUMENT_KEY, r.key);
+            i.putExtra(SearchPreferenceResult.ARGUMENT_FILE, r.resId);
             startActivity(i);
         }
     }

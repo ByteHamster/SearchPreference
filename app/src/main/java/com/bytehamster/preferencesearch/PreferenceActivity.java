@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import com.bytehamster.lib.preferencesearch.PreferenceSearchResult;
+import com.bytehamster.lib.preferencesearch.SearchPreferenceResult;
 import com.bytehamster.lib.preferencesearch.SearchPreference;
 
 public class PreferenceActivity extends AppCompatActivity {
@@ -30,7 +30,6 @@ public class PreferenceActivity extends AppCompatActivity {
             searchPreference = (SearchPreference) findPreference("searchPreference");
             searchPreference.openActivityOnResultClick(PreferenceActivity.class);
             searchPreference.setHistoryEnabled(true);
-
             searchPreference.setBreadcrumbsEnabled(false);
             searchPreference.addResourceFileToIndex(R.xml.preferences);
         }
@@ -39,8 +38,8 @@ public class PreferenceActivity extends AppCompatActivity {
         public void onStart() {
             super.onStart();
 
-            PreferenceSearchResult result = new PreferenceSearchResult(this);
-            if (result.hasResult()) {
+            SearchPreferenceResult result = new SearchPreferenceResult(this);
+            if (result.hasData()) {
                 Log.d("PreferenceActivity", "Found " + result + " in " + result.getResourceFile());
 
                 getPreferenceScreen().removePreference(searchPreference);
