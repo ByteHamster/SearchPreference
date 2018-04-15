@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+            android:title="Second file"
+            android:summary="This is a preference coming from a second file"
+            android:key="secondfile" />
+</PreferenceScreen>

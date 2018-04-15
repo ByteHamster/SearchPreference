@@ -18,7 +18,7 @@ public class SearchPreference extends Preference implements View.OnClickListener
     private ArrayList<Integer> filesToIndex = new ArrayList<>();
     private ArrayList<String> breadcrumbsToIndex = new ArrayList<>();
     private boolean historyEnabled = true;
-    private boolean breadcrumbsEnabled = true;
+    private boolean breadcrumbsEnabled = false;
     private Class classToBeCalled;
 
     @SuppressWarnings("unused")
@@ -84,7 +84,7 @@ public class SearchPreference extends Preference implements View.OnClickListener
     }
 
     /**
-     * Show a history of recent search terms if nothing was typed yet
+     * Show a history of recent search terms if nothing was typed yet. Default is true
      * @param historyEnabled True if history should be enabled
      */
     public void setHistoryEnabled(boolean historyEnabled) {
@@ -101,7 +101,8 @@ public class SearchPreference extends Preference implements View.OnClickListener
 
     /**
      * Show breadcrumbs in the list of search results, containing of
-     * the prefix given in addResourceFileToIndex, PreferenceCategory and PreferenceScreen
+     * the prefix given in addResourceFileToIndex, PreferenceCategory and PreferenceScreen.
+     * Default is false
      * @param breadcrumbsEnabled True if breadcrumbs should be shown
      */
     public void setBreadcrumbsEnabled(boolean breadcrumbsEnabled) {

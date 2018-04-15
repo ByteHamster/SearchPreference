@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.bytehamster.lib.preferencesearch.SearchPreferenceResult;
 import com.bytehamster.lib.preferencesearch.SearchPreference;
 
-public class PreferenceActivity extends AppCompatActivity {
+public class SimpleExample extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,17 +17,13 @@ public class PreferenceActivity extends AppCompatActivity {
     }
 
     public static class PrefsFragment extends PreferenceFragment {
-        SearchPreference searchPreference;
-
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
 
-            searchPreference = (SearchPreference) findPreference("searchPreference");
-            searchPreference.openActivityOnResultClick(PreferenceActivity.class);
-            searchPreference.setHistoryEnabled(true);
-            searchPreference.setBreadcrumbsEnabled(false);
+            SearchPreference searchPreference = (SearchPreference) findPreference("searchPreference");
+            searchPreference.openActivityOnResultClick(SimpleExample.class);
             searchPreference.addResourceFileToIndex(R.xml.preferences);
         }
 
@@ -37,7 +33,7 @@ public class PreferenceActivity extends AppCompatActivity {
 
             SearchPreferenceResult result = new SearchPreferenceResult(this, getActivity().getIntent().getExtras());
             if (result.hasData()) {
-                getPreferenceScreen().removePreference(searchPreference);
+                // A search result was clicked
                 result.scrollTo();
                 result.setIcon();
             }

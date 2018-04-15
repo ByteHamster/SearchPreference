@@ -156,13 +156,18 @@ public class PreferenceSearchActivity extends AppCompatActivity implements Adapt
                 Map<String, String> m = new HashMap<>();
                 m.put("title", result.title);
                 m.put("summary", result.summary);
-                if (getIntent().getBooleanExtra(EXTRA_BREADCRUMBS_ENABLED, true)) {
-                    m.put("breadcrumbs", result.breadcrumbs);
-                }
+                m.put("breadcrumbs", result.breadcrumbs);
                 results2.add(m);
             }
-            SimpleAdapter sa = new SimpleAdapter(this, results2, R.layout.search_result_item,
-                    new String[]{"title", "summary", "breadcrumbs"}, new int[]{R.id.title, R.id.summary, R.id.breadcrumbs});
+
+            SimpleAdapter sa;
+            if (getIntent().getBooleanExtra(EXTRA_BREADCRUMBS_ENABLED, true)) {
+                sa = new SimpleAdapter(this, results2, R.layout.search_result_item_breadcrumbs,
+                        new String[]{"title", "summary", "breadcrumbs"}, new int[]{R.id.title, R.id.summary, R.id.breadcrumbs});
+            } else {
+                sa = new SimpleAdapter(this, results2, R.layout.search_result_item,
+                        new String[]{"title", "summary"}, new int[]{R.id.title, R.id.summary});
+            }
             listView.setAdapter(sa);
             showingHistory = false;
 

@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">PreferenceSearch</string>
+    <string name="app_name">Example</string>
+    <string name="app_name_enhanced">Example++</string>
 </resources>
