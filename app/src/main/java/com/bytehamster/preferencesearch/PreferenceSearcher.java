@@ -1,6 +1,7 @@
 package com.bytehamster.preferencesearch;
 
 import android.app.Activity;
+import android.text.TextUtils;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.util.ArrayList;
@@ -64,6 +65,11 @@ public class PreferenceSearcher {
 
     public ArrayList<SearchResult> searchFor(final String keyword) {
         ArrayList<SearchResult> results = new ArrayList<>();
+
+        if (TextUtils.isEmpty(keyword)) {
+            return results;
+        }
+
         for (SearchResult res : allEntries) {
             if (res.contains(keyword)) {
                 results.add(res);
@@ -91,6 +97,9 @@ public class PreferenceSearcher {
     }
 
     private boolean stringContains(String s1, String s2) {
+        if (s1 == null || s2 == null) {
+            return false;
+        }
         return simplify(s1).contains(simplify(s2));
     }
 

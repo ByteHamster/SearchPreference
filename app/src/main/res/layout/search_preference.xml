@@ -3,16 +3,9 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:orientation="vertical"
         android:padding="8dp"
         android:clipToPadding="false">
 
     <include layout="@layout/search_view" />
 
-    <ListView
-            android:paddingTop="16dp"
-            android:clipToPadding="false"
-            android:id="@+id/list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
 </LinearLayout>

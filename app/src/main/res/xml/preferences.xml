@@ -1,23 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <com.bytehamster.preferencesearch.SearchPreference
+            android:key="pref_max_volume"
+            android:title="@string/app_name" />
+
     <CheckBoxPreference
             android:title="AbcTitle"
             android:summary="CdeSummary"
-            android:key="blahKey" />
+            android:key="blahKey"/>
     <CheckBoxPreference
             android:title="@string/app_name"
             android:summary="@string/pref_header_general"
-            android:key="fooKey" />
-    <EditTextPreference
-            android:title="@string/pref_title_add_friends_to_messages"
-            android:summary="@string/pref_title_add_friends_to_messages"
-            android:key="fooKey" />
-    <CheckBoxPreference
-            android:title="@string/pref_title_social_recommendations"
-            android:summary="@string/pref_title_ringtone"
-            android:key="fooKey" />
-    <CheckBoxPreference
-            android:title="@string/pref_header_data_sync"
-            android:summary="@string/pref_title_display_name"
-            android:key="fooKey" />
+            android:key="fooKey"/>
+    <PreferenceCategory
+            android:title="@string/pref_title_vibrate">
+        <EditTextPreference
+                android:title="@string/pref_title_add_friends_to_messages"
+                android:summary="@string/pref_title_add_friends_to_messages"
+                android:key="fooKey"/>
+        <CheckBoxPreference
+                android:title="@string/pref_title_social_recommendations"
+                android:summary="@string/pref_title_ringtone"
+                android:key="fooKey"/>
+    </PreferenceCategory>
+    <PreferenceScreen
+            android:key="screen_preference"
+            android:title="@string/pref_title_display_name"
+            android:summary="@string/pref_ringtone_silent">
+        <CheckBoxPreference
+                android:title="@string/pref_header_data_sync"
+                android:summary="@string/pref_title_display_name"
+                android:key="fooKey"/>
+    </PreferenceScreen>
 </PreferenceScreen>
