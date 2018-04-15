@@ -1,26 +1,24 @@
-package com.bytehamster.preferencesearch;
+package com.bytehamster.lib.preferencesearch;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
+import com.bytehamster.preferencesearch.PreferenceActivity;
+import com.bytehamster.preferencesearch.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class PreferenceSearchActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private PreferenceSearcher searcher;
     private ArrayList<PreferenceSearcher.SearchResult> results;
 
@@ -56,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home || item.getItemId() ==  0) {
+        if (item.getItemId() == android.R.id.home || item.getItemId() == 0) {
             finish();
             return true;
         }
@@ -74,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 results2.add(m);
             }
             SimpleAdapter sa = new SimpleAdapter(this, results2, android.R.layout.simple_list_item_2,
-                new String[] {"title", "summary"} ,new int[] {android.R.id.text1, android.R.id.text2});
+                    new String[]{"title", "summary"}, new int[]{android.R.id.text1, android.R.id.text2});
             ((ListView) findViewById(R.id.list)).setAdapter(sa);
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,4 +1,4 @@
-package com.bytehamster.preferencesearch;
+package com.bytehamster.lib.preferencesearch;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import com.bytehamster.preferencesearch.R;
 
 public class SearchPreference extends Preference implements View.OnClickListener {
     public SearchPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
@@ -41,6 +42,6 @@ public class SearchPreference extends Preference implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
-        getContext().startActivity(new Intent(getContext(), MainActivity.class));
+        getContext().startActivity(new Intent(getContext(), PreferenceSearchActivity.class));
     }
 }

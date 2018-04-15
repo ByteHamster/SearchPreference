@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <com.bytehamster.preferencesearch.SearchPreference
+    <com.bytehamster.lib.preferencesearch.SearchPreference
             android:key="pref_max_volume"
             android:title="@string/app_name" />
 

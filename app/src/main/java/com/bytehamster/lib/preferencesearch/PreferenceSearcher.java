@@ -1,4 +1,4 @@
-package com.bytehamster.preferencesearch;
+package com.bytehamster.lib.preferencesearch;
 
 import android.app.Activity;
 import android.text.TextUtils;
@@ -11,16 +11,16 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class PreferenceSearcher {
-    private static final List<String> BLACKLIST = Arrays.asList("com.bytehamster.preferencesearch.SearchPreference", "PreferenceCategory");
+class PreferenceSearcher {
+    private static final List<String> BLACKLIST = Arrays.asList(SearchPreference.class.getName(), "PreferenceCategory");
     private Activity activity;
     private ArrayList<SearchResult> allEntries = new ArrayList<>();
 
-    public PreferenceSearcher(Activity activity) {
+    PreferenceSearcher(Activity activity) {
         this.activity = activity;
     }
 
-    public void addResourceFile(int resId) {
+    void addResourceFile(int resId) {
         allEntries.addAll(parseFile(resId));
     }
 
@@ -71,7 +71,7 @@ public class PreferenceSearcher {
         return results;
     }
 
-    public ArrayList<SearchResult> searchFor(final String keyword) {
+    ArrayList<SearchResult> searchFor(final String keyword) {
         ArrayList<SearchResult> results = new ArrayList<>();
 
         if (TextUtils.isEmpty(keyword)) {
