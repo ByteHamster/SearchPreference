@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import com.bytehamster.preferencesearch.R;
 
 public class PreferenceSearchResult {
     static final String ARGUMENT_KEY = "key";

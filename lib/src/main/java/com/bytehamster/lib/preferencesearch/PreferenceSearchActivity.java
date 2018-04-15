@@ -17,8 +17,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import com.bytehamster.preferencesearch.PreferenceActivity;
-import com.bytehamster.preferencesearch.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
