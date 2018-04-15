@@ -2,11 +2,17 @@ package com.bytehamster.preferencesearch;
 
 import android.app.Activity;
 import android.text.TextUtils;
+import android.util.Log;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class PreferenceSearcher {
+    private static final List<String> BLACKLIST = Arrays.asList("com.bytehamster.preferencesearch.SearchPreference", "PreferenceCategory");
     private Activity activity;
     private ArrayList<SearchResult> allEntries = new ArrayList<>();
 
@@ -25,35 +31,37 @@ public class PreferenceSearcher {
         try {
             while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
                 if (xpp.getEventType() == XmlPullParser.START_TAG) {
-                    SearchResult result = new SearchResult();
-                    result.resId = resId;
-                    for (int i = 0; i < xpp.getAttributeCount(); i++) {
-                        String valSanitized = xpp.getAttributeValue(i);
-                        if (valSanitized.startsWith("@")) {
-                            try {
-                                int id = Integer.parseInt(valSanitized.substring(1));
-                                valSanitized = activity.getString(id);
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                    if (!BLACKLIST.contains(xpp.getName())) {
+                        SearchResult result = new SearchResult();
+                        result.resId = resId;
+                        for (int i = 0; i < xpp.getAttributeCount(); i++) {
+                            String valSanitized = xpp.getAttributeValue(i);
+                            if (valSanitized.startsWith("@")) {
+                                try {
+                                    int id = Integer.parseInt(valSanitized.substring(1));
+                                    valSanitized = activity.getString(id);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            switch (xpp.getAttributeName(i)) {
+                                case "title":
+                                    result.title = valSanitized;
+                                    break;
+                                case "summary":
+                                    result.summary = valSanitized;
+                                    break;
+                                case "key":
+                                    result.key = valSanitized;
+                                    break;
                             }
                         }
-                        switch (xpp.getAttributeName(i)) {
-                            case "title":
-                                result.title = valSanitized;
-                                break;
-                            case "summary":
-                                result.summary = valSanitized;
-                                break;
-                            case "key":
-                                result.key = valSanitized;
-                                break;
+
+                        Log.d("PreferenceSearcher", "Found: " + xpp.getName() + "/" + result);
+                        if (result.hasData()) {
+                            results.add(result);
                         }
                     }
-
-                    if (result.hasData()) {
-                        results.add(result);
-                    }
-
                 }
                 xpp.next();
             }
