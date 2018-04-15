@@ -1,6 +1,8 @@
 package com.bytehamster.lib.preferencesearch;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
@@ -21,10 +23,13 @@ import com.bytehamster.preferencesearch.R;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class PreferenceSearchActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     static final String EXTRA_INDEX_FILES = "files";
+    private static final String SHARED_PREFS_FILE = "preferenceSearch";
     private PreferenceSearcher searcher;
     private ArrayList<PreferenceSearcher.SearchResult> results;
     private ArrayList<String> history;
@@ -32,12 +37,14 @@ public class PreferenceSearchActivity extends AppCompatActivity implements Adapt
     private ImageView moreButton;
     private EditText searchView;
     private boolean showingHistory = false;
+    private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+        prefs = getSharedPreferences(SHARED_PREFS_FILE, Context.MODE_PRIVATE);
         searcher = new PreferenceSearcher(this);
 
         ArrayList<Integer> files = getIntent().getIntegerArrayListExtra(EXTRA_INDEX_FILES);
@@ -74,21 +81,39 @@ public class PreferenceSearchActivity extends AppCompatActivity implements Adapt
                 popup.show();
             }
         });
-
-        updateSearchResults();
         ((ListView) findViewById(R.id.list)).setOnItemClickListener(this);
         searchView.addTextChangedListener(textWatcher);
     }
 
     private void loadHistory() {
+        Set<String> set = prefs.getStringSet("history", new HashSet<String>());
         history = new ArrayList<>();
-        history.add("Chec");
-        history.add("Priv");
+        history.addAll(set);
     }
 
     private void clearHistory() {
         searchView.setText("");
         history.clear();
+        saveHistory();
+        updateSearchResults();
+    }
+
+    private void addHistoryEntry(String entry) {
+        if (!history.contains(entry)) {
+            history.add(entry);
+            saveHistory();
+            updateSearchResults();
+        }
+    }
+
+    private void saveHistory() {
+        Set<String> set = new HashSet<>(history);
+        prefs.edit().putStringSet("history", set).apply();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         updateSearchResults();
     }
 
@@ -148,6 +173,7 @@ public class PreferenceSearchActivity extends AppCompatActivity implements Adapt
         if (showingHistory) {
             searchView.setText(((TextView) view.findViewById(R.id.title)).getText());
         } else {
+            addHistoryEntry(searchView.getText().toString());
             PreferenceSearcher.SearchResult r = results.get(position);
             Intent i = new Intent(this, PreferenceActivity.class);
             i.putExtra(PreferenceSearchResult.ARGUMENT_KEY, r.key);
