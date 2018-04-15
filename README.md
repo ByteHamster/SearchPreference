@@ -5,9 +5,23 @@ Search inside Android Preferences
 
 ## How to add to your app
 
-Add PreferenceSearch to your dependencies:
+Add PreferenceSearch to your `build.gradle`:
 ```
-// ToDo
+dependencies {
+    compile 'com.bytehamster.lib:searchpreference:1.0.0@aar'
+}
+```
+
+Add PreferenceSearch to your `settings.gradle`:
+```
+allprojects {
+    repositories {
+        // ...
+        maven {
+            url  "https://dl.bintray.com/bytehamster/android"
+        }
+    }
+}
 ```
 
 Add search bar to your `preferences.xml` file:
