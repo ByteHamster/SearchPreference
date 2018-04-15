@@ -26,7 +26,7 @@ public class PreferenceSearchActivity extends AppCompatActivity implements Adapt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_search);
 
         searcher = new PreferenceSearcher(this);
 
