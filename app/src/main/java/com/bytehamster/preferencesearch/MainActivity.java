@@ -1,10 +1,12 @@
 package com.bytehamster.preferencesearch;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -16,7 +18,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -31,9 +32,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         searcher = new PreferenceSearcher(this);
         searcher.addResourceFile(R.xml.preferences);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         updateSearchResults("");
         ((ListView) findViewById(R.id.list)).setOnItemClickListener(this);
-
         ((EditText) findViewById(R.id.search)).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -50,6 +52,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 updateSearchResults(editable.toString());
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home || item.getItemId() ==  0) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void updateSearchResults(String keyword) {
@@ -73,6 +84,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         PreferenceSearcher.SearchResult r = results.get(position);
-        Toast.makeText(this, r.key, Toast.LENGTH_LONG).show();
+
+        Intent i = new Intent(this, PreferenceActivity.class);
+        i.putExtra("KEY", r.key);
+        startActivity(i);
     }
 }

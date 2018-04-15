@@ -11,25 +11,57 @@
     <CheckBoxPreference
             android:title="@string/app_name"
             android:summary="@string/pref_header_general"
-            android:key="fooKey"/>
+            android:key="dfg"/>
     <PreferenceCategory
             android:title="@string/pref_title_vibrate">
         <EditTextPreference
                 android:title="@string/pref_title_add_friends_to_messages"
                 android:summary="@string/pref_title_add_friends_to_messages"
-                android:key="fooKey"/>
+                android:key="gfd"/>
         <CheckBoxPreference
                 android:title="@string/pref_title_social_recommendations"
                 android:summary="@string/pref_title_ringtone"
-                android:key="fooKey"/>
+                android:key="dfgfg"/>
     </PreferenceCategory>
     <PreferenceScreen
-            android:key="screen_preference"
+            android:key="gfdfg"
             android:title="@string/pref_title_display_name"
             android:summary="@string/pref_ringtone_silent">
         <CheckBoxPreference
                 android:title="@string/pref_header_data_sync"
                 android:summary="@string/pref_title_display_name"
-                android:key="fooKey"/>
+                android:key="gfdfg"/>
     </PreferenceScreen>
+    <EditTextPreference
+            android:title="@string/pref_title_add_friends_to_messages"
+            android:summary="@string/pref_title_add_friends_to_messages"
+            android:key="fdfsd"/>
+    <CheckBoxPreference
+            android:title="@string/pref_title_social_recommendations"
+            android:summary="@string/pref_title_ringtone"
+            android:key="fdfsdf"/>
+    <EditTextPreference
+            android:title="@string/pref_title_add_friends_to_messages"
+            android:summary="@string/pref_title_add_friends_to_messages"
+            android:key="fdfdsd"/>
+    <CheckBoxPreference
+            android:title="@string/pref_title_social_recommendations"
+            android:summary="@string/pref_title_ringtone"
+            android:key="ffdsd"/>
+    <EditTextPreference
+            android:title="@string/pref_title_add_friends_to_messages"
+            android:summary="@string/pref_title_add_friends_to_messages"
+            android:key="gffdffdfd"/>
+    <CheckBoxPreference
+            android:title="@string/pref_title_social_recommendations"
+            android:summary="@string/pref_title_ringtone"
+            android:key="sssdf"/>
+    <EditTextPreference
+            android:title="@string/pref_title_add_friends_to_messages"
+            android:summary="@string/pref_title_add_friends_to_messages"
+            android:key="gfffdfsdffdd"/>
+    <CheckBoxPreference
+            android:title="Far down"
+            android:summary="A preference that is very far down"
+            android:key="sdffffdsfd"/>
 </PreferenceScreen>
