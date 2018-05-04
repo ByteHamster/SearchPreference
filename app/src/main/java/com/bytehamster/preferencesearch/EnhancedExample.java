@@ -46,14 +46,13 @@ public class EnhancedExample extends AppCompatActivity implements SearchPreferen
         private void onSearchResultClicked(SearchPreferenceResult result) {
             if (result.getResourceFile() == R.xml.preferences) {
                 getPreferenceScreen().removePreference(searchPreference); // Do not allow to click search multiple times
-                result.scrollTo(this);
+                scrollToPreference(result.getKey());
                 findPreference(result.getKey()).setTitle("RESULT: " + findPreference(result.getKey()).getTitle());
             } else {
                 // Result was found in the other file
                 getPreferenceScreen().removeAll();
                 addPreferencesFromResource(R.xml.preferences2);
-                result.scrollTo(this);
-                result.setIcon(this);
+                result.highlight(this);
             }
         }
     }

@@ -3,6 +3,7 @@ package com.bytehamster.lib.preferencesearch;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.PopupMenu;
@@ -207,22 +208,28 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
     }
 
     @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+    public void onItemClick(AdapterView<?> adapterView, View view, final int position, long id) {
         if (showingHistory) {
             CharSequence text = ((TextView) view.findViewById(R.id.title)).getText();
             viewHolder.searchView.setText(text);
             viewHolder.searchView.setSelection(text.length());
         } else {
             addHistoryEntry(viewHolder.searchView.getText().toString());
+            getFragmentManager().popBackStack();
 
             try {
-                PreferenceParser.ParseResult r = results.get(position);
-                SearchPreferenceResult result = new SearchPreferenceResult(r.key, r.resId);
-                ((SearchPreferenceResultListener) getActivity()).onSearchResultClicked(result);
+                final SearchPreferenceResultListener callback = (SearchPreferenceResultListener) getActivity();
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        PreferenceParser.ParseResult r = results.get(position);
+                        SearchPreferenceResult result = new SearchPreferenceResult(r.key, r.resId);
+                        callback.onSearchResultClicked(result);
+                    }
+                });
             } catch (ClassCastException e) {
                 throw new ClassCastException(getActivity().toString() + " must implement SearchPreferenceResultListener");
             }
-            getFragmentManager().popBackStack();
         }
     }
 
