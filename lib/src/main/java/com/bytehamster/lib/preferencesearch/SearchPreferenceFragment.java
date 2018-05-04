@@ -156,55 +156,50 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
             return;
         }
 
-        try {
-            results = searcher.searchFor(keyword);
-            ArrayList<Map<String, String>> results2 = new ArrayList<>();
-            for (PreferenceParser.ParseResult result : results) {
-                Map<String, String> m = new HashMap<>();
-                m.put("title", result.title);
-                m.put("summary", result.summary);
-                m.put("breadcrumbs", result.breadcrumbs);
-                results2.add(m);
-            }
+        results = searcher.searchFor(keyword);
+        ArrayList<Map<String, String>> results2 = new ArrayList<>();
+        for (PreferenceParser.ParseResult result : results) {
+            Map<String, String> m = new HashMap<>();
+            m.put("title", result.title);
+            m.put("summary", result.summary);
+            m.put("breadcrumbs", result.breadcrumbs);
+            results2.add(m);
+        }
 
-            SimpleAdapter sa;
-            if (getArguments().getBoolean(ARGUMENT_BREADCRUMBS_ENABLED, true)) {
-                sa = new SimpleAdapter(getContext(), results2, R.layout.searchpreference_list_item_result_breadcrumbs,
-                        new String[]{"title", "summary", "breadcrumbs"}, new int[]{R.id.title, R.id.summary, R.id.breadcrumbs});
-            } else {
-                sa = new SimpleAdapter(getContext(), results2, R.layout.searchpreference_list_item_result,
-                        new String[]{"title", "summary"}, new int[]{R.id.title, R.id.summary});
-            }
-            viewHolder.listView.setAdapter(sa);
-            showingHistory = false;
+        SimpleAdapter sa;
+        if (getArguments().getBoolean(ARGUMENT_BREADCRUMBS_ENABLED, true)) {
+            sa = new SimpleAdapter(getContext(), results2, R.layout.searchpreference_list_item_result_breadcrumbs,
+                    new String[]{"title", "summary", "breadcrumbs"}, new int[]{R.id.title, R.id.summary, R.id.breadcrumbs});
+        } else {
+            sa = new SimpleAdapter(getContext(), results2, R.layout.searchpreference_list_item_result,
+                    new String[]{"title", "summary"}, new int[]{R.id.title, R.id.summary});
+        }
+        viewHolder.listView.setAdapter(sa);
+        showingHistory = false;
 
-            if (results.isEmpty()) {
-                viewHolder.noResults.setVisibility(View.VISIBLE);
-                viewHolder.listView.setVisibility(View.GONE);
-            } else {
-                viewHolder.noResults.setVisibility(View.GONE);
-                viewHolder.listView.setVisibility(View.VISIBLE);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (results.isEmpty()) {
+            viewHolder.noResults.setVisibility(View.VISIBLE);
+            viewHolder.listView.setVisibility(View.GONE);
+        } else {
+            viewHolder.noResults.setVisibility(View.GONE);
+            viewHolder.listView.setVisibility(View.VISIBLE);
         }
     }
 
     private void showHistory() {
-        try {
-            ArrayList<Map<String, String>> results2 = new ArrayList<>();
-            for (String entry : history) {
-                Map<String, String> m = new HashMap<>();
-                m.put("title", entry);
-                results2.add(m);
-            }
-            SimpleAdapter sa = new SimpleAdapter(getContext(), results2, R.layout.searchpreference_list_item_history,
-                    new String[]{"title"}, new int[]{R.id.title});
-            viewHolder.listView.setAdapter(sa);
-            showingHistory = true;
-        } catch (Exception e) {
-            e.printStackTrace();
+        viewHolder.noResults.setVisibility(View.GONE);
+        viewHolder.listView.setVisibility(View.VISIBLE);
+
+        ArrayList<Map<String, String>> results2 = new ArrayList<>();
+        for (String entry : history) {
+            Map<String, String> m = new HashMap<>();
+            m.put("title", entry);
+            results2.add(m);
         }
+        SimpleAdapter sa = new SimpleAdapter(getContext(), results2, R.layout.searchpreference_list_item_history,
+                new String[]{"title"}, new int[]{R.id.title});
+        viewHolder.listView.setAdapter(sa);
+        showingHistory = true;
     }
 
     @Override
