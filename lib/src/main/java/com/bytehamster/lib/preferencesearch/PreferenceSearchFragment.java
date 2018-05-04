@@ -141,8 +141,10 @@ public class PreferenceSearchFragment extends Fragment implements AdapterView.On
             @Override
             public void run() {
                 viewHolder.searchView.requestFocus();
-                InputMethodManager imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imgr.showSoftInput(viewHolder.searchView, InputMethodManager.SHOW_IMPLICIT);
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.showSoftInput(viewHolder.searchView, InputMethodManager.SHOW_IMPLICIT);
+                }
             }
         });
     }

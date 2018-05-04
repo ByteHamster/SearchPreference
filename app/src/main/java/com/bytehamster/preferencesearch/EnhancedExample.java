@@ -1,7 +1,6 @@
 package com.bytehamster.preferencesearch;
 
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import com.bytehamster.lib.preferencesearch.SearchPreference;
@@ -37,6 +36,7 @@ public class EnhancedExample extends AppCompatActivity implements SearchPreferen
 
             searchPreference = (SearchPreference) findPreference("searchPreference");
             searchPreference.setActivity((AppCompatActivity) getActivity());
+            searchPreference.setFragmentContainerViewId(android.R.id.content);
             searchPreference.addResourceFileToIndex(R.xml.preferences, "Main file");
             searchPreference.addResourceFileToIndex(R.xml.preferences2, "Second file");
             searchPreference.setBreadcrumbsEnabled(true);

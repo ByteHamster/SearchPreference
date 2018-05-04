@@ -2,15 +2,14 @@ package com.bytehamster.lib.preferencesearch;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.XmlRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceViewHolder;
 import android.text.InputType;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 
 import java.util.ArrayList;
@@ -124,7 +123,7 @@ public class SearchPreference extends Preference implements View.OnClickListener
      * Sets the container to use when loading the fragment
      * @param containerResId Resource id of the container
      */
-    public void setContainerResId(int containerResId) {
+    public void setFragmentContainerViewId(@IdRes int containerResId) {
         this.containerResId = containerResId;
     }
 }
