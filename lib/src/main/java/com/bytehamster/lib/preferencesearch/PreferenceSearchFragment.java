@@ -59,7 +59,7 @@ public class PreferenceSearchFragment extends Fragment implements AdapterView.On
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_search, container, false);
+        View rootView = inflater.inflate(R.layout.searchpreference_fragment, container, false);
         viewHolder = new SearchViewHolder(rootView);
 
 
@@ -168,10 +168,10 @@ public class PreferenceSearchFragment extends Fragment implements AdapterView.On
 
             SimpleAdapter sa;
             if (getArguments().getBoolean(ARGUMENT_BREADCRUMBS_ENABLED, true)) {
-                sa = new SimpleAdapter(getContext(), results2, R.layout.search_result_item_breadcrumbs,
+                sa = new SimpleAdapter(getContext(), results2, R.layout.searchpreference_list_item_result_breadcrumbs,
                         new String[]{"title", "summary", "breadcrumbs"}, new int[]{R.id.title, R.id.summary, R.id.breadcrumbs});
             } else {
-                sa = new SimpleAdapter(getContext(), results2, R.layout.search_result_item,
+                sa = new SimpleAdapter(getContext(), results2, R.layout.searchpreference_list_item_result,
                         new String[]{"title", "summary"}, new int[]{R.id.title, R.id.summary});
             }
             viewHolder.listView.setAdapter(sa);
@@ -197,7 +197,7 @@ public class PreferenceSearchFragment extends Fragment implements AdapterView.On
                 m.put("title", entry);
                 results2.add(m);
             }
-            SimpleAdapter sa = new SimpleAdapter(getContext(), results2, R.layout.search_history_item,
+            SimpleAdapter sa = new SimpleAdapter(getContext(), results2, R.layout.searchpreference_list_item_history,
                     new String[]{"title"}, new int[]{R.id.title});
             viewHolder.listView.setAdapter(sa);
             showingHistory = true;

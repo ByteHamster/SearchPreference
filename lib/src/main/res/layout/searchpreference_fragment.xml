@@ -7,7 +7,7 @@
         android:padding="8dp"
         android:clipToPadding="false">
 
-    <include layout="@layout/search_view" />
+    <include layout="@layout/searchpreference_searchbar" />
 
     <TextView
             android:id="@+id/no_results"

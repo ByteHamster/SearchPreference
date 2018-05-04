@@ -25,19 +25,19 @@ public class SearchPreference extends Preference implements View.OnClickListener
     @SuppressWarnings("unused")
     public SearchPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        setLayoutResource(R.layout.search_preference);
+        setLayoutResource(R.layout.searchpreference_preference);
     }
 
     @SuppressWarnings("unused")
     public SearchPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setLayoutResource(R.layout.search_preference);
+        setLayoutResource(R.layout.searchpreference_preference);
     }
 
     @SuppressWarnings("unused")
     public SearchPreference(Context context) {
         super(context);
-        setLayoutResource(R.layout.search_preference);
+        setLayoutResource(R.layout.searchpreference_preference);
     }
 
     @Override
