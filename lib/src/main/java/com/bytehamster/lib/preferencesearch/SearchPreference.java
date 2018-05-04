@@ -3,6 +3,7 @@ package com.bytehamster.lib.preferencesearch;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.StringRes;
 import android.support.annotation.XmlRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.Preference;
@@ -99,6 +100,15 @@ public class SearchPreference extends Preference implements View.OnClickListener
     public void addResourceFileToIndex(@XmlRes int resId, String breadcrumb) {
         filesToIndex.add(resId);
         breadcrumbsToIndex.add(breadcrumb);
+    }
+
+    /**
+     * Makes the search index include the given R.xml resource
+     * @param resId The resource to index
+     * @param breadcrumb Prefix to add to breadcrumbs when displaying search results from this file
+     */
+    public void addResourceFileToIndex(@XmlRes int resId, @StringRes int breadcrumb) {
+        addResourceFileToIndex(resId, activity.getString(breadcrumb));
     }
 
     /**

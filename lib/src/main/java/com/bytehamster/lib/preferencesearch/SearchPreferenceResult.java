@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.util.Log;
 
 
 public class SearchPreferenceResult {
@@ -37,27 +38,35 @@ public class SearchPreferenceResult {
      * @param prefsFragment Fragment that contains the preference
      */
     public void highlight(final PreferenceFragmentCompat prefsFragment) {
-        final Preference prefResult = prefsFragment.findPreference(getKey());
-
         new Handler().post(new Runnable() {
             @Override
             public void run() {
-                prefsFragment.scrollToPreference(prefResult);
-
-                final Drawable oldIcon = prefResult.getIcon();
-                final boolean oldSpaceReserved = prefResult.isIconSpaceReserved();
-
-                prefResult.setIcon(R.drawable.ic_arrow_right);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        prefResult.setIcon(oldIcon);
-                        prefResult.setIconSpaceReserved(oldSpaceReserved);
-                    }
-                }, 1000);
+                doHighlight(prefsFragment);
             }
         });
 
+    }
+
+    private void doHighlight(PreferenceFragmentCompat prefsFragment) {
+        final Preference prefResult = prefsFragment.findPreference(getKey());
+
+        if (prefResult == null) {
+            Log.e("doHighlight", "Preference not found on given screen");
+            return;
+        }
+
+        prefsFragment.scrollToPreference(prefResult);
+        final Drawable oldIcon = prefResult.getIcon();
+        final boolean oldSpaceReserved = prefResult.isIconSpaceReserved();
+
+        prefResult.setIcon(R.drawable.ic_arrow_right);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                prefResult.setIcon(oldIcon);
+                prefResult.setIconSpaceReserved(oldSpaceReserved);
+            }
+        }, 1000);
     }
 
     /**
