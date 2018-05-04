@@ -210,18 +210,12 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
             viewHolder.searchView.setSelection(text.length());
         } else {
             addHistoryEntry(viewHolder.searchView.getText().toString());
-            getFragmentManager().popBackStack();
 
             try {
                 final SearchPreferenceResultListener callback = (SearchPreferenceResultListener) getActivity();
-                new Handler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        PreferenceParser.ParseResult r = results.get(position);
-                        SearchPreferenceResult result = new SearchPreferenceResult(r.key, r.resId);
-                        callback.onSearchResultClicked(result);
-                    }
-                });
+                PreferenceParser.ParseResult r = results.get(position);
+                SearchPreferenceResult result = new SearchPreferenceResult(r.key, r.resId);
+                callback.onSearchResultClicked(result);
             } catch (ClassCastException e) {
                 throw new ClassCastException(getActivity().toString() + " must implement SearchPreferenceResultListener");
             }

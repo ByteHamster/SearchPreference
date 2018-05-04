@@ -2,6 +2,7 @@ package com.bytehamster.lib.preferencesearch;
 
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
@@ -35,20 +36,35 @@ public class SearchPreferenceResult {
      * Highlight the preference that was found
      * @param prefsFragment Fragment that contains the preference
      */
-    public void highlight(PreferenceFragmentCompat prefsFragment) {
+    public void highlight(final PreferenceFragmentCompat prefsFragment) {
         final Preference prefResult = prefsFragment.findPreference(getKey());
-        prefsFragment.scrollToPreference(prefResult);
 
-        final Drawable oldIcon = prefResult.getIcon();
-        final boolean oldSpaceReserved = prefResult.isIconSpaceReserved();
-
-        prefResult.setIcon(R.drawable.ic_arrow_right);
-        new Handler().postDelayed(new Runnable() {
+        new Handler().post(new Runnable() {
             @Override
             public void run() {
-                prefResult.setIcon(oldIcon);
-                prefResult.setIconSpaceReserved(oldSpaceReserved);
+                prefsFragment.scrollToPreference(prefResult);
+
+                final Drawable oldIcon = prefResult.getIcon();
+                final boolean oldSpaceReserved = prefResult.isIconSpaceReserved();
+
+                prefResult.setIcon(R.drawable.ic_arrow_right);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        prefResult.setIcon(oldIcon);
+                        prefResult.setIconSpaceReserved(oldSpaceReserved);
+                    }
+                }, 1000);
             }
-        }, 1000);
+        });
+
+    }
+
+    /**
+     * Closes the search results page
+     * @param activity The current activity
+     */
+    public void closeSearchPage(AppCompatActivity activity) {
+        activity.getSupportFragmentManager().popBackStack();
     }
 }

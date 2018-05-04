@@ -24,6 +24,7 @@ public class SimpleExample extends AppCompatActivity implements SearchPreference
 
     @Override
     public void onSearchResultClicked(SearchPreferenceResult result) {
+        result.closeSearchPage(this);
         result.highlight(prefsFragment);
     }
 

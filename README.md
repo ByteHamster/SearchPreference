@@ -29,31 +29,30 @@ Add search bar to your `preferences.xml` file:
     <com.bytehamster.lib.preferencesearch.SearchPreference
         android:key="searchPreference" />
         
-Define search index and react to search results in your `PreferenceFragment`:
+Define search index in your `PreferenceFragment`:
 
 
-    public static class PrefsFragment extends PreferenceFragment {
+    public static class PrefsFragment extends PreferenceFragmentCompat {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
 
             SearchPreference searchPreference = (SearchPreference) findPreference("searchPreference");
-            searchPreference.openActivityOnResultClick(SimpleExample.class);
+            searchPreference.setActivity((AppCompatActivity) getActivity());
             searchPreference.addResourceFileToIndex(R.xml.preferences);
         }
+    }
+
+And react to search results in your Activity:
+
+    public class MyActivity extends AppCompatActivity implements SearchPreferenceResultListener {
+        private PrefsFragment prefsFragment;
 
         @Override
-        public void onStart() {
-            super.onStart();
-
-            SearchPreferenceResult result = new SearchPreferenceResult(this,
-                    getActivity().getIntent().getExtras());
-            if (result.hasData()) {
-                // A search result was clicked
-                result.scrollTo();
-                result.setIcon();
-            }
+        public void onSearchResultClicked(SearchPreferenceResult result) {
+            result.closeSearchPage(this);
+            result.highlight(prefsFragment);
         }
     }
 

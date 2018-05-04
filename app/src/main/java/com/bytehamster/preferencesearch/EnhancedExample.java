@@ -1,6 +1,7 @@
 package com.bytehamster.preferencesearch;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import com.bytehamster.lib.preferencesearch.SearchPreference;
@@ -23,8 +24,18 @@ public class EnhancedExample extends AppCompatActivity implements SearchPreferen
     }
 
     @Override
-    public void onSearchResultClicked(SearchPreferenceResult result) {
-        prefsFragment.onSearchResultClicked(result);
+    public void onSearchResultClicked(final SearchPreferenceResult result) {
+        prefsFragment = new PrefsFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(android.R.id.content, prefsFragment).addToBackStack("PrefsFragment")
+                .commit(); // Allow to navigate back to search
+
+        new Handler().post(new Runnable() { // Allow fragment to get created
+            @Override
+            public void run() {
+                prefsFragment.onSearchResultClicked(result);
+            }
+        });
     }
 
     public static class PrefsFragment extends PreferenceFragmentCompat {
@@ -45,7 +56,7 @@ public class EnhancedExample extends AppCompatActivity implements SearchPreferen
 
         private void onSearchResultClicked(SearchPreferenceResult result) {
             if (result.getResourceFile() == R.xml.preferences) {
-                getPreferenceScreen().removePreference(searchPreference); // Do not allow to click search multiple times
+                searchPreference.setVisible(false); // Do not allow to click search multiple times
                 scrollToPreference(result.getKey());
                 findPreference(result.getKey()).setTitle("RESULT: " + findPreference(result.getKey()).getTitle());
             } else {
