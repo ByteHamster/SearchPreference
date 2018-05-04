@@ -37,7 +37,7 @@
             android:summary="This is an edit text preference"
             android:key="edittext"/>
 
-    <SwitchPreference
+    <android.support.v14.preference.SwitchPreference
             android:title="Switch preference"
             android:summary="This allows to use a nice switch"
             android:key="switch"/>
@@ -49,7 +49,7 @@
             android:key="list"
             android:summary="This allows to select from a list" />
 
-    <MultiSelectListPreference
+    <android.support.v14.preference.MultiSelectListPreference
             android:title="Multi select list preference"
             android:entries="@android:array/emailAddressTypes"
             android:entryValues="@android:array/emailAddressTypes"

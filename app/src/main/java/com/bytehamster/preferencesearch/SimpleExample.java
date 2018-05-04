@@ -1,45 +1,41 @@
 package com.bytehamster.preferencesearch;
 
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
+import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.app.AppCompatActivity;
 import com.bytehamster.lib.preferencesearch.SearchPreferenceResult;
 import com.bytehamster.lib.preferencesearch.SearchPreference;
+import com.bytehamster.lib.preferencesearch.SearchPreferenceResultListener;
 
 /**
  * This file contains a minimal working example for the library
  */
-public class SimpleExample extends AppCompatActivity {
+public class SimpleExample extends AppCompatActivity implements SearchPreferenceResultListener {
+    private PrefsFragment prefsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new PrefsFragment()).commit();
+        prefsFragment = new PrefsFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(android.R.id.content, prefsFragment).commit();
     }
 
-    public static class PrefsFragment extends PreferenceFragment {
+    @Override
+    public void onSearchResultClicked(SearchPreferenceResult result) {
+        result.scrollTo(prefsFragment);
+        result.setIcon(prefsFragment);
+    }
+
+    public static class PrefsFragment extends PreferenceFragmentCompat {
         @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.preferences);
 
             SearchPreference searchPreference = (SearchPreference) findPreference("searchPreference");
-            searchPreference.openActivityOnResultClick(SimpleExample.class);
+            searchPreference.setActivity((AppCompatActivity) getActivity());
             searchPreference.addResourceFileToIndex(R.xml.preferences);
-        }
-
-        @Override
-        public void onStart() {
-            super.onStart();
-
-            SearchPreferenceResult result = new SearchPreferenceResult(this, getActivity().getIntent().getExtras());
-            if (result.hasData()) {
-                // A search result was clicked
-                result.scrollTo();
-                result.setIcon();
-            }
         }
     }
 }

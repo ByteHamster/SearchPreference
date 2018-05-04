@@ -1,6 +1,6 @@
 package com.bytehamster.lib.preferencesearch;
 
-import android.app.Activity;
+import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 import org.xmlpull.v1.XmlPullParser;
@@ -12,11 +12,11 @@ import java.util.List;
 class PreferenceSearcher {
     private static final List<String> BLACKLIST = Arrays.asList(SearchPreference.class.getName(), "PreferenceCategory");
     private static final List<String> CONTAINERS = Arrays.asList("PreferenceCategory", "PreferenceScreen");
-    private Activity activity;
+    private Context context;
     private ArrayList<SearchResult> allEntries = new ArrayList<>();
 
-    PreferenceSearcher(Activity activity) {
-        this.activity = activity;
+    PreferenceSearcher(Context context) {
+        this.context = context;
     }
 
     void addResourceFile(int resId, String breadcrumb) {
@@ -25,7 +25,7 @@ class PreferenceSearcher {
 
     private ArrayList<SearchResult> parseFile(int resId, String firstBreadcrumb) {
         java.util.ArrayList<SearchResult> results = new ArrayList<>();
-        XmlPullParser xpp = activity.getResources().getXml(resId);
+        XmlPullParser xpp = context.getResources().getXml(resId);
 
         try {
             ArrayList<String> breadcrumbs = new ArrayList<>();
@@ -95,7 +95,7 @@ class PreferenceSearcher {
         if (s.startsWith("@")) {
             try {
                 int id = Integer.parseInt(s.substring(1));
-                String[] elements = activity.getResources().getStringArray(id);
+                String[] elements = context.getResources().getStringArray(id);
                 return TextUtils.join(",", elements);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -108,7 +108,7 @@ class PreferenceSearcher {
         if (s.startsWith("@")) {
             try {
                 int id = Integer.parseInt(s.substring(1));
-                return activity.getString(id);
+                return context.getString(id);
             } catch (Exception e) {
                 e.printStackTrace();
             }

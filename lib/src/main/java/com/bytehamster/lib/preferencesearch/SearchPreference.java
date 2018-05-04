@@ -1,10 +1,11 @@
 package com.bytehamster.lib.preferencesearch;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.preference.Preference;
+import android.os.Bundle;
 import android.support.annotation.XmlRes;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceViewHolder;
 import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -19,50 +20,68 @@ public class SearchPreference extends Preference implements View.OnClickListener
     private ArrayList<String> breadcrumbsToIndex = new ArrayList<>();
     private boolean historyEnabled = true;
     private boolean breadcrumbsEnabled = false;
-    private Class classToBeCalled;
+    private AppCompatActivity activity;
+    private int containerResId = android.R.id.content;
 
     @SuppressWarnings("unused")
     public SearchPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        setLayoutResource(R.layout.search_preference);
     }
 
     @SuppressWarnings("unused")
     public SearchPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setLayoutResource(R.layout.search_preference);
     }
 
     @SuppressWarnings("unused")
     public SearchPreference(Context context) {
         super(context);
+        setLayoutResource(R.layout.search_preference);
     }
 
     @Override
-    protected View onCreateView(ViewGroup parent) {
-        super.onCreateView(parent);
-        LayoutInflater li = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if (li == null) {
-            return null;
-        }
-        View root = li.inflate(R.layout.search_preference, parent, false);
+    public void onBindViewHolder(PreferenceViewHolder holder) {
+        super.onBindViewHolder(holder);
 
-        EditText searchText = root.findViewById(R.id.search);
+        EditText searchText = (EditText) holder.findViewById(R.id.search);
         searchText.setFocusable(false);
         searchText.setInputType(InputType.TYPE_NULL);
         searchText.setOnClickListener(this);
 
-        root.findViewById(R.id.search_card).setOnClickListener(this);
-        return root;
+        holder.findViewById(R.id.search_card).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        Intent i = new Intent(getContext(), PreferenceSearchActivity.class);
-        i.putExtra(PreferenceSearchActivity.EXTRA_INDEX_FILES, filesToIndex);
-        i.putExtra(PreferenceSearchActivity.EXTRA_INDEX_BREADCRUMBS, breadcrumbsToIndex);
-        i.putExtra(PreferenceSearchActivity.EXTRA_HISTORY_ENABLED, historyEnabled);
-        i.putExtra(PreferenceSearchActivity.EXTRA_CLASS_TO_BE_CALLED, classToBeCalled);
-        i.putExtra(PreferenceSearchActivity.EXTRA_BREADCRUMBS_ENABLED, breadcrumbsEnabled);
-        getContext().startActivity(i);
+        if (activity == null) {
+            throw new IllegalStateException("setActivity() not called");
+        }
+
+        Bundle arguments = new Bundle();
+        arguments.putSerializable(PreferenceSearchFragment.ARGUMENT_INDEX_FILES, filesToIndex);
+        arguments.putSerializable(PreferenceSearchFragment.ARGUMENT_INDEX_BREADCRUMBS, breadcrumbsToIndex);
+        arguments.putBoolean(PreferenceSearchFragment.ARGUMENT_HISTORY_ENABLED, historyEnabled);
+        arguments.putBoolean(PreferenceSearchFragment.ARGUMENT_BREADCRUMBS_ENABLED, breadcrumbsEnabled);
+
+        PreferenceSearchFragment fragment = new PreferenceSearchFragment();
+        fragment.setArguments(arguments);
+        activity.getSupportFragmentManager().beginTransaction()
+                .replace(containerResId, fragment)
+                .addToBackStack("PreferenceSearchFragment")
+                .commit();
+    }
+
+    /**
+     * Sets the current activity that also receives callbacks
+     * @param activity The Activity that receives callbacks. Must implement SearchPreferenceResultListener.
+     */
+    public void setActivity(AppCompatActivity activity) {
+        this.activity = activity;
+        if (!(activity instanceof SearchPreferenceResultListener)) {
+            throw new IllegalArgumentException("Activity must implement SearchPreferenceResultListener");
+        }
     }
 
     /**
@@ -92,14 +111,6 @@ public class SearchPreference extends Preference implements View.OnClickListener
     }
 
     /**
-     * Specifies which Activity should be called when a search result was pressed
-     * @param classToBeCalled The Activity to be called
-     */
-    public void openActivityOnResultClick(Class<? extends Activity> classToBeCalled) {
-        this.classToBeCalled = classToBeCalled;
-    }
-
-    /**
      * Show breadcrumbs in the list of search results, containing of
      * the prefix given in addResourceFileToIndex, PreferenceCategory and PreferenceScreen.
      * Default is false
@@ -107,5 +118,13 @@ public class SearchPreference extends Preference implements View.OnClickListener
      */
     public void setBreadcrumbsEnabled(boolean breadcrumbsEnabled) {
         this.breadcrumbsEnabled = breadcrumbsEnabled;
+    }
+
+    /**
+     * Sets the container to use when loading the fragment
+     * @param containerResId Resource id of the container
+     */
+    public void setContainerResId(int containerResId) {
+        this.containerResId = containerResId;
     }
 }
