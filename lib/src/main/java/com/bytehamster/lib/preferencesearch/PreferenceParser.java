@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-class PreferenceSearcher {
+class PreferenceParser {
     private static final List<String> BLACKLIST = Arrays.asList(SearchPreference.class.getName(), "PreferenceCategory");
     private static final List<String> CONTAINERS = Arrays.asList("PreferenceCategory", "PreferenceScreen");
     private Context context;
-    private ArrayList<SearchResult> allEntries = new ArrayList<>();
+    private ArrayList<ParseResult> allEntries = new ArrayList<>();
 
-    PreferenceSearcher(Context context) {
+    PreferenceParser(Context context) {
         this.context = context;
     }
 
@@ -23,8 +23,8 @@ class PreferenceSearcher {
         allEntries.addAll(parseFile(resId, breadcrumb));
     }
 
-    private ArrayList<SearchResult> parseFile(int resId, String firstBreadcrumb) {
-        java.util.ArrayList<SearchResult> results = new ArrayList<>();
+    private ArrayList<ParseResult> parseFile(int resId, String firstBreadcrumb) {
+        java.util.ArrayList<ParseResult> results = new ArrayList<>();
         XmlPullParser xpp = context.getResources().getXml(resId);
 
         try {
@@ -34,7 +34,7 @@ class PreferenceSearcher {
             }
             while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
                 if (xpp.getEventType() == XmlPullParser.START_TAG) {
-                    SearchResult result = parseSearchResult(xpp);
+                    ParseResult result = parseSearchResult(xpp);
                     result.resId = resId;
 
                     if (!BLACKLIST.contains(xpp.getName()) && result.hasData()) {
@@ -69,8 +69,8 @@ class PreferenceSearcher {
         return result.toString();
     }
 
-    private SearchResult parseSearchResult(XmlPullParser xpp) {
-        SearchResult result = new SearchResult();
+    private ParseResult parseSearchResult(XmlPullParser xpp) {
+        ParseResult result = new ParseResult();
         for (int i = 0; i < xpp.getAttributeCount(); i++) {
             switch (xpp.getAttributeName(i)) {
                 case "title":
@@ -87,7 +87,7 @@ class PreferenceSearcher {
                     break;
             }
         }
-        Log.d("PreferenceSearcher", "Found: " + xpp.getName() + "/" + result);
+        Log.d("PreferenceParser", "Found: " + xpp.getName() + "/" + result);
         return result;
     }
 
@@ -116,10 +116,10 @@ class PreferenceSearcher {
         return s;
     }
 
-    ArrayList<SearchResult> searchFor(final String keyword) {
-        ArrayList<SearchResult> results = new ArrayList<>();
+    ArrayList<ParseResult> searchFor(final String keyword) {
+        ArrayList<ParseResult> results = new ArrayList<>();
 
-        for (SearchResult res : allEntries) {
+        for (ParseResult res : allEntries) {
             if (res.contains(keyword)) {
                 results.add(res);
             }
@@ -127,7 +127,7 @@ class PreferenceSearcher {
         return results;
     }
 
-    class SearchResult {
+    class ParseResult {
         String title, summary, key, entries, breadcrumbs;
         int resId;
 
@@ -142,7 +142,7 @@ class PreferenceSearcher {
 
         @Override
         public String toString() {
-            return "SearchResult: " + title + " " + summary + " " + key;
+            return "ParseResult: " + title + " " + summary + " " + key;
         }
     }
 

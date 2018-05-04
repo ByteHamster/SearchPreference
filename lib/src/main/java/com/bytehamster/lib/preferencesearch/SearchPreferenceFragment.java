@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PreferenceSearchFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class SearchPreferenceFragment extends Fragment implements AdapterView.OnItemClickListener {
     static final String ARGUMENT_INDEX_FILES = "files";
     static final String ARGUMENT_INDEX_BREADCRUMBS = "breadcrumbs";
     static final String ARGUMENT_HISTORY_ENABLED = "history_enabled";
@@ -33,8 +33,8 @@ public class PreferenceSearchFragment extends Fragment implements AdapterView.On
 
     private static final String SHARED_PREFS_FILE = "preferenceSearch";
     private static final int MAX_HISTORY = 5;
-    private PreferenceSearcher searcher;
-    private ArrayList<PreferenceSearcher.SearchResult> results;
+    private PreferenceParser searcher;
+    private ArrayList<PreferenceParser.ParseResult> results;
     private ArrayList<String> history;
     private boolean showingHistory = false;
     private SharedPreferences prefs;
@@ -44,7 +44,7 @@ public class PreferenceSearchFragment extends Fragment implements AdapterView.On
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         prefs = getContext().getSharedPreferences(SHARED_PREFS_FILE, Context.MODE_PRIVATE);
-        searcher = new PreferenceSearcher(getContext());
+        searcher = new PreferenceParser(getContext());
 
         ArrayList<Integer> files = getArguments().getIntegerArrayList(ARGUMENT_INDEX_FILES);
         ArrayList<String> breadcrumbs = getArguments().getStringArrayList(ARGUMENT_INDEX_BREADCRUMBS);
@@ -158,7 +158,7 @@ public class PreferenceSearchFragment extends Fragment implements AdapterView.On
         try {
             results = searcher.searchFor(keyword);
             ArrayList<Map<String, String>> results2 = new ArrayList<>();
-            for (PreferenceSearcher.SearchResult result : results) {
+            for (PreferenceParser.ParseResult result : results) {
                 Map<String, String> m = new HashMap<>();
                 m.put("title", result.title);
                 m.put("summary", result.summary);
@@ -216,7 +216,7 @@ public class PreferenceSearchFragment extends Fragment implements AdapterView.On
             addHistoryEntry(viewHolder.searchView.getText().toString());
 
             try {
-                PreferenceSearcher.SearchResult r = results.get(position);
+                PreferenceParser.ParseResult r = results.get(position);
                 SearchPreferenceResult result = new SearchPreferenceResult(r.key, r.resId);
                 ((SearchPreferenceResultListener) getActivity()).onSearchResultClicked(result);
             } catch (ClassCastException e) {

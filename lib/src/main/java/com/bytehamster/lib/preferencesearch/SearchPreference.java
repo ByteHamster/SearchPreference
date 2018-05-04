@@ -59,16 +59,16 @@ public class SearchPreference extends Preference implements View.OnClickListener
         }
 
         Bundle arguments = new Bundle();
-        arguments.putSerializable(PreferenceSearchFragment.ARGUMENT_INDEX_FILES, filesToIndex);
-        arguments.putSerializable(PreferenceSearchFragment.ARGUMENT_INDEX_BREADCRUMBS, breadcrumbsToIndex);
-        arguments.putBoolean(PreferenceSearchFragment.ARGUMENT_HISTORY_ENABLED, historyEnabled);
-        arguments.putBoolean(PreferenceSearchFragment.ARGUMENT_BREADCRUMBS_ENABLED, breadcrumbsEnabled);
+        arguments.putSerializable(SearchPreferenceFragment.ARGUMENT_INDEX_FILES, filesToIndex);
+        arguments.putSerializable(SearchPreferenceFragment.ARGUMENT_INDEX_BREADCRUMBS, breadcrumbsToIndex);
+        arguments.putBoolean(SearchPreferenceFragment.ARGUMENT_HISTORY_ENABLED, historyEnabled);
+        arguments.putBoolean(SearchPreferenceFragment.ARGUMENT_BREADCRUMBS_ENABLED, breadcrumbsEnabled);
 
-        PreferenceSearchFragment fragment = new PreferenceSearchFragment();
+        SearchPreferenceFragment fragment = new SearchPreferenceFragment();
         fragment.setArguments(arguments);
         activity.getSupportFragmentManager().beginTransaction()
                 .replace(containerResId, fragment)
-                .addToBackStack("PreferenceSearchFragment")
+                .addToBackStack("SearchPreferenceFragment")
                 .commit();
     }
 
