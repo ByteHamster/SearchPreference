@@ -30,7 +30,7 @@ publish {
     groupId = 'com.bytehamster.lib'
     artifactId = 'searchpreference'
     uploadName = 'SearchPreference'
-    publishVersion = '1.0.1'
+    publishVersion = '1.0.2'
     desc = 'Search inside Android Preferences'
     website = 'https://github.com/ByteHamster/PreferenceSearch'
     repoName = "android"
