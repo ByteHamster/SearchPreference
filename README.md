@@ -1,5 +1,6 @@
 # SearchPreference
-Search inside Android Preferences
+
+This is a library for Android apps that allows to search inside Preference xml files. The library provides a subclass of `Preference` that can be integrated into existing apps easily.
 
 [ ![Download](https://api.bintray.com/packages/bytehamster/android/SearchPreference/images/download.svg) ](https://bintray.com/bytehamster/android/SearchPreference/_latestVersion)
 
