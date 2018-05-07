@@ -1,0 +1,8 @@
+<resources>
+    <string name="search">Suchen…</string>
+    <string name="clear">Leeren</string>
+    <string name="history_entry">Verlaufseintrag</string>
+    <string name="more">Mehr</string>
+    <string name="clear_history">Verlauf löschen</string>
+    <string name="no_results">Keine Ergebnisse</string>
+</resources>
