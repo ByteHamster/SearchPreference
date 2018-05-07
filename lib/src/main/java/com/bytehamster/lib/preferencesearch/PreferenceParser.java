@@ -7,13 +7,16 @@ import org.xmlpull.v1.XmlPullParser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 class PreferenceParser {
+    private static final int MAX_RESULTS = 10;
     private static final List<String> BLACKLIST = Arrays.asList(SearchPreference.class.getName(), "PreferenceCategory");
     private static final List<String> CONTAINERS = Arrays.asList("PreferenceCategory", "PreferenceScreen");
     private Context context;
-    private ArrayList<ParseResult> allEntries = new ArrayList<>();
+    private ArrayList<PreferenceItem> allEntries = new ArrayList<>();
 
     PreferenceParser(Context context) {
         this.context = context;
@@ -23,8 +26,8 @@ class PreferenceParser {
         allEntries.addAll(parseFile(resId, breadcrumb));
     }
 
-    private ArrayList<ParseResult> parseFile(int resId, String firstBreadcrumb) {
-        java.util.ArrayList<ParseResult> results = new ArrayList<>();
+    private ArrayList<PreferenceItem> parseFile(int resId, String firstBreadcrumb) {
+        java.util.ArrayList<PreferenceItem> results = new ArrayList<>();
         XmlPullParser xpp = context.getResources().getXml(resId);
 
         try {
@@ -34,7 +37,7 @@ class PreferenceParser {
             }
             while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
                 if (xpp.getEventType() == XmlPullParser.START_TAG) {
-                    ParseResult result = parseSearchResult(xpp);
+                    PreferenceItem result = parseSearchResult(xpp);
                     result.resId = resId;
 
                     if (!BLACKLIST.contains(xpp.getName()) && result.hasData()) {
@@ -66,8 +69,8 @@ class PreferenceParser {
         return result;
     }
 
-    private ParseResult parseSearchResult(XmlPullParser xpp) {
-        ParseResult result = new ParseResult();
+    private PreferenceItem parseSearchResult(XmlPullParser xpp) {
+        PreferenceItem result = new PreferenceItem();
         for (int i = 0; i < xpp.getAttributeCount(); i++) {
             switch (xpp.getAttributeName(i)) {
                 case "title":
@@ -113,44 +116,34 @@ class PreferenceParser {
         return s;
     }
 
-    ArrayList<ParseResult> searchFor(final String keyword) {
-        ArrayList<ParseResult> results = new ArrayList<>();
+    List<PreferenceItem> searchFor(final String keyword) {
+        if (TextUtils.isEmpty(keyword)) {
+            return new ArrayList<>();
+        }
+        ArrayList<PreferenceItem> results = new ArrayList<>();
 
-        for (ParseResult res : allEntries) {
-            if (res.contains(keyword)) {
-                results.add(res);
+        for (PreferenceItem item : allEntries) {
+            if (item.matches(keyword)) {
+                results.add(item);
             }
         }
-        return results;
-    }
 
-    class ParseResult {
-        String title, summary, key, entries, breadcrumbs;
-        int resId;
+        Collections.sort(results, new Comparator<PreferenceItem>() {
+            @Override
+            public int compare(PreferenceItem i1, PreferenceItem i2) {
+                return floatCompare(i2.getScore(keyword), i1.getScore(keyword));
+            }
+        });
 
-        private boolean hasData() {
-            return title != null || summary != null;
-        }
-
-        private boolean contains(String keyword) {
-            return stringContains(title, keyword) || stringContains(summary, keyword)
-                    || stringContains(entries, keyword) || stringContains(breadcrumbs, keyword);
-        }
-
-        @Override
-        public String toString() {
-            return "ParseResult: " + title + " " + summary + " " + key;
+        if (results.size() > MAX_RESULTS) {
+            return results.subList(0, MAX_RESULTS);
+        } else {
+            return results;
         }
     }
 
-    private boolean stringContains(String s1, String s2) {
-        if (s1 == null || s2 == null) {
-            return false;
-        }
-        return simplify(s1).contains(simplify(s2));
-    }
-
-    private String simplify (String s) {
-        return s.toLowerCase().replace(" ", "");
+    @SuppressWarnings("UseCompareMethod")
+    private static int floatCompare(float x, float y) {
+        return (x < y) ? -1 : ((x == y) ? 0 : 1);
     }
 }

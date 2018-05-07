@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SearchPreferenceFragment extends Fragment implements AdapterView.OnItemClickListener {
@@ -34,8 +35,8 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
     private static final String SHARED_PREFS_FILE = "preferenceSearch";
     private static final int MAX_HISTORY = 5;
     private PreferenceParser searcher;
-    private ArrayList<PreferenceParser.ParseResult> results;
-    private ArrayList<String> history;
+    private List<PreferenceItem> results;
+    private List<String> history;
     private boolean showingHistory = false;
     private SharedPreferences prefs;
     private SearchViewHolder viewHolder;
@@ -169,7 +170,7 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
 
         results = searcher.searchFor(keyword);
         ArrayList<Map<String, String>> results2 = new ArrayList<>();
-        for (PreferenceParser.ParseResult result : results) {
+        for (PreferenceItem result : results) {
             Map<String, String> m = new HashMap<>();
             m.put("title", result.title);
             m.put("summary", result.summary);
@@ -225,7 +226,7 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
 
             try {
                 final SearchPreferenceResultListener callback = (SearchPreferenceResultListener) getActivity();
-                PreferenceParser.ParseResult r = results.get(position);
+                PreferenceItem r = results.get(position);
                 SearchPreferenceResult result = new SearchPreferenceResult(r.key, r.resId);
                 callback.onSearchResultClicked(result);
             } catch (ClassCastException e) {

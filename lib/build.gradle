@@ -21,4 +21,5 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:cardview-v7:26.1.0'
     implementation 'com.android.support:preference-v14:26.1.0'
+    implementation 'org.apache.commons:commons-text:1.3'
 }
