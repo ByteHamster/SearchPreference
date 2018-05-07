@@ -1,8 +1,0 @@
-<resources>
-    <string name="search">Search…</string>
-    <string name="clear">Clear</string>
-    <string name="history_entry">History entry</string>
-    <string name="more">More</string>
-    <string name="clear_history">Clear history</string>
-    <string name="no_results">No results</string>
-</resources>

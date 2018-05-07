@@ -85,33 +85,6 @@ public class SearchPreference extends Preference implements View.OnClickListener
     }
 
     /**
-     * Makes the search index include the given R.xml resource
-     * @param resId The resource to index
-     */
-    public void addResourceFileToIndex(@XmlRes int resId) {
-        addResourceFileToIndex(resId, "");
-    }
-
-    /**
-     * Makes the search index include the given R.xml resource
-     * @param resId The resource to index
-     * @param breadcrumb Prefix to add to breadcrumbs when displaying search results from this file
-     */
-    public void addResourceFileToIndex(@XmlRes int resId, String breadcrumb) {
-        filesToIndex.add(resId);
-        breadcrumbsToIndex.add(breadcrumb);
-    }
-
-    /**
-     * Makes the search index include the given R.xml resource
-     * @param resId The resource to index
-     * @param breadcrumb Prefix to add to breadcrumbs when displaying search results from this file
-     */
-    public void addResourceFileToIndex(@XmlRes int resId, @StringRes int breadcrumb) {
-        addResourceFileToIndex(resId, activity.getString(breadcrumb));
-    }
-
-    /**
      * Show a history of recent search terms if nothing was typed yet. Default is true
      * @param historyEnabled True if history should be enabled
      */
@@ -135,5 +108,56 @@ public class SearchPreference extends Preference implements View.OnClickListener
      */
     public void setFragmentContainerViewId(@IdRes int containerResId) {
         this.containerResId = containerResId;
+    }
+
+    /**
+     * Begin adding a file to the index
+     */
+    public ResourceAdder index() {
+        return new ResourceAdder(this);
+    }
+
+    /**
+     * Adds a given R.xml resource to the search index
+     */
+    public class ResourceAdder {
+        private String breadcrumb = null;
+        private final SearchPreference searchPreference;
+
+        private ResourceAdder(SearchPreference searchPreference) {
+            this.searchPreference = searchPreference;
+        }
+
+        /**
+         * Includes the given R.xml resource in the index
+         * @param resId The resource to index
+         */
+        public void addFile (@XmlRes int resId) {
+            if (breadcrumb == null) {
+                breadcrumb = "";
+            }
+
+            searchPreference.filesToIndex.add(resId);
+            searchPreference.breadcrumbsToIndex.add(breadcrumb);
+        }
+
+        /**
+         * Adds a breadcrumb
+         * @param breadcrumb The breadcrumb to add
+         * @return For chaining
+         */
+        public ResourceAdder addBreadcrumb(@StringRes int breadcrumb) {
+            return addBreadcrumb(activity.getString(breadcrumb));
+        }
+
+        /**
+         * Adds a breadcrumb
+         * @param breadcrumb The breadcrumb to add
+         * @return For chaining
+         */
+        public ResourceAdder addBreadcrumb(String breadcrumb) {
+            this.breadcrumb = Breadcrumb.concat(this.breadcrumb, breadcrumb);
+            return this;
+        }
     }
 }

@@ -48,8 +48,9 @@ public class EnhancedExample extends AppCompatActivity implements SearchPreferen
             searchPreference = (SearchPreference) findPreference("searchPreference");
             searchPreference.setActivity((AppCompatActivity) getActivity());
             searchPreference.setFragmentContainerViewId(android.R.id.content);
-            searchPreference.addResourceFileToIndex(R.xml.preferences, "Main file");
-            searchPreference.addResourceFileToIndex(R.xml.preferences2, "Second file");
+
+            searchPreference.index().addBreadcrumb("Main file").addFile(R.xml.preferences);
+            searchPreference.index().addBreadcrumb("Second file").addFile(R.xml.preferences2);
             searchPreference.setBreadcrumbsEnabled(true);
             searchPreference.setHistoryEnabled(true);
         }

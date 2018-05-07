@@ -37,7 +37,7 @@ Define search index in your `PreferenceFragment`:
 
             SearchPreference searchPreference = (SearchPreference) findPreference("searchPreference");
             searchPreference.setActivity((AppCompatActivity) getActivity());
-            searchPreference.addResourceFileToIndex(R.xml.preferences);
+            searchPreference.index().addFile(R.xml.preferences);
         }
     }
 

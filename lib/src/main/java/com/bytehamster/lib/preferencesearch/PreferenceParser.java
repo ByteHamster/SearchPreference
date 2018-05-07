@@ -57,16 +57,13 @@ class PreferenceParser {
     }
 
     private String joinBreadcrumbs(ArrayList<String> breadcrumbs) {
-        StringBuilder result = new StringBuilder();
+        String result = "";
         for (String crumb : breadcrumbs) {
             if (!TextUtils.isEmpty(crumb)) {
-                if (!TextUtils.isEmpty(result.toString())) {
-                    result.append(" > ");
-                }
-                result.append(crumb);
+                result = Breadcrumb.concat(result, crumb);
             }
         }
-        return result.toString();
+        return result;
     }
 
     private ParseResult parseSearchResult(XmlPullParser xpp) {
