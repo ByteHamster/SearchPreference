@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 26
@@ -13,7 +12,6 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
@@ -23,16 +21,4 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:cardview-v7:26.1.0'
     implementation 'com.android.support:preference-v14:26.1.0'
-}
-
-publish {
-    userOrg = 'bytehamster'
-    groupId = 'com.bytehamster.lib'
-    artifactId = 'searchpreference'
-    uploadName = 'SearchPreference'
-    publishVersion = '1.0.2'
-    desc = 'Search inside Android Preferences'
-    website = 'https://github.com/ByteHamster/PreferenceSearch'
-    repoName = "android"
-    dryRun = false
 }

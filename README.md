@@ -2,26 +2,22 @@
 
 This is a library for Android apps that allows to search inside Preference xml files. The library provides a subclass of `Preference` that can be integrated into existing apps easily.
 
-[ ![Download](https://api.bintray.com/packages/bytehamster/android/SearchPreference/images/download.svg) ](https://bintray.com/bytehamster/android/SearchPreference/_latestVersion)
-
 <img width="200" src="https://raw.githubusercontent.com/ByteHamster/PreferenceSearch/master/screenshots/main.png" /> <img width="200" src="https://raw.githubusercontent.com/ByteHamster/PreferenceSearch/master/screenshots/history.png" /> <img width="200" src="https://raw.githubusercontent.com/ByteHamster/PreferenceSearch/master/screenshots/suggestions.png" /> <img width="200" src="https://raw.githubusercontent.com/ByteHamster/PreferenceSearch/master/screenshots/result.png" />
 
 ## Adding to your app
 
-Add PreferenceSearch to your `build.gradle`:
+Add PreferenceSearch to your `app/build.gradle`:
 
     dependencies {
-        compile 'com.bytehamster.lib:searchpreference:1.0.0'
+        implementation 'com.github.ByteHamster:SearchPreference:v1.0.2'
     }
 
-Add PreferenceSearch to your `settings.gradle`:
+Add PreferenceSearch to your `build.gradle`:
 
     allprojects {
         repositories {
             // ...
-            maven {
-                url  "https://dl.bintray.com/bytehamster/android"
-            }
+            maven { url 'https://jitpack.io' }
         }
     }
 
@@ -56,9 +52,3 @@ And react to search results in your Activity:
             result.highlight(prefsFragment);
         }
     }
-
-## Developer info
-
-Releasing to bintray:
-
-    build generatePomFileForReleasePublication bintrayUpload
