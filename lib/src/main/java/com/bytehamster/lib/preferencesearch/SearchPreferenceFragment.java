@@ -3,7 +3,6 @@ package com.bytehamster.lib.preferencesearch;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.PopupMenu;
@@ -138,6 +137,10 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
         super.onResume();
         updateSearchResults(viewHolder.searchView.getText().toString());
 
+        showKeyboard();
+    }
+
+    private void showKeyboard() {
         viewHolder.searchView.post(new Runnable() {
             @Override
             public void run() {
@@ -148,6 +151,14 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
                 }
             }
         });
+    }
+
+    private void hideKeyboard() {
+        View view = getActivity().getCurrentFocus();
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (view != null && imm != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     private void updateSearchResults(String keyword) {
@@ -210,6 +221,7 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
             viewHolder.searchView.setSelection(text.length());
         } else {
             addHistoryEntry(viewHolder.searchView.getText().toString());
+            hideKeyboard();
 
             try {
                 final SearchPreferenceResultListener callback = (SearchPreferenceResultListener) getActivity();
