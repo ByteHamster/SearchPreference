@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 public class SearchPreferenceFragment extends Fragment implements AdapterView.OnItemClickListener {
+    static final String ARGUMENT_INDEX_IGNORED = "ignored";
     static final String ARGUMENT_INDEX_FILES = "files";
     static final String ARGUMENT_INDEX_BREADCRUMBS = "breadcrumbs";
     static final String ARGUMENT_HISTORY_ENABLED = "history_enabled";
@@ -49,11 +50,12 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
 
         ArrayList<Integer> files = getArguments().getIntegerArrayList(ARGUMENT_INDEX_FILES);
         ArrayList<String> breadcrumbs = getArguments().getStringArrayList(ARGUMENT_INDEX_BREADCRUMBS);
+        ArrayList<String> ignored = getArguments().getStringArrayList(ARGUMENT_INDEX_IGNORED);
         if (files == null || breadcrumbs == null || files.size() != breadcrumbs.size()) {
             throw new AssertionError("Got incorrect arguments");
         }
         for (int i = 0; i < files.size(); i++) {
-            searcher.addResourceFile(files.get(i), breadcrumbs.get(i));
+            searcher.addResourceFile(files.get(i), breadcrumbs.get(i), ignored.get(i));
         }
         loadHistory();
     }

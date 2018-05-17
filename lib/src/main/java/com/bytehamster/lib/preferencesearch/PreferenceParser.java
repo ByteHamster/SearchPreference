@@ -23,11 +23,11 @@ class PreferenceParser {
         this.context = context;
     }
 
-    void addResourceFile(int resId, String breadcrumb) {
-        allEntries.addAll(parseFile(resId, breadcrumb));
+    void addResourceFile(int resId, String breadcrumb, String ignored) {
+        allEntries.addAll(parseFile(resId, breadcrumb, ignored));
     }
 
-    private ArrayList<PreferenceItem> parseFile(int resId, String firstBreadcrumb) {
+    private ArrayList<PreferenceItem> parseFile(int resId, String firstBreadcrumb, String ignored) {
         java.util.ArrayList<PreferenceItem> results = new ArrayList<>();
         XmlPullParser xpp = context.getResources().getXml(resId);
 
@@ -45,7 +45,9 @@ class PreferenceParser {
                     if (!BLACKLIST.contains(xpp.getName()) && result.hasData()) {
                         result.breadcrumbs = joinBreadcrumbs(breadcrumbs);
                         result.keyBreadcrumbs = cleanupKeyBreadcrumbs(keyBreadcrumbs);
-                        results.add(result);
+                        if (!ignored.contains(result.key)) {
+                            results.add(result);
+                        }
                     }
                     if (CONTAINERS.contains(xpp.getName())) {
                         breadcrumbs.add(result.title == null ? "" : result.title);

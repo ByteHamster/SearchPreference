@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class SearchPreference extends Preference implements View.OnClickListener {
     private ArrayList<Integer> filesToIndex = new ArrayList<>();
     private ArrayList<String> breadcrumbsToIndex = new ArrayList<>();
+    private ArrayList<String> ignoredKeys = new ArrayList<>();
     private boolean historyEnabled = true;
     private boolean breadcrumbsEnabled = false;
     private AppCompatActivity activity;
@@ -62,6 +63,7 @@ public class SearchPreference extends Preference implements View.OnClickListener
         Bundle arguments = new Bundle();
         arguments.putSerializable(SearchPreferenceFragment.ARGUMENT_INDEX_FILES, filesToIndex);
         arguments.putSerializable(SearchPreferenceFragment.ARGUMENT_INDEX_BREADCRUMBS, breadcrumbsToIndex);
+        arguments.putSerializable(SearchPreferenceFragment.ARGUMENT_INDEX_IGNORED, ignoredKeys);
         arguments.putBoolean(SearchPreferenceFragment.ARGUMENT_HISTORY_ENABLED, historyEnabled);
         arguments.putBoolean(SearchPreferenceFragment.ARGUMENT_BREADCRUMBS_ENABLED, breadcrumbsEnabled);
 
@@ -122,6 +124,7 @@ public class SearchPreference extends Preference implements View.OnClickListener
      */
     public class ResourceAdder {
         private String breadcrumb = null;
+        private String ignoredKeys = "";
         private final SearchPreference searchPreference;
 
         private ResourceAdder(SearchPreference searchPreference) {
@@ -139,6 +142,7 @@ public class SearchPreference extends Preference implements View.OnClickListener
 
             searchPreference.filesToIndex.add(resId);
             searchPreference.breadcrumbsToIndex.add(breadcrumb);
+            searchPreference.ignoredKeys.add(ignoredKeys);
         }
 
         /**
@@ -148,6 +152,16 @@ public class SearchPreference extends Preference implements View.OnClickListener
          */
         public ResourceAdder addBreadcrumb(@StringRes int breadcrumb) {
             return addBreadcrumb(activity.getString(breadcrumb));
+        }
+
+        /**
+         * Prevents the preference with this key from being displayed
+         * @param key The key to ignore
+         * @return For chaining
+         */
+        public ResourceAdder ignoreKey(String key) {
+            ignoredKeys = ignoredKeys + "\"" + key; // " is not a valid key
+            return this;
         }
 
         /**

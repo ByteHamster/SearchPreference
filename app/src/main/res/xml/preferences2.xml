@@ -5,4 +5,10 @@
             android:title="Checkbox"
             android:summary="This checkbox is a preference coming from a second file"
             android:key="secondfile" />
+
+    <CheckBoxPreference
+            android:title="Ignored"
+            android:summary="This checkbox should not be displayed"
+            android:key="ignoredcheckbox" />
+
 </PreferenceScreen>
