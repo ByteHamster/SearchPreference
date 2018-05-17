@@ -141,14 +141,15 @@ class PreferenceParser {
         return s;
     }
 
-    List<PreferenceItem> searchFor(final String keyword) {
+    List<PreferenceItem> searchFor(final String keyword, boolean fuzzy) {
         if (TextUtils.isEmpty(keyword)) {
             return new ArrayList<>();
         }
         ArrayList<PreferenceItem> results = new ArrayList<>();
 
         for (PreferenceItem item : allEntries) {
-            if (item.matches(keyword)) {
+            if ((fuzzy && item.matchesFuzzy(keyword))
+                    || (!fuzzy && item.matches(keyword))) {
                 results.add(item);
             }
         }

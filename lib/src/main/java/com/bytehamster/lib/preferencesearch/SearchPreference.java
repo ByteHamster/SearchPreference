@@ -21,6 +21,7 @@ public class SearchPreference extends Preference implements View.OnClickListener
     private ArrayList<String> ignoredKeys = new ArrayList<>();
     private boolean historyEnabled = true;
     private boolean breadcrumbsEnabled = false;
+    private boolean fuzzySearchEnabled = true;
     private AppCompatActivity activity;
     private int containerResId = android.R.id.content;
 
@@ -65,6 +66,7 @@ public class SearchPreference extends Preference implements View.OnClickListener
         arguments.putSerializable(SearchPreferenceFragment.ARGUMENT_INDEX_BREADCRUMBS, breadcrumbsToIndex);
         arguments.putSerializable(SearchPreferenceFragment.ARGUMENT_INDEX_IGNORED, ignoredKeys);
         arguments.putBoolean(SearchPreferenceFragment.ARGUMENT_HISTORY_ENABLED, historyEnabled);
+        arguments.putBoolean(SearchPreferenceFragment.ARGUMENT_FUZZY_ENABLED, fuzzySearchEnabled);
         arguments.putBoolean(SearchPreferenceFragment.ARGUMENT_BREADCRUMBS_ENABLED, breadcrumbsEnabled);
 
         SearchPreferenceFragment fragment = new SearchPreferenceFragment();
@@ -92,6 +94,14 @@ public class SearchPreference extends Preference implements View.OnClickListener
      */
     public void setHistoryEnabled(boolean historyEnabled) {
         this.historyEnabled = historyEnabled;
+    }
+
+    /**
+     * Allow to enable and disable fuzzy searching. Default is true
+     * @param historyEnabled True if search should be fuzzy
+     */
+    public void setFuzzySearchEnabled(boolean fuzzySearchEnabled) {
+        this.fuzzySearchEnabled = fuzzySearchEnabled;
     }
 
     /**

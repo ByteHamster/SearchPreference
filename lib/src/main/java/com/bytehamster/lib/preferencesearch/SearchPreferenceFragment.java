@@ -30,6 +30,7 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
     static final String ARGUMENT_INDEX_IGNORED = "ignored";
     static final String ARGUMENT_INDEX_FILES = "files";
     static final String ARGUMENT_INDEX_BREADCRUMBS = "breadcrumbs";
+    static final String ARGUMENT_FUZZY_ENABLED = "fuzzy";
     static final String ARGUMENT_HISTORY_ENABLED = "history_enabled";
     static final String ARGUMENT_BREADCRUMBS_ENABLED = "breadcrumbs_enabled";
 
@@ -170,7 +171,9 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
             return;
         }
 
-        results = searcher.searchFor(keyword);
+        boolean fuzzy = getArguments().getBoolean(ARGUMENT_FUZZY_ENABLED, true);
+        results = searcher.searchFor(keyword, fuzzy);
+
         ArrayList<Map<String, String>> results2 = new ArrayList<>();
         for (PreferenceItem result : results) {
             Map<String, String> m = new HashMap<>();

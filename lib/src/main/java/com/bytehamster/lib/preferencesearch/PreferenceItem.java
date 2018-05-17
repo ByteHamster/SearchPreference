@@ -24,8 +24,12 @@ class PreferenceItem {
         return title != null || summary != null;
     }
 
-    boolean matches(String keyword) {
+    boolean matchesFuzzy(String keyword) {
         return getScore(keyword) > 0.3;
+    }
+
+    boolean matches(String keyword) {
+        return getInfo().contains(keyword);
     }
 
     float getScore(String keyword) {
@@ -34,6 +38,17 @@ class PreferenceItem {
         } else if (TextUtils.equals(lastKeyword, keyword)) {
             return lastScore;
         }
+        String info = getInfo();
+
+        float score = fuzzyScore.fuzzyScore(info, "ø" + keyword);
+        float maxScore = (keyword.length() + 1) * 3 - 2; // First item can not get +2 bonus score
+
+        lastScore = score / maxScore;
+        lastKeyword = keyword;
+        return lastScore;
+    }
+
+    private String getInfo() {
         StringBuilder infoBuilder = new StringBuilder();
         if (!TextUtils.isEmpty(title)) {
             infoBuilder.append("ø").append(title);
@@ -47,14 +62,7 @@ class PreferenceItem {
         if (!TextUtils.isEmpty(breadcrumbs)) {
             infoBuilder.append("ø").append(breadcrumbs);
         }
-        String info = infoBuilder.toString();
-
-        float score = fuzzyScore.fuzzyScore(info, "ø" + keyword);
-        float maxScore = (keyword.length() + 1) * 3 - 2; // First item can not get +2 bonus score
-
-        lastScore = score / maxScore;
-        lastKeyword = keyword;
-        return lastScore;
+        return infoBuilder.toString();
     }
 
 

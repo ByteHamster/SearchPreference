@@ -55,6 +55,7 @@ public class EnhancedExample extends AppCompatActivity implements SearchPreferen
                                     .addFile(R.xml.preferences2);
             searchPreference.setBreadcrumbsEnabled(true);
             searchPreference.setHistoryEnabled(true);
+            searchPreference.setFuzzySearchEnabled(true);
         }
 
         private void onSearchResultClicked(SearchPreferenceResult result) {
