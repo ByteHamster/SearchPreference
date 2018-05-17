@@ -9,7 +9,7 @@ This is a library for Android apps that allows to search inside Preference xml f
 Add PreferenceSearch to your `app/build.gradle`:
 
     dependencies {
-        implementation 'com.github.ByteHamster:SearchPreference:v1.0.2'
+        implementation 'com.github.ByteHamster:SearchPreference:v1.0.3'
     }
 
 Add PreferenceSearch to your `build.gradle`:
