@@ -9,12 +9,14 @@ import android.util.Log;
 
 
 public class SearchPreferenceResult {
-    private String key;
-    private int file;
+    private final String key;
+    private final int file;
+    private final String screen;
 
-    SearchPreferenceResult(String key, int file) {
+    SearchPreferenceResult(String key, int file, String screen) {
         this.key = key;
         this.file = file;
+        this.screen = screen;
     }
 
     /**
@@ -31,6 +33,14 @@ public class SearchPreferenceResult {
      */
     public int getResourceFile() {
         return file;
+    }
+
+    /**
+     * Returns the screen in which the result was found
+     * @return The screen in which the result was found
+     */
+    public String getScreen() {
+        return screen;
     }
 
     /**

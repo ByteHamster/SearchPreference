@@ -227,7 +227,11 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
             try {
                 final SearchPreferenceResultListener callback = (SearchPreferenceResultListener) getActivity();
                 PreferenceItem r = results.get(position);
-                SearchPreferenceResult result = new SearchPreferenceResult(r.key, r.resId);
+                String screen = null;
+                if (!r.keyBreadcrumbs.isEmpty()) {
+                    screen = r.keyBreadcrumbs.get(r.keyBreadcrumbs.size() - 1);
+                }
+                SearchPreferenceResult result = new SearchPreferenceResult(r.key, r.resId, screen);
                 callback.onSearchResultClicked(result);
             } catch (ClassCastException e) {
                 throw new ClassCastException(getActivity().toString() + " must implement SearchPreferenceResultListener");

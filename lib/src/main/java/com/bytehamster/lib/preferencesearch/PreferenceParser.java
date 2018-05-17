@@ -1,6 +1,7 @@
 package com.bytehamster.lib.preferencesearch;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import org.xmlpull.v1.XmlPullParser;
@@ -32,6 +33,7 @@ class PreferenceParser {
 
         try {
             ArrayList<String> breadcrumbs = new ArrayList<>();
+            ArrayList<String> keyBreadcrumbs = new ArrayList<>();
             if (!TextUtils.isEmpty(firstBreadcrumb)) {
                 breadcrumbs.add(firstBreadcrumb);
             }
@@ -42,13 +44,20 @@ class PreferenceParser {
 
                     if (!BLACKLIST.contains(xpp.getName()) && result.hasData()) {
                         result.breadcrumbs = joinBreadcrumbs(breadcrumbs);
+                        result.keyBreadcrumbs = cleanupKeyBreadcrumbs(keyBreadcrumbs);
                         results.add(result);
                     }
                     if (CONTAINERS.contains(xpp.getName())) {
                         breadcrumbs.add(result.title == null ? "" : result.title);
                     }
+                    if (xpp.getName().equals("PreferenceScreen")) {
+                        keyBreadcrumbs.add(getAttribute(xpp, "key"));
+                    }
                 } else if (xpp.getEventType() == XmlPullParser.END_TAG && CONTAINERS.contains(xpp.getName())) {
                     breadcrumbs.remove(breadcrumbs.size() - 1);
+                    if (xpp.getName().equals("PreferenceScreen")) {
+                        keyBreadcrumbs.remove(breadcrumbs.size() - 1);
+                    }
                 }
 
                 xpp.next();
@@ -57,6 +66,16 @@ class PreferenceParser {
             e.printStackTrace();
         }
         return results;
+    }
+
+    private ArrayList<String> cleanupKeyBreadcrumbs(ArrayList<String> keyBreadcrumbs) {
+        ArrayList<String> result = new ArrayList<>();
+        for (String keyBreadcrumb : keyBreadcrumbs) {
+            if (keyBreadcrumb != null) {
+                result.add(keyBreadcrumb);
+            }
+        }
+        return result;
     }
 
     private String joinBreadcrumbs(ArrayList<String> breadcrumbs) {
@@ -69,29 +88,30 @@ class PreferenceParser {
         return result;
     }
 
-    private PreferenceItem parseSearchResult(XmlPullParser xpp) {
-        PreferenceItem result = new PreferenceItem();
+    private String getAttribute(XmlPullParser xpp, String attribute) {
         for (int i = 0; i < xpp.getAttributeCount(); i++) {
-            switch (xpp.getAttributeName(i)) {
-                case "title":
-                    result.title = readString(xpp.getAttributeValue(i));
-                    break;
-                case "summary":
-                    result.summary = readString(xpp.getAttributeValue(i));
-                    break;
-                case "key":
-                    result.key = readString(xpp.getAttributeValue(i));
-                    break;
-                case "entries":
-                    result.entries = readStringArray(xpp.getAttributeValue(i));
-                    break;
+            if (xpp.getAttributeName(i).equals(attribute)) {
+                return xpp.getAttributeValue(i);
             }
         }
+        return null;
+    }
+
+    private PreferenceItem parseSearchResult(XmlPullParser xpp) {
+        PreferenceItem result = new PreferenceItem();
+        result.title = readString(getAttribute(xpp, "title"));
+        result.summary = readString(getAttribute(xpp, "summary"));
+        result.key = readString(getAttribute(xpp, "key"));
+        result.entries = readStringArray(getAttribute(xpp, "entries"));
+
         Log.d("PreferenceParser", "Found: " + xpp.getName() + "/" + result);
         return result;
     }
 
-    private String readStringArray(String s) {
+    private String readStringArray(@Nullable String s) {
+        if (s == null) {
+            return null;
+        }
         if (s.startsWith("@")) {
             try {
                 int id = Integer.parseInt(s.substring(1));
@@ -104,7 +124,10 @@ class PreferenceParser {
         return s;
     }
 
-    private String readString(String s) {
+    private String readString(@Nullable String s) {
+        if (s == null) {
+            return null;
+        }
         if (s.startsWith("@")) {
             try {
                 int id = Integer.parseInt(s.substring(1));

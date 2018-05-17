@@ -3,6 +3,7 @@ package com.bytehamster.lib.preferencesearch;
 import android.text.TextUtils;
 import org.apache.commons.text.similarity.FuzzyScore;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 class PreferenceItem {
@@ -13,6 +14,7 @@ class PreferenceItem {
     String key;
     String entries;
     String breadcrumbs;
+    ArrayList<String> keyBreadcrumbs = new ArrayList<>();
     int resId;
 
     private float lastScore = 0;
