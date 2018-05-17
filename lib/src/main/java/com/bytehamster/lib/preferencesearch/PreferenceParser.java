@@ -45,7 +45,7 @@ class PreferenceParser {
                     if (!BLACKLIST.contains(xpp.getName()) && result.hasData()) {
                         result.breadcrumbs = joinBreadcrumbs(breadcrumbs);
                         result.keyBreadcrumbs = cleanupKeyBreadcrumbs(keyBreadcrumbs);
-                        if (!ignored.contains(result.key)) {
+                        if (result.key == null || !ignored.contains(result.key)) {
                             results.add(result);
                         }
                     }
