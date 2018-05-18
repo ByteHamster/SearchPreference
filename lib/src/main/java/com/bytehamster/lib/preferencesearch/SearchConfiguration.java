@@ -17,6 +17,18 @@ public class SearchConfiguration {
     private AppCompatActivity activity;
     private int containerResId = android.R.id.content;
 
+    SearchConfiguration() {
+
+    }
+
+    /**
+     * Creates a new search configuration
+     * @param activity The Activity that receives callbacks. Must implement SearchPreferenceResultListener.
+     */
+    public SearchConfiguration(AppCompatActivity activity) {
+        setActivity(activity);
+    }
+
     public void showSearchFragment() {
         if (activity == null) {
             throw new IllegalStateException("setActivity() not called");
