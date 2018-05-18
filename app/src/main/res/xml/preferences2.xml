@@ -8,6 +8,12 @@
             android:key="secondfile" />
 
     <CheckBoxPreference
+            android:title="Checkbox"
+            android:summary="This checkbox is a preference coming from a second file"
+            search:summary="This summary is only displayed in search"
+            android:key="searchsummary" />
+
+    <CheckBoxPreference
             android:title="Ignored"
             android:summary="This checkbox should not be displayed"
             android:key="ignoredcheckbox"

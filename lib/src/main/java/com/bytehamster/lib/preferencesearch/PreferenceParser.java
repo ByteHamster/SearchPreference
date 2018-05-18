@@ -58,7 +58,7 @@ class PreferenceParser {
                         breadcrumbs.add(result.title == null ? "" : result.title);
                     }
                     if (xpp.getName().equals("PreferenceScreen")) {
-                        keyBreadcrumbs.add(getAttribute(xpp, NS_ANDROID, "key"));
+                        keyBreadcrumbs.add(getAttribute(xpp, "key"));
                     }
                 } else if (xpp.getEventType() == XmlPullParser.END_TAG && CONTAINERS.contains(xpp.getName())) {
                     breadcrumbs.remove(breadcrumbs.size() - 1);
@@ -106,12 +106,24 @@ class PreferenceParser {
         return null;
     }
 
+    private String getAttribute(XmlPullParser xpp, @NonNull String attribute) {
+        if (hasAttribute(xpp, NS_SEARCH, attribute)) {
+            return getAttribute(xpp, NS_SEARCH, attribute);
+        } else {
+            return getAttribute(xpp, NS_ANDROID, attribute);
+        }
+    }
+
+    private boolean hasAttribute(XmlPullParser xpp, @Nullable String namespace, @NonNull String attribute) {
+        return getAttribute(xpp, namespace, attribute) != null;
+    }
+
     private PreferenceItem parseSearchResult(XmlPullParser xpp) {
         PreferenceItem result = new PreferenceItem();
-        result.title = readString(getAttribute(xpp, NS_ANDROID, "title"));
-        result.summary = readString(getAttribute(xpp, NS_ANDROID,"summary"));
-        result.key = readString(getAttribute(xpp, NS_ANDROID,"key"));
-        result.entries = readStringArray(getAttribute(xpp, NS_ANDROID,"entries"));
+        result.title = readString(getAttribute(xpp, "title"));
+        result.summary = readString(getAttribute(xpp,"summary"));
+        result.key = readString(getAttribute(xpp,"key"));
+        result.entries = readStringArray(getAttribute(xpp,"entries"));
 
         Log.d("PreferenceParser", "Found: " + xpp.getName() + "/" + result);
         return result;
