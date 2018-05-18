@@ -3,6 +3,7 @@ package com.bytehamster.preferencesearch;
 import android.os.Bundle;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.app.AppCompatActivity;
+import com.bytehamster.lib.preferencesearch.SearchConfiguration;
 import com.bytehamster.lib.preferencesearch.SearchPreferenceResult;
 import com.bytehamster.lib.preferencesearch.SearchPreference;
 import com.bytehamster.lib.preferencesearch.SearchPreferenceResultListener;
@@ -34,8 +35,9 @@ public class SimpleExample extends AppCompatActivity implements SearchPreference
             addPreferencesFromResource(R.xml.preferences);
 
             SearchPreference searchPreference = (SearchPreference) findPreference("searchPreference");
-            searchPreference.setActivity((AppCompatActivity) getActivity());
-            searchPreference.index().addFile(R.xml.preferences);
+            SearchConfiguration config = searchPreference.getSearchConfiguration();
+            config.setActivity((AppCompatActivity) getActivity());
+            config.index().addFile(R.xml.preferences);
         }
     }
 }

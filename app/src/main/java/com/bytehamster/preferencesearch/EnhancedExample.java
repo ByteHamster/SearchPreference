@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import com.bytehamster.lib.preferencesearch.SearchConfiguration;
 import com.bytehamster.lib.preferencesearch.SearchPreference;
 import com.bytehamster.lib.preferencesearch.SearchPreferenceResult;
 import com.bytehamster.lib.preferencesearch.SearchPreferenceResultListener;
@@ -46,14 +47,15 @@ public class EnhancedExample extends AppCompatActivity implements SearchPreferen
             addPreferencesFromResource(R.xml.preferences);
 
             searchPreference = (SearchPreference) findPreference("searchPreference");
-            searchPreference.setActivity((AppCompatActivity) getActivity());
-            searchPreference.setFragmentContainerViewId(android.R.id.content);
+            SearchConfiguration config = searchPreference.getSearchConfiguration();
+            config.setActivity((AppCompatActivity) getActivity());
+            config.setFragmentContainerViewId(android.R.id.content);
 
-            searchPreference.index().addBreadcrumb("Main file").addFile(R.xml.preferences);
-            searchPreference.index().addBreadcrumb("Second file").addFile(R.xml.preferences2);
-            searchPreference.setBreadcrumbsEnabled(true);
-            searchPreference.setHistoryEnabled(true);
-            searchPreference.setFuzzySearchEnabled(true);
+            config.index().addBreadcrumb("Main file").addFile(R.xml.preferences);
+            config.index().addBreadcrumb("Second file").addFile(R.xml.preferences2);
+            config.setBreadcrumbsEnabled(true);
+            config.setHistoryEnabled(true);
+            config.setFuzzySearchEnabled(true);
         }
 
         private void onSearchResultClicked(SearchPreferenceResult result) {

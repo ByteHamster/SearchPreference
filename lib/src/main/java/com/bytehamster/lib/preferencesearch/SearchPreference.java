@@ -1,10 +1,7 @@
 package com.bytehamster.lib.preferencesearch;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.annotation.StringRes;
-import android.support.annotation.XmlRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceViewHolder;
@@ -13,16 +10,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.EditText;
 
-import java.util.ArrayList;
-
 public class SearchPreference extends Preference implements View.OnClickListener {
-    private ArrayList<Integer> filesToIndex = new ArrayList<>();
-    private ArrayList<String> breadcrumbsToIndex = new ArrayList<>();
-    private boolean historyEnabled = true;
-    private boolean breadcrumbsEnabled = false;
-    private boolean fuzzySearchEnabled = true;
-    private AppCompatActivity activity;
-    private int containerResId = android.R.id.content;
+    private SearchConfiguration searchConfiguration = new SearchConfiguration();
 
     @SuppressWarnings("unused")
     public SearchPreference(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -56,50 +45,42 @@ public class SearchPreference extends Preference implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
-        if (activity == null) {
-            throw new IllegalStateException("setActivity() not called");
-        }
+        getSearchConfiguration().showSearchFragment();
+    }
 
-        Bundle arguments = new Bundle();
-        arguments.putSerializable(SearchPreferenceFragment.ARGUMENT_INDEX_FILES, filesToIndex);
-        arguments.putSerializable(SearchPreferenceFragment.ARGUMENT_INDEX_BREADCRUMBS, breadcrumbsToIndex);
-        arguments.putBoolean(SearchPreferenceFragment.ARGUMENT_HISTORY_ENABLED, historyEnabled);
-        arguments.putBoolean(SearchPreferenceFragment.ARGUMENT_FUZZY_ENABLED, fuzzySearchEnabled);
-        arguments.putBoolean(SearchPreferenceFragment.ARGUMENT_BREADCRUMBS_ENABLED, breadcrumbsEnabled);
-
-        SearchPreferenceFragment fragment = new SearchPreferenceFragment();
-        fragment.setArguments(arguments);
-        activity.getSupportFragmentManager().beginTransaction()
-                .replace(containerResId, fragment)
-                .addToBackStack("SearchPreferenceFragment")
-                .commit();
+    /**
+     * Returns the search configuration object for this preference
+     * @return The search configuration
+     */
+    public SearchConfiguration getSearchConfiguration() {
+        return searchConfiguration;
     }
 
     /**
      * Sets the current activity that also receives callbacks
      * @param activity The Activity that receives callbacks. Must implement SearchPreferenceResultListener.
+     * @deprecated Use getSearchConfiguration().setActivity() instead.
      */
     public void setActivity(AppCompatActivity activity) {
-        this.activity = activity;
-        if (!(activity instanceof SearchPreferenceResultListener)) {
-            throw new IllegalArgumentException("Activity must implement SearchPreferenceResultListener");
-        }
+        getSearchConfiguration().setActivity(activity);
     }
 
     /**
      * Show a history of recent search terms if nothing was typed yet. Default is true
      * @param historyEnabled True if history should be enabled
+     * @deprecated Use getSearchConfiguration().setHistoryEnabled() instead.
      */
     public void setHistoryEnabled(boolean historyEnabled) {
-        this.historyEnabled = historyEnabled;
+        getSearchConfiguration().setHistoryEnabled(historyEnabled);
     }
 
     /**
      * Allow to enable and disable fuzzy searching. Default is true
      * @param fuzzySearchEnabled True if search should be fuzzy
+     * @deprecated Use getSearchConfiguration().setFuzzySearchEnabled() instead.
      */
     public void setFuzzySearchEnabled(boolean fuzzySearchEnabled) {
-        this.fuzzySearchEnabled = fuzzySearchEnabled;
+        getSearchConfiguration().setFuzzySearchEnabled(fuzzySearchEnabled);
     }
 
     /**
@@ -107,67 +88,26 @@ public class SearchPreference extends Preference implements View.OnClickListener
      * the prefix given in addResourceFileToIndex, PreferenceCategory and PreferenceScreen.
      * Default is false
      * @param breadcrumbsEnabled True if breadcrumbs should be shown
+     * @deprecated Use getSearchConfiguration().setBreadcrumbsEnabled() instead.
      */
     public void setBreadcrumbsEnabled(boolean breadcrumbsEnabled) {
-        this.breadcrumbsEnabled = breadcrumbsEnabled;
+        getSearchConfiguration().setBreadcrumbsEnabled(breadcrumbsEnabled);
     }
 
     /**
      * Sets the container to use when loading the fragment
      * @param containerResId Resource id of the container
+     * @deprecated Use getSearchConfiguration().setFragmentContainerViewId() instead.
      */
     public void setFragmentContainerViewId(@IdRes int containerResId) {
-        this.containerResId = containerResId;
+        getSearchConfiguration().setFragmentContainerViewId(containerResId);
     }
 
     /**
      * Begin adding a file to the index
+     * @deprecated Use getSearchConfiguration().index() instead.
      */
-    public ResourceAdder index() {
-        return new ResourceAdder(this);
-    }
-
-    /**
-     * Adds a given R.xml resource to the search index
-     */
-    public class ResourceAdder {
-        private String breadcrumb = null;
-        private final SearchPreference searchPreference;
-
-        private ResourceAdder(SearchPreference searchPreference) {
-            this.searchPreference = searchPreference;
-        }
-
-        /**
-         * Includes the given R.xml resource in the index
-         * @param resId The resource to index
-         */
-        public void addFile (@XmlRes int resId) {
-            if (breadcrumb == null) {
-                breadcrumb = "";
-            }
-
-            searchPreference.filesToIndex.add(resId);
-            searchPreference.breadcrumbsToIndex.add(breadcrumb);
-        }
-
-        /**
-         * Adds a breadcrumb
-         * @param breadcrumb The breadcrumb to add
-         * @return For chaining
-         */
-        public ResourceAdder addBreadcrumb(@StringRes int breadcrumb) {
-            return addBreadcrumb(activity.getString(breadcrumb));
-        }
-
-        /**
-         * Adds a breadcrumb
-         * @param breadcrumb The breadcrumb to add
-         * @return For chaining
-         */
-        public ResourceAdder addBreadcrumb(String breadcrumb) {
-            this.breadcrumb = Breadcrumb.concat(this.breadcrumb, breadcrumb);
-            return this;
-        }
+    public SearchConfiguration.ResourceAdder index() {
+        return getSearchConfiguration().index();
     }
 }
