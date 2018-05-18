@@ -50,9 +50,7 @@ public class EnhancedExample extends AppCompatActivity implements SearchPreferen
             searchPreference.setFragmentContainerViewId(android.R.id.content);
 
             searchPreference.index().addBreadcrumb("Main file").addFile(R.xml.preferences);
-            searchPreference.index().addBreadcrumb("Second file")
-                                    .ignoreKey("ignoredcheckbox")
-                                    .addFile(R.xml.preferences2);
+            searchPreference.index().addBreadcrumb("Second file").addFile(R.xml.preferences2);
             searchPreference.setBreadcrumbsEnabled(true);
             searchPreference.setHistoryEnabled(true);
             searchPreference.setFuzzySearchEnabled(true);
