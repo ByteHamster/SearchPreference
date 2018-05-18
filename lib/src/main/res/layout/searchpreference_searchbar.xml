@@ -21,11 +21,11 @@
         <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_search"
-                android:contentDescription="@string/search"/>
+                app:srcCompat="@drawable/searchpreference_ic_search"
+                android:contentDescription="@string/searchpreference_search"/>
 
         <EditText
-                android:hint="@string/search"
+                android:hint="@string/searchpreference_search"
                 android:layout_weight="1"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
@@ -41,12 +41,12 @@
                 android:id="@+id/clear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_clear"
+                app:srcCompat="@drawable/searchpreference_ic_clear"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
-                android:contentDescription="@string/clear"
+                android:contentDescription="@string/searchpreference_clear"
                 android:background="?attr/selectableItemBackground"
                 android:visibility="gone"/>
 
@@ -54,12 +54,12 @@
                 android:id="@+id/more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_more"
+                app:srcCompat="@drawable/searchpreference_ic_more"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
-                android:contentDescription="@string/more"
+                android:contentDescription="@string/searchpreference_more"
                 android:background="?attr/selectableItemBackground"
                 android:visibility="gone"/>
     </LinearLayout>

@@ -14,10 +14,10 @@
             android:id="@+id/history"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_history"
+            app:srcCompat="@drawable/searchpreference_ic_history"
             android:layout_marginRight="16dp"
             android:layout_marginEnd="16dp"
-            android:contentDescription="@string/history_entry"/>
+            android:contentDescription="@string/searchpreference_history_entry"/>
 
     <TextView
             android:layout_width="match_parent"

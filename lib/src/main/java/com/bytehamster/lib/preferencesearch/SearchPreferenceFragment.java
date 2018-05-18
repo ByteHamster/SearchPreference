@@ -78,7 +78,7 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
             @Override
             public void onClick(View v) {
                 PopupMenu popup = new PopupMenu(getContext(), viewHolder.moreButton);
-                popup.getMenuInflater().inflate(R.menu.more_search, popup.getMenu());
+                popup.getMenuInflater().inflate(R.menu.searchpreference_more, popup.getMenu());
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         if (item.getItemId() == R.id.clear_history) {

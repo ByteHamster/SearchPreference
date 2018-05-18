@@ -69,7 +69,7 @@ public class SearchPreferenceResult {
         final Drawable oldIcon = prefResult.getIcon();
         final boolean oldSpaceReserved = prefResult.isIconSpaceReserved();
 
-        prefResult.setIcon(R.drawable.ic_arrow_right);
+        prefResult.setIcon(R.drawable.searchpreference_ic_arrow_right);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
