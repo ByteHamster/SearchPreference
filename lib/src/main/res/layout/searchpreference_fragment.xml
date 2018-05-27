@@ -18,7 +18,8 @@
             android:gravity="center"
             android:visibility="gone"/>
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
+            android:scrollbars="vertical"
             android:paddingTop="8dp"
             android:clipToPadding="false"
             android:id="@+id/list"

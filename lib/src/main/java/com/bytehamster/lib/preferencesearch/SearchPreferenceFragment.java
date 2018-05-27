@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -18,25 +21,22 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class SearchPreferenceFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class SearchPreferenceFragment extends Fragment implements SearchPreferenceAdapter.SearchClickListener {
     private static final String SHARED_PREFS_FILE = "preferenceSearch";
     private static final int MAX_HISTORY = 5;
     private PreferenceParser searcher;
     private List<PreferenceItem> results;
-    private List<String> history;
+    private List<HistoryItem> history;
     private boolean showingHistory = false;
     private SharedPreferences prefs;
     private SearchViewHolder viewHolder;
     private SearchConfiguration searchConfiguration;
+    private SearchPreferenceAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,7 +87,14 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
                 popup.show();
             }
         });
-        viewHolder.listView.setOnItemClickListener(this);
+
+        viewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        viewHolder.recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        adapter = new SearchPreferenceAdapter();
+        adapter.setSearchConfiguration(searchConfiguration);
+        adapter.setOnItemClickListener(this);
+        viewHolder.recyclerView.setAdapter(adapter);
+
         viewHolder.searchView.addTextChangedListener(textWatcher);
 
         if (!searchConfiguration.isSearchBarEnabled()) {
@@ -104,7 +111,8 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
 
         int size = prefs.getInt("history_size", 0);
         for (int i = 0; i < size; i++) {
-            history.add(prefs.getString("history_" + i, null));
+            String title = prefs.getString("history_" + i, null);
+            history.add(new HistoryItem(title));
         }
     }
 
@@ -112,7 +120,7 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt("history_size", history.size());
         for (int i = 0; i < history.size(); i++) {
-            editor.putString("history_" + i, history.get(i));
+            editor.putString("history_" + i, history.get(i).getTerm());
         }
         editor.apply();
     }
@@ -125,11 +133,12 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
     }
 
     private void addHistoryEntry(String entry) {
-        if (!history.contains(entry)) {
+        HistoryItem newItem = new HistoryItem(entry);
+        if (!history.contains(newItem)) {
             if (history.size() >= MAX_HISTORY) {
                 history.remove(history.size() - 1);
             }
-            history.add(0, entry);
+            history.add(0, newItem);
             saveHistory();
             updateSearchResults(viewHolder.searchView.getText().toString());
         }
@@ -175,56 +184,30 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
         }
 
         results = searcher.searchFor(keyword, searchConfiguration.isFuzzySearchEnabled());
-
-        ArrayList<Map<String, String>> results2 = new ArrayList<>();
-        for (PreferenceItem result : results) {
-            Map<String, String> m = new HashMap<>();
-            m.put("title", result.title);
-            m.put("summary", result.summary);
-            m.put("breadcrumbs", result.breadcrumbs);
-            results2.add(m);
-        }
-
-        SimpleAdapter sa;
-        if (searchConfiguration.isBreadcrumbsEnabled()) {
-            sa = new SimpleAdapter(getContext(), results2, R.layout.searchpreference_list_item_result_breadcrumbs,
-                    new String[]{"title", "summary", "breadcrumbs"}, new int[]{R.id.title, R.id.summary, R.id.breadcrumbs});
-        } else {
-            sa = new SimpleAdapter(getContext(), results2, R.layout.searchpreference_list_item_result,
-                    new String[]{"title", "summary"}, new int[]{R.id.title, R.id.summary});
-        }
-        viewHolder.listView.setAdapter(sa);
+        adapter.setContent(new ArrayList<ListItem>(results));
         showingHistory = false;
 
         if (results.isEmpty()) {
             viewHolder.noResults.setVisibility(View.VISIBLE);
-            viewHolder.listView.setVisibility(View.GONE);
+            viewHolder.recyclerView.setVisibility(View.GONE);
         } else {
             viewHolder.noResults.setVisibility(View.GONE);
-            viewHolder.listView.setVisibility(View.VISIBLE);
+            viewHolder.recyclerView.setVisibility(View.VISIBLE);
         }
     }
 
     private void showHistory() {
         viewHolder.noResults.setVisibility(View.GONE);
-        viewHolder.listView.setVisibility(View.VISIBLE);
+        viewHolder.recyclerView.setVisibility(View.VISIBLE);
 
-        ArrayList<Map<String, String>> results2 = new ArrayList<>();
-        for (String entry : history) {
-            Map<String, String> m = new HashMap<>();
-            m.put("title", entry);
-            results2.add(m);
-        }
-        SimpleAdapter sa = new SimpleAdapter(getContext(), results2, R.layout.searchpreference_list_item_history,
-                new String[]{"title"}, new int[]{R.id.title});
-        viewHolder.listView.setAdapter(sa);
+        adapter.setContent(new ArrayList<ListItem>(history));
         showingHistory = true;
     }
 
     @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, final int position, long id) {
-        if (showingHistory) {
-            CharSequence text = ((TextView) view.findViewById(R.id.title)).getText();
+    public void onItemClicked(ListItem item, int position) {
+        if (item.getType() == HistoryItem.TYPE) {
+            CharSequence text = ((HistoryItem) item).getTerm();
             viewHolder.searchView.setText(text);
             viewHolder.searchView.setSelection(text.length());
         } else {
@@ -266,14 +249,14 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
         private ImageView clearButton;
         private ImageView moreButton;
         private EditText searchView;
-        private ListView listView;
+        private RecyclerView recyclerView;
         private TextView noResults;
         private CardView cardView;
 
         SearchViewHolder(View root) {
             searchView = root.findViewById(R.id.search);
             clearButton = root.findViewById(R.id.clear);
-            listView = root.findViewById(R.id.list);
+            recyclerView = root.findViewById(R.id.list);
             moreButton = root.findViewById(R.id.more);
             noResults = root.findViewById(R.id.no_results);
             cardView = root.findViewById(R.id.search_card);

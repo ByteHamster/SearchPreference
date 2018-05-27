@@ -6,7 +6,8 @@ import org.apache.commons.text.similarity.FuzzyScore;
 import java.util.ArrayList;
 import java.util.Locale;
 
-class PreferenceItem {
+class PreferenceItem extends ListItem {
+    static final int TYPE = 2;
     private static FuzzyScore fuzzyScore = new FuzzyScore(Locale.getDefault());
 
     String title;
@@ -69,5 +70,10 @@ class PreferenceItem {
     @Override
     public String toString() {
         return "PreferenceItem: " + title + " " + summary + " " + key;
+    }
+
+    @Override
+    public int getType() {
+        return TYPE;
     }
 }
