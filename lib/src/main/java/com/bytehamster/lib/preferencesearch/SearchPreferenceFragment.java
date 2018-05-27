@@ -159,6 +159,10 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
         }
     }
 
+    public void setSearchTerm(CharSequence term) {
+        viewHolder.searchView.setText(term);
+    }
+
     private void updateSearchResults(String keyword) {
         if (TextUtils.isEmpty(keyword)) {
             showHistory();

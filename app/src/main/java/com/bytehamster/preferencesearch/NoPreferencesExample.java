@@ -15,6 +15,8 @@ import com.bytehamster.lib.preferencesearch.SearchPreferenceResultListener;
  * This file demonstrates how to use the library without actually displaying a PreferenceFragment
  */
 public class NoPreferencesExample extends AppCompatActivity implements SearchPreferenceResultListener {
+    SearchPreferenceFragment fragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +25,14 @@ public class NoPreferencesExample extends AppCompatActivity implements SearchPre
         config.setFragmentContainerViewId(android.R.id.content);
         config.index().addFile(R.xml.preferences);
 
-        SearchPreferenceFragment fragment = config.showSearchFragment();
+        fragment = config.showSearchFragment();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        fragment.setSearchTerm("Test");
     }
 
     @Override
