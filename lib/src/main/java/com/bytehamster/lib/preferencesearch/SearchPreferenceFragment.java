@@ -27,12 +27,6 @@ import java.util.List;
 import java.util.Map;
 
 public class SearchPreferenceFragment extends Fragment implements AdapterView.OnItemClickListener {
-    static final String ARGUMENT_INDEX_FILES = "files";
-    static final String ARGUMENT_INDEX_BREADCRUMBS = "breadcrumbs";
-    static final String ARGUMENT_FUZZY_ENABLED = "fuzzy";
-    static final String ARGUMENT_HISTORY_ENABLED = "history_enabled";
-    static final String ARGUMENT_BREADCRUMBS_ENABLED = "breadcrumbs_enabled";
-
     private static final String SHARED_PREFS_FILE = "preferenceSearch";
     private static final int MAX_HISTORY = 5;
     private PreferenceParser searcher;
@@ -41,6 +35,7 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
     private boolean showingHistory = false;
     private SharedPreferences prefs;
     private SearchViewHolder viewHolder;
+    private SearchConfiguration searchConfiguration;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,8 +43,9 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
         prefs = getContext().getSharedPreferences(SHARED_PREFS_FILE, Context.MODE_PRIVATE);
         searcher = new PreferenceParser(getContext());
 
-        ArrayList<Integer> files = getArguments().getIntegerArrayList(ARGUMENT_INDEX_FILES);
-        ArrayList<String> breadcrumbs = getArguments().getStringArrayList(ARGUMENT_INDEX_BREADCRUMBS);
+        searchConfiguration = SearchConfiguration.fromBundle(getArguments());
+        ArrayList<Integer> files = searchConfiguration.getFiles();
+        ArrayList<String> breadcrumbs = searchConfiguration.getBreadcrumbs();
         if (files == null || breadcrumbs == null || files.size() != breadcrumbs.size()) {
             throw new AssertionError("Got incorrect arguments");
         }
@@ -71,7 +67,7 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
                 viewHolder.searchView.setText("");
             }
         });
-        if (getArguments().getBoolean(ARGUMENT_HISTORY_ENABLED, true)) {
+        if (searchConfiguration.isHistoryEnabled()) {
             viewHolder.moreButton.setVisibility(View.VISIBLE);
         }
         viewHolder.moreButton.setOnClickListener(new View.OnClickListener() {
@@ -97,7 +93,7 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
 
     private void loadHistory() {
         history = new ArrayList<>();
-        if (!getArguments().getBoolean(ARGUMENT_HISTORY_ENABLED, true)) {
+        if (!searchConfiguration.isHistoryEnabled()) {
             return;
         }
 
@@ -169,8 +165,7 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
             return;
         }
 
-        boolean fuzzy = getArguments().getBoolean(ARGUMENT_FUZZY_ENABLED, true);
-        results = searcher.searchFor(keyword, fuzzy);
+        results = searcher.searchFor(keyword, searchConfiguration.isFuzzySearchEnabled());
 
         ArrayList<Map<String, String>> results2 = new ArrayList<>();
         for (PreferenceItem result : results) {
@@ -182,7 +177,7 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
         }
 
         SimpleAdapter sa;
-        if (getArguments().getBoolean(ARGUMENT_BREADCRUMBS_ENABLED, true)) {
+        if (searchConfiguration.isBreadcrumbsEnabled()) {
             sa = new SimpleAdapter(getContext(), results2, R.layout.searchpreference_list_item_result_breadcrumbs,
                     new String[]{"title", "summary", "breadcrumbs"}, new int[]{R.id.title, R.id.summary, R.id.breadcrumbs});
         } else {

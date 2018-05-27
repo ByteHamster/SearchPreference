@@ -9,6 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import java.util.ArrayList;
 
 public class SearchConfiguration {
+    private static final String ARGUMENT_INDEX_FILES = "files";
+    private static final String ARGUMENT_INDEX_BREADCRUMBS = "breadcrumbs";
+    private static final String ARGUMENT_FUZZY_ENABLED = "fuzzy";
+    private static final String ARGUMENT_HISTORY_ENABLED = "history_enabled";
+    private static final String ARGUMENT_BREADCRUMBS_ENABLED = "breadcrumbs_enabled";
+
     private ArrayList<Integer> filesToIndex = new ArrayList<>();
     private ArrayList<String> breadcrumbsToIndex = new ArrayList<>();
     private boolean historyEnabled = true;
@@ -29,24 +35,49 @@ public class SearchConfiguration {
         setActivity(activity);
     }
 
-    public void showSearchFragment() {
+    /**
+     * Shows the fragment
+     * @return A reference to the fragment
+     */
+    public SearchPreferenceFragment showSearchFragment() {
         if (activity == null) {
             throw new IllegalStateException("setActivity() not called");
         }
 
-        Bundle arguments = new Bundle();
-        arguments.putSerializable(SearchPreferenceFragment.ARGUMENT_INDEX_FILES, filesToIndex);
-        arguments.putSerializable(SearchPreferenceFragment.ARGUMENT_INDEX_BREADCRUMBS, breadcrumbsToIndex);
-        arguments.putBoolean(SearchPreferenceFragment.ARGUMENT_HISTORY_ENABLED, historyEnabled);
-        arguments.putBoolean(SearchPreferenceFragment.ARGUMENT_FUZZY_ENABLED, fuzzySearchEnabled);
-        arguments.putBoolean(SearchPreferenceFragment.ARGUMENT_BREADCRUMBS_ENABLED, breadcrumbsEnabled);
-
+        Bundle arguments = this.toBundle();
         SearchPreferenceFragment fragment = new SearchPreferenceFragment();
         fragment.setArguments(arguments);
         activity.getSupportFragmentManager().beginTransaction()
                 .replace(containerResId, fragment)
                 .addToBackStack("SearchPreferenceFragment")
                 .commit();
+        return fragment;
+    }
+
+    private Bundle toBundle() {
+        Bundle arguments = new Bundle();
+        arguments.putSerializable(ARGUMENT_INDEX_FILES, filesToIndex);
+        arguments.putSerializable(ARGUMENT_INDEX_BREADCRUMBS, breadcrumbsToIndex);
+        arguments.putBoolean(ARGUMENT_HISTORY_ENABLED, historyEnabled);
+        arguments.putBoolean(ARGUMENT_FUZZY_ENABLED, fuzzySearchEnabled);
+        arguments.putBoolean(ARGUMENT_BREADCRUMBS_ENABLED, breadcrumbsEnabled);
+        return arguments;
+    }
+
+    static SearchConfiguration fromBundle(Bundle bundle) {
+        SearchConfiguration config = new SearchConfiguration();
+        config.filesToIndex = bundle.getIntegerArrayList(ARGUMENT_INDEX_FILES);
+        config.breadcrumbsToIndex = bundle.getStringArrayList(ARGUMENT_INDEX_BREADCRUMBS);
+
+        if (config.filesToIndex == null || config.breadcrumbsToIndex == null) {
+            throw new AssertionError("Missing extras");
+        } else if (config.filesToIndex.size() != config.breadcrumbsToIndex.size()) {
+            throw new AssertionError("Extra sizes do not match");
+        }
+        config.historyEnabled = bundle.getBoolean(ARGUMENT_HISTORY_ENABLED);
+        config.fuzzySearchEnabled = bundle.getBoolean(ARGUMENT_FUZZY_ENABLED);
+        config.breadcrumbsEnabled = bundle.getBoolean(ARGUMENT_BREADCRUMBS_ENABLED);
+        return config;
     }
 
     /**
@@ -99,6 +130,26 @@ public class SearchConfiguration {
      */
     public ResourceAdder index() {
         return new ResourceAdder(this);
+    }
+
+    ArrayList<Integer> getFiles() {
+        return filesToIndex;
+    }
+
+    ArrayList<String> getBreadcrumbs() {
+        return breadcrumbsToIndex;
+    }
+
+    boolean isHistoryEnabled() {
+        return historyEnabled;
+    }
+
+    boolean isBreadcrumbsEnabled() {
+        return breadcrumbsEnabled;
+    }
+
+    boolean isFuzzySearchEnabled() {
+        return fuzzySearchEnabled;
     }
 
     /**
