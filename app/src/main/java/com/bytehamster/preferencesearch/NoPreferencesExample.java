@@ -24,6 +24,8 @@ public class NoPreferencesExample extends AppCompatActivity implements SearchPre
         SearchConfiguration config = new SearchConfiguration(this);
         config.setFragmentContainerViewId(android.R.id.content);
         config.index().addFile(R.xml.preferences);
+        config.setSearchBarEnabled(false);
+        config.setFuzzySearchEnabled(false);
 
         fragment = config.showSearchFragment();
     }
@@ -32,7 +34,7 @@ public class NoPreferencesExample extends AppCompatActivity implements SearchPre
     protected void onStart() {
         super.onStart();
 
-        fragment.setSearchTerm("Test");
+        fragment.setSearchTerm("Checkbox");
     }
 
     @Override

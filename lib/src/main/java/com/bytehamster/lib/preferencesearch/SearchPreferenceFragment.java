@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -88,6 +89,10 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
         });
         viewHolder.listView.setOnItemClickListener(this);
         viewHolder.searchView.addTextChangedListener(textWatcher);
+
+        if (!searchConfiguration.isSearchBarEnabled()) {
+            viewHolder.cardView.setVisibility(View.GONE);
+        }
         return rootView;
     }
 
@@ -263,6 +268,7 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
         private EditText searchView;
         private ListView listView;
         private TextView noResults;
+        private CardView cardView;
 
         SearchViewHolder(View root) {
             searchView = root.findViewById(R.id.search);
@@ -270,6 +276,7 @@ public class SearchPreferenceFragment extends Fragment implements AdapterView.On
             listView = root.findViewById(R.id.list);
             moreButton = root.findViewById(R.id.more);
             noResults = root.findViewById(R.id.no_results);
+            cardView = root.findViewById(R.id.search_card);
         }
     }
 }

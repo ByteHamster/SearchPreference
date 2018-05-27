@@ -13,6 +13,7 @@ public class SearchConfiguration {
     private static final String ARGUMENT_INDEX_BREADCRUMBS = "breadcrumbs";
     private static final String ARGUMENT_FUZZY_ENABLED = "fuzzy";
     private static final String ARGUMENT_HISTORY_ENABLED = "history_enabled";
+    private static final String ARGUMENT_SEARCH_BAR_ENABLED = "search_bar_enabled";
     private static final String ARGUMENT_BREADCRUMBS_ENABLED = "breadcrumbs_enabled";
 
     private ArrayList<Integer> filesToIndex = new ArrayList<>();
@@ -20,6 +21,7 @@ public class SearchConfiguration {
     private boolean historyEnabled = true;
     private boolean breadcrumbsEnabled = false;
     private boolean fuzzySearchEnabled = true;
+    private boolean searchBarEnabled = true;
     private AppCompatActivity activity;
     private int containerResId = android.R.id.content;
 
@@ -61,6 +63,7 @@ public class SearchConfiguration {
         arguments.putBoolean(ARGUMENT_HISTORY_ENABLED, historyEnabled);
         arguments.putBoolean(ARGUMENT_FUZZY_ENABLED, fuzzySearchEnabled);
         arguments.putBoolean(ARGUMENT_BREADCRUMBS_ENABLED, breadcrumbsEnabled);
+        arguments.putBoolean(ARGUMENT_SEARCH_BAR_ENABLED, searchBarEnabled);
         return arguments;
     }
 
@@ -77,6 +80,7 @@ public class SearchConfiguration {
         config.historyEnabled = bundle.getBoolean(ARGUMENT_HISTORY_ENABLED);
         config.fuzzySearchEnabled = bundle.getBoolean(ARGUMENT_FUZZY_ENABLED);
         config.breadcrumbsEnabled = bundle.getBoolean(ARGUMENT_BREADCRUMBS_ENABLED);
+        config.searchBarEnabled = bundle.getBoolean(ARGUMENT_SEARCH_BAR_ENABLED);
         return config;
     }
 
@@ -118,6 +122,15 @@ public class SearchConfiguration {
     }
 
     /**
+     * Show the search bar above the list. When setting this to false, you have to use {@see SearchPreferenceFragment#setSearchTerm(String) setSearchTerm} instead
+     * Default is true
+     * @param searchBarEnabled True if search bar should be shown
+     */
+    public void setSearchBarEnabled(boolean searchBarEnabled) {
+        this.searchBarEnabled = searchBarEnabled;
+    }
+
+    /**
      * Sets the container to use when loading the fragment
      * @param containerResId Resource id of the container
      */
@@ -150,6 +163,10 @@ public class SearchConfiguration {
 
     boolean isFuzzySearchEnabled() {
         return fuzzySearchEnabled;
+    }
+
+    boolean isSearchBarEnabled() {
+        return searchBarEnabled;
     }
 
     /**
