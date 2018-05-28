@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,7 +31,6 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
     private PreferenceParser searcher;
     private List<PreferenceItem> results;
     private List<HistoryItem> history;
-    private boolean showingHistory = false;
     private SharedPreferences prefs;
     private SearchViewHolder viewHolder;
     private SearchConfiguration searchConfiguration;
@@ -149,7 +147,9 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
         super.onResume();
         updateSearchResults(viewHolder.searchView.getText().toString());
 
-        showKeyboard();
+        if (searchConfiguration.isSearchBarEnabled()) {
+            showKeyboard();
+        }
     }
 
     private void showKeyboard() {
@@ -185,7 +185,6 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
 
         results = searcher.searchFor(keyword, searchConfiguration.isFuzzySearchEnabled());
         adapter.setContent(new ArrayList<ListItem>(results));
-        showingHistory = false;
 
         if (results.isEmpty()) {
             viewHolder.noResults.setVisibility(View.VISIBLE);
@@ -201,7 +200,6 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
         viewHolder.recyclerView.setVisibility(View.VISIBLE);
 
         adapter.setContent(new ArrayList<ListItem>(history));
-        showingHistory = true;
     }
 
     @Override
