@@ -2,6 +2,7 @@ package com.bytehamster.preferencesearch;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.widget.Toast;
@@ -38,7 +39,7 @@ public class NoPreferencesExample extends AppCompatActivity implements SearchPre
     }
 
     @Override
-    public void onSearchResultClicked(final SearchPreferenceResult result) {
+    public void onSearchResultClicked(@NonNull final SearchPreferenceResult result) {
         Toast.makeText(this, result.getKey(), Toast.LENGTH_LONG).show();
     }
 }

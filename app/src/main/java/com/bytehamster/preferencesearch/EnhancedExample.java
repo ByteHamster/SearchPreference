@@ -2,6 +2,7 @@ package com.bytehamster.preferencesearch;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import com.bytehamster.lib.preferencesearch.SearchConfiguration;
@@ -25,7 +26,7 @@ public class EnhancedExample extends AppCompatActivity implements SearchPreferen
     }
 
     @Override
-    public void onSearchResultClicked(final SearchPreferenceResult result) {
+    public void onSearchResultClicked(@NonNull final SearchPreferenceResult result) {
         prefsFragment = new PrefsFragment();
         getSupportFragmentManager().beginTransaction()
                 .replace(android.R.id.content, prefsFragment).addToBackStack("PrefsFragment")

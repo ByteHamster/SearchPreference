@@ -2,6 +2,7 @@ package com.bytehamster.lib.preferencesearch;
 
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.annotation.XmlRes;
 import android.support.v7.app.AppCompatActivity;
@@ -50,7 +51,7 @@ public class SearchConfiguration {
         SearchPreferenceFragment fragment = new SearchPreferenceFragment();
         fragment.setArguments(arguments);
         activity.getSupportFragmentManager().beginTransaction()
-                .replace(containerResId, fragment)
+                .replace(containerResId, fragment, SearchPreferenceFragment.TAG)
                 .addToBackStack("SearchPreferenceFragment")
                 .commit();
         return fragment;
@@ -88,7 +89,7 @@ public class SearchConfiguration {
      * Sets the current activity that also receives callbacks
      * @param activity The Activity that receives callbacks. Must implement SearchPreferenceResultListener.
      */
-    public void setActivity(AppCompatActivity activity) {
+    public void setActivity(@NonNull AppCompatActivity activity) {
         this.activity = activity;
         if (!(activity instanceof SearchPreferenceResultListener)) {
             throw new IllegalArgumentException("Activity must implement SearchPreferenceResultListener");

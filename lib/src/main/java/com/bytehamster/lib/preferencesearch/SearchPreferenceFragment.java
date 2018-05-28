@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchPreferenceFragment extends Fragment implements SearchPreferenceAdapter.SearchClickListener {
+    public static final String TAG = "SearchPreferenceFragment";
+
     private static final String SHARED_PREFS_FILE = "preferenceSearch";
     private static final int MAX_HISTORY = 5;
     private PreferenceParser searcher;
