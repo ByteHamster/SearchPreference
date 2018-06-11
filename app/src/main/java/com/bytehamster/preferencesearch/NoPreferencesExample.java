@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.util.Log;
 import android.widget.Toast;
 import com.bytehamster.lib.preferencesearch.SearchConfiguration;
 import com.bytehamster.lib.preferencesearch.SearchPreference;
@@ -16,7 +17,7 @@ import com.bytehamster.lib.preferencesearch.SearchPreferenceResultListener;
  * This file demonstrates how to use the library without actually displaying a PreferenceFragment
  */
 public class NoPreferencesExample extends AppCompatActivity implements SearchPreferenceResultListener {
-    SearchPreferenceFragment fragment;
+    private SearchPreferenceFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +30,12 @@ public class NoPreferencesExample extends AppCompatActivity implements SearchPre
         config.setFuzzySearchEnabled(false);
 
         fragment = config.showSearchFragment();
+        fragment.setHistoryClickListener(new SearchPreferenceFragment.HistoryClickListener() {
+            @Override
+            public void onHistoryEntryClicked(String entry) {
+                Log.d("NoPreferencesExample", "History entry clicked: " + entry);
+            }
+        });
     }
 
     @Override

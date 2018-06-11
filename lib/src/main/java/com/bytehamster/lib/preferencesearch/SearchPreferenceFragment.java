@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchPreferenceFragment extends Fragment implements SearchPreferenceAdapter.SearchClickListener {
-    public static final String TAG = "SearchPreferenceFragment";
+    static final String TAG = "SearchPreferenceFragment";
 
     private static final String SHARED_PREFS_FILE = "preferenceSearch";
     private static final int MAX_HISTORY = 5;
@@ -37,6 +37,7 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
     private SearchViewHolder viewHolder;
     private SearchConfiguration searchConfiguration;
     private SearchPreferenceAdapter adapter;
+    private HistoryClickListener historyClickListener;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -210,6 +211,9 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
             CharSequence text = ((HistoryItem) item).getTerm();
             viewHolder.searchView.setText(text);
             viewHolder.searchView.setSelection(text.length());
+            if (historyClickListener != null) {
+                historyClickListener.onHistoryEntryClicked(text.toString());
+            }
         } else {
             addHistoryEntry(viewHolder.searchView.getText().toString());
             hideKeyboard();
@@ -245,6 +249,10 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
         }
     };
 
+    public void setHistoryClickListener(HistoryClickListener historyClickListener) {
+        this.historyClickListener = historyClickListener;
+    }
+
     private class SearchViewHolder {
         private ImageView clearButton;
         private ImageView moreButton;
@@ -261,5 +269,9 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
             noResults = root.findViewById(R.id.no_results);
             cardView = root.findViewById(R.id.search_card);
         }
+    }
+
+    public interface HistoryClickListener {
+        void onHistoryEntryClicked(String entry);
     }
 }
