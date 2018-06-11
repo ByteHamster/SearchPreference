@@ -14,7 +14,7 @@ import com.bytehamster.lib.preferencesearch.SearchPreferenceResult;
 import com.bytehamster.lib.preferencesearch.SearchPreferenceResultListener;
 
 /**
- * This file demonstrates how to use the library without actually displaying a PreferenceFragment
+ * This file demonstrates how to use the library without actually displaying the preference
  */
 public class NoPreferencesExample extends AppCompatActivity implements SearchPreferenceResultListener {
     private SearchPreferenceFragment fragment;
