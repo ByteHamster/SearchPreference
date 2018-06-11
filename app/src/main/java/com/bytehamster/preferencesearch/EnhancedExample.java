@@ -68,7 +68,7 @@ public class EnhancedExample extends AppCompatActivity implements SearchPreferen
                 // Result was found in the other file
                 getPreferenceScreen().removeAll();
                 addPreferencesFromResource(R.xml.preferences2);
-                result.highlight(this);
+                result.highlight(this, 0x00ff00);
             }
         }
     }

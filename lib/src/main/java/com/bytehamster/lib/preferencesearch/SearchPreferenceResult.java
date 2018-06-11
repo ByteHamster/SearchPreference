@@ -1,7 +1,9 @@
 package com.bytehamster.lib.preferencesearch;
 
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.support.annotation.ColorInt;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
@@ -48,16 +50,23 @@ public class SearchPreferenceResult {
      * @param prefsFragment Fragment that contains the preference
      */
     public void highlight(final PreferenceFragmentCompat prefsFragment) {
+        highlight(prefsFragment, 0xff3F51B5);
+    }
+
+    /**
+     * Highlight the preference that was found
+     * @param prefsFragment Fragment that contains the preference
+     */
+    public void highlight(final PreferenceFragmentCompat prefsFragment, @ColorInt final int color) {
         new Handler().post(new Runnable() {
             @Override
             public void run() {
-                doHighlight(prefsFragment);
+                doHighlight(prefsFragment, color);
             }
         });
-
     }
 
-    private void doHighlight(PreferenceFragmentCompat prefsFragment) {
+    private void doHighlight(PreferenceFragmentCompat prefsFragment, @ColorInt int color) {
         final Preference prefResult = prefsFragment.findPreference(getKey());
 
         if (prefResult == null) {
@@ -65,11 +74,22 @@ public class SearchPreferenceResult {
             return;
         }
 
+        if ((color & 0xff000000) == 0) {
+            color += 0xff000000;
+        }
+
         prefsFragment.scrollToPreference(prefResult);
         final Drawable oldIcon = prefResult.getIcon();
         final boolean oldSpaceReserved = prefResult.isIconSpaceReserved();
 
-        prefResult.setIcon(R.drawable.searchpreference_ic_arrow_right);
+        Drawable arrow;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            arrow = prefsFragment.getContext().getDrawable(R.drawable.searchpreference_ic_arrow_right);
+        } else {
+            arrow = prefsFragment.getResources().getDrawable(R.drawable.searchpreference_ic_arrow_right);
+        }
+        arrow.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        prefResult.setIcon(arrow);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
