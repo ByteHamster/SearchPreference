@@ -189,7 +189,11 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
         results = searcher.searchFor(keyword, searchConfiguration.isFuzzySearchEnabled());
         adapter.setContent(new ArrayList<ListItem>(results));
 
-        if (results.isEmpty()) {
+        setEmptyViewShown(results.isEmpty());
+    }
+
+    private void setEmptyViewShown(boolean shown) {
+        if (shown) {
             viewHolder.noResults.setVisibility(View.VISIBLE);
             viewHolder.recyclerView.setVisibility(View.GONE);
         } else {
@@ -203,6 +207,7 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
         viewHolder.recyclerView.setVisibility(View.VISIBLE);
 
         adapter.setContent(new ArrayList<ListItem>(history));
+        setEmptyViewShown(history.isEmpty());
     }
 
     @Override
