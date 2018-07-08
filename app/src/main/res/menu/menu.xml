@@ -6,6 +6,7 @@
           android:title="title"
           android:icon="@drawable/searchpreference_ic_search"
           android:iconTint="#ffffff"
-          app:showAsAction="always"
+          app:iconTint="#ffffff"
+          app:showAsAction="collapseActionView|ifRoom"
           app:actionViewClass="com.bytehamster.lib.preferencesearch.SearchPreferenceActionView"/>
 </menu>

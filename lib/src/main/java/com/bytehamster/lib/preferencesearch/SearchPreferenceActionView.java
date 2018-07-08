@@ -36,7 +36,9 @@ public class SearchPreferenceActionView extends SearchView {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                searchFragment.setSearchTerm(newText);
+                if (searchFragment != null) {
+                    searchFragment.setSearchTerm(newText);
+                }
                 return true;
             }
         });
