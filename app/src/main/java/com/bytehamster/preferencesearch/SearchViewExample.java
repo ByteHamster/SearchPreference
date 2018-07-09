@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 import com.bytehamster.lib.preferencesearch.SearchConfiguration;
 import com.bytehamster.lib.preferencesearch.SearchPreferenceActionView;
@@ -29,6 +30,19 @@ public class SearchViewExample extends AppCompatActivity implements SearchPrefer
         SearchConfiguration searchConfiguration = searchPreferenceActionView.getSearchConfiguration();
         searchConfiguration.index().addFile(R.xml.preferences);
         searchPreferenceActionView.setActivity(this);
+
+        menu.findItem(R.id.search).setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                searchPreferenceActionView.onBackPressed();
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+        });
         return true;
     }
 
