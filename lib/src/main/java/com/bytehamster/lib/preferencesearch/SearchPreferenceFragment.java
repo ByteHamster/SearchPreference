@@ -38,6 +38,7 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
     private SearchConfiguration searchConfiguration;
     private SearchPreferenceAdapter adapter;
     private HistoryClickListener historyClickListener;
+    private CharSequence searchTermPreset = null;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,6 +101,10 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
 
         if (!searchConfiguration.isSearchBarEnabled()) {
             viewHolder.cardView.setVisibility(View.GONE);
+        }
+
+        if (searchTermPreset != null) {
+            viewHolder.searchView.setText(searchTermPreset);
         }
         return rootView;
     }
@@ -177,7 +182,11 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
     }
 
     public void setSearchTerm(CharSequence term) {
-        viewHolder.searchView.setText(term);
+        if (viewHolder != null) {
+            viewHolder.searchView.setText(term);
+        } else {
+            searchTermPreset = term;
+        }
     }
 
     private void updateSearchResults(String keyword) {
