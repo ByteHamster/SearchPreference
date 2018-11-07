@@ -49,7 +49,7 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
         searchConfiguration = SearchConfiguration.fromBundle(getArguments());
         ArrayList<SearchConfiguration.SearchIndexItem> files = searchConfiguration.getFiles();
         for (SearchConfiguration.SearchIndexItem file : files) {
-            searcher.addResourceFile(file.getResId(), file.getBreadcrumb());
+            searcher.addResourceFile(file);
         }
         loadHistory();
     }

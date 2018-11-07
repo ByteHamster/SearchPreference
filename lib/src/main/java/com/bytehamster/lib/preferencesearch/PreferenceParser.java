@@ -26,26 +26,26 @@ class PreferenceParser {
         this.context = context;
     }
 
-    void addResourceFile(int resId, String breadcrumb) {
-        allEntries.addAll(parseFile(resId, breadcrumb));
+    void addResourceFile(SearchConfiguration.SearchIndexItem item) {
+        allEntries.addAll(parseFile(item));
     }
 
-    private ArrayList<PreferenceItem> parseFile(int resId, String firstBreadcrumb) {
+    private ArrayList<PreferenceItem> parseFile(SearchConfiguration.SearchIndexItem item) {
         java.util.ArrayList<PreferenceItem> results = new ArrayList<>();
-        XmlPullParser xpp = context.getResources().getXml(resId);
+        XmlPullParser xpp = context.getResources().getXml(item.getResId());
 
         try {
             xpp.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
             xpp.setFeature(XmlPullParser.FEATURE_REPORT_NAMESPACE_ATTRIBUTES, true);
             ArrayList<String> breadcrumbs = new ArrayList<>();
             ArrayList<String> keyBreadcrumbs = new ArrayList<>();
-            if (!TextUtils.isEmpty(firstBreadcrumb)) {
-                breadcrumbs.add(firstBreadcrumb);
+            if (!TextUtils.isEmpty(item.getBreadcrumb())) {
+                breadcrumbs.add(item.getBreadcrumb());
             }
             while (xpp.getEventType() != XmlPullParser.END_DOCUMENT) {
                 if (xpp.getEventType() == XmlPullParser.START_TAG) {
                     PreferenceItem result = parseSearchResult(xpp);
-                    result.resId = resId;
+                    result.resId = item.getResId();
 
                     if (!BLACKLIST.contains(xpp.getName()) && result.hasData()) {
                         result.breadcrumbs = joinBreadcrumbs(breadcrumbs);
