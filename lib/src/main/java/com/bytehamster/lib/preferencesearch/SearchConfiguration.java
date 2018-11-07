@@ -3,11 +3,14 @@ package com.bytehamster.lib.preferencesearch;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.ColorInt;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.annotation.XmlRes;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import com.bytehamster.lib.preferencesearch.ui.RevealAnimationSetting;
 
 import java.util.ArrayList;
 
@@ -17,6 +20,7 @@ public class SearchConfiguration {
     private static final String ARGUMENT_HISTORY_ENABLED = "history_enabled";
     private static final String ARGUMENT_SEARCH_BAR_ENABLED = "search_bar_enabled";
     private static final String ARGUMENT_BREADCRUMBS_ENABLED = "breadcrumbs_enabled";
+    private static final String ARGUMENT_REVEAL_ANIMATION_SETTING = "reveal_anim_setting";
 
     private ArrayList<SearchIndexItem> itemsToIndex = new ArrayList<>();
     private boolean historyEnabled = true;
@@ -25,6 +29,7 @@ public class SearchConfiguration {
     private boolean searchBarEnabled = true;
     private AppCompatActivity activity;
     private int containerResId = android.R.id.content;
+    private RevealAnimationSetting revealAnimationSetting = null;
 
     SearchConfiguration() {
 
@@ -61,6 +66,7 @@ public class SearchConfiguration {
         Bundle arguments = new Bundle();
         arguments.putParcelableArrayList(ARGUMENT_INDEX_ITEMS, itemsToIndex);
         arguments.putBoolean(ARGUMENT_HISTORY_ENABLED, historyEnabled);
+        arguments.putParcelable(ARGUMENT_REVEAL_ANIMATION_SETTING, revealAnimationSetting);
         arguments.putBoolean(ARGUMENT_FUZZY_ENABLED, fuzzySearchEnabled);
         arguments.putBoolean(ARGUMENT_BREADCRUMBS_ENABLED, breadcrumbsEnabled);
         arguments.putBoolean(ARGUMENT_SEARCH_BAR_ENABLED, searchBarEnabled);
@@ -71,6 +77,7 @@ public class SearchConfiguration {
         SearchConfiguration config = new SearchConfiguration();
         config.itemsToIndex = bundle.getParcelableArrayList(ARGUMENT_INDEX_ITEMS);
         config.historyEnabled = bundle.getBoolean(ARGUMENT_HISTORY_ENABLED);
+        config.revealAnimationSetting = bundle.getParcelable(ARGUMENT_REVEAL_ANIMATION_SETTING);
         config.fuzzySearchEnabled = bundle.getBoolean(ARGUMENT_FUZZY_ENABLED);
         config.breadcrumbsEnabled = bundle.getBoolean(ARGUMENT_BREADCRUMBS_ENABLED);
         config.searchBarEnabled = bundle.getBoolean(ARGUMENT_SEARCH_BAR_ENABLED);
@@ -132,6 +139,33 @@ public class SearchConfiguration {
     }
 
     /**
+     * Display a reveal animation
+     * @param origin Where the animation should start
+     * @param container Container that should be covered
+     */
+    public void useAnimation(View origin, View container, @ColorInt int color) {
+        revealAnimationSetting = new RevealAnimationSetting(
+                (int) (origin.getX() + origin.getWidth() / 2),
+                (int) (origin.getY() + origin.getHeight() / 2),
+                container.getWidth(),
+                container.getHeight(),
+                color);
+    }
+
+
+    /**
+     * Display a reveal animation
+     * @param centerX Origin of the reveal animation
+     * @param centerY Origin of the reveal animation
+     * @param width Size of the main container
+     * @param height Size of the main container
+     * @param color Accent color to use
+     */
+    public void useAnimation(int centerX, int centerY, int width, int height, @ColorInt int color) {
+        revealAnimationSetting = new RevealAnimationSetting(centerX, centerY, width, height, color);
+    }
+
+    /**
      * Adds a new file to the index
      * @param resId The preference file to index
      */
@@ -159,6 +193,10 @@ public class SearchConfiguration {
 
     boolean isSearchBarEnabled() {
         return searchBarEnabled;
+    }
+
+    RevealAnimationSetting getRevealAnimationSetting() {
+        return revealAnimationSetting;
     }
 
     /**

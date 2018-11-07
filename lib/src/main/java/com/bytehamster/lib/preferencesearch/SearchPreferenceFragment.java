@@ -21,6 +21,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.bytehamster.lib.preferencesearch.ui.AnimationUtils;
+import com.bytehamster.lib.preferencesearch.ui.RevealAnimationSetting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,6 +104,13 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
         if (searchTermPreset != null) {
             viewHolder.searchView.setText(searchTermPreset);
         }
+
+        RevealAnimationSetting anim = searchConfiguration.getRevealAnimationSetting();
+        if (searchConfiguration.getRevealAnimationSetting() != null) {
+            AnimationUtils.registerCircularRevealAnimation(getContext(), rootView, anim);
+
+        }
+
         return rootView;
     }
 

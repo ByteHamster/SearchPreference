@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.AttributeSet;
 import android.view.View;
+import com.bytehamster.lib.preferencesearch.ui.AnimationUtils;
 
 public class SearchPreferenceActionView extends SearchView {
     private SearchPreferenceFragment searchFragment;
@@ -75,7 +76,19 @@ public class SearchPreferenceActionView extends SearchView {
             didSomething = true;
         }
         if (searchFragment != null && searchFragment.isVisible()) {
-            activity.getSupportFragmentManager().popBackStack();
+            if (getSearchConfiguration().getRevealAnimationSetting() != null) {
+                AnimationUtils.startCircularExitAnimation(getContext(), searchFragment.getView(),
+                        getSearchConfiguration().getRevealAnimationSetting(),
+                        new AnimationUtils.OnDismissedListener() {
+                    @Override
+                    public void onDismissed() {
+                        activity.getSupportFragmentManager().popBackStack();
+                    }
+                });
+            } else {
+                activity.getSupportFragmentManager().popBackStack();
+            }
+
             didSomething = true;
         }
         return didSomething;
