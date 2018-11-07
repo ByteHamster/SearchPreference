@@ -47,13 +47,9 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
         searcher = new PreferenceParser(getContext());
 
         searchConfiguration = SearchConfiguration.fromBundle(getArguments());
-        ArrayList<Integer> files = searchConfiguration.getFiles();
-        ArrayList<String> breadcrumbs = searchConfiguration.getBreadcrumbs();
-        if (files == null || breadcrumbs == null || files.size() != breadcrumbs.size()) {
-            throw new AssertionError("Got incorrect arguments");
-        }
-        for (int i = 0; i < files.size(); i++) {
-            searcher.addResourceFile(files.get(i), breadcrumbs.get(i));
+        ArrayList<SearchConfiguration.SearchIndexItem> files = searchConfiguration.getFiles();
+        for (SearchConfiguration.SearchIndexItem file : files) {
+            searcher.addResourceFile(file.getResId(), file.getBreadcrumb());
         }
         loadHistory();
     }

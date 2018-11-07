@@ -52,8 +52,8 @@ public class EnhancedExample extends AppCompatActivity implements SearchPreferen
             config.setActivity((AppCompatActivity) getActivity());
             config.setFragmentContainerViewId(android.R.id.content);
 
-            config.index().addBreadcrumb("Main file").addFile(R.xml.preferences);
-            config.index().addBreadcrumb("Second file").addFile(R.xml.preferences2);
+            config.index(R.xml.preferences).addBreadcrumb("Main file");
+            config.index(R.xml.preferences2).addBreadcrumb("Second file");
             config.setBreadcrumbsEnabled(true);
             config.setHistoryEnabled(true);
             config.setFuzzySearchEnabled(true);

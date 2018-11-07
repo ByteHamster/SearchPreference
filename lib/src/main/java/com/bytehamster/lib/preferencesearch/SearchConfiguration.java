@@ -1,6 +1,8 @@
 package com.bytehamster.lib.preferencesearch;
 
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
@@ -10,15 +12,13 @@ import android.support.v7.app.AppCompatActivity;
 import java.util.ArrayList;
 
 public class SearchConfiguration {
-    private static final String ARGUMENT_INDEX_FILES = "files";
-    private static final String ARGUMENT_INDEX_BREADCRUMBS = "breadcrumbs";
+    private static final String ARGUMENT_INDEX_ITEMS = "items";
     private static final String ARGUMENT_FUZZY_ENABLED = "fuzzy";
     private static final String ARGUMENT_HISTORY_ENABLED = "history_enabled";
     private static final String ARGUMENT_SEARCH_BAR_ENABLED = "search_bar_enabled";
     private static final String ARGUMENT_BREADCRUMBS_ENABLED = "breadcrumbs_enabled";
 
-    private ArrayList<Integer> filesToIndex = new ArrayList<>();
-    private ArrayList<String> breadcrumbsToIndex = new ArrayList<>();
+    private ArrayList<SearchIndexItem> itemsToIndex = new ArrayList<>();
     private boolean historyEnabled = true;
     private boolean breadcrumbsEnabled = false;
     private boolean fuzzySearchEnabled = true;
@@ -59,8 +59,7 @@ public class SearchConfiguration {
 
     private Bundle toBundle() {
         Bundle arguments = new Bundle();
-        arguments.putSerializable(ARGUMENT_INDEX_FILES, filesToIndex);
-        arguments.putSerializable(ARGUMENT_INDEX_BREADCRUMBS, breadcrumbsToIndex);
+        arguments.putParcelableArrayList(ARGUMENT_INDEX_ITEMS, itemsToIndex);
         arguments.putBoolean(ARGUMENT_HISTORY_ENABLED, historyEnabled);
         arguments.putBoolean(ARGUMENT_FUZZY_ENABLED, fuzzySearchEnabled);
         arguments.putBoolean(ARGUMENT_BREADCRUMBS_ENABLED, breadcrumbsEnabled);
@@ -70,14 +69,7 @@ public class SearchConfiguration {
 
     static SearchConfiguration fromBundle(Bundle bundle) {
         SearchConfiguration config = new SearchConfiguration();
-        config.filesToIndex = bundle.getIntegerArrayList(ARGUMENT_INDEX_FILES);
-        config.breadcrumbsToIndex = bundle.getStringArrayList(ARGUMENT_INDEX_BREADCRUMBS);
-
-        if (config.filesToIndex == null || config.breadcrumbsToIndex == null) {
-            throw new AssertionError("Missing extras");
-        } else if (config.filesToIndex.size() != config.breadcrumbsToIndex.size()) {
-            throw new AssertionError("Extra sizes do not match");
-        }
+        config.itemsToIndex = bundle.getParcelableArrayList(ARGUMENT_INDEX_ITEMS);
         config.historyEnabled = bundle.getBoolean(ARGUMENT_HISTORY_ENABLED);
         config.fuzzySearchEnabled = bundle.getBoolean(ARGUMENT_FUZZY_ENABLED);
         config.breadcrumbsEnabled = bundle.getBoolean(ARGUMENT_BREADCRUMBS_ENABLED);
@@ -140,18 +132,17 @@ public class SearchConfiguration {
     }
 
     /**
-     * Begin adding a file to the index
+     * Adds a new file to the index
+     * @param resId The preference file to index
      */
-    public ResourceAdder index() {
-        return new ResourceAdder(this);
+    public SearchIndexItem index(@XmlRes int resId) {
+        SearchIndexItem item = new SearchIndexItem(resId, this);
+        itemsToIndex.add(item);
+        return item;
     }
 
-    ArrayList<Integer> getFiles() {
-        return filesToIndex;
-    }
-
-    ArrayList<String> getBreadcrumbs() {
-        return breadcrumbsToIndex;
+    ArrayList<SearchIndexItem> getFiles() {
+        return itemsToIndex;
     }
 
     boolean isHistoryEnabled() {
@@ -173,25 +164,18 @@ public class SearchConfiguration {
     /**
      * Adds a given R.xml resource to the search index
      */
-    public static class ResourceAdder {
-        private String breadcrumb = null;
+    public static class SearchIndexItem implements Parcelable {
+        private String breadcrumb = "";
+        private final @XmlRes int resId;
         private final SearchConfiguration searchConfiguration;
-
-        ResourceAdder(SearchConfiguration searchConfiguration) {
-            this.searchConfiguration = searchConfiguration;
-        }
 
         /**
          * Includes the given R.xml resource in the index
          * @param resId The resource to index
          */
-        public void addFile (@XmlRes int resId) {
-            if (breadcrumb == null) {
-                breadcrumb = "";
-            }
-
-            searchConfiguration.filesToIndex.add(resId);
-            searchConfiguration.breadcrumbsToIndex.add(breadcrumb);
+        private SearchIndexItem(@XmlRes int resId, SearchConfiguration searchConfiguration) {
+            this.resId = resId;
+            this.searchConfiguration = searchConfiguration;
         }
 
         /**
@@ -199,7 +183,8 @@ public class SearchConfiguration {
          * @param breadcrumb The breadcrumb to add
          * @return For chaining
          */
-        public ResourceAdder addBreadcrumb(@StringRes int breadcrumb) {
+        public SearchIndexItem addBreadcrumb(@StringRes int breadcrumb) {
+            assertNotParcel();
             return addBreadcrumb(searchConfiguration.activity.getString(breadcrumb));
         }
 
@@ -208,9 +193,56 @@ public class SearchConfiguration {
          * @param breadcrumb The breadcrumb to add
          * @return For chaining
          */
-        public ResourceAdder addBreadcrumb(String breadcrumb) {
+        public SearchIndexItem addBreadcrumb(String breadcrumb) {
+            assertNotParcel();
             this.breadcrumb = Breadcrumb.concat(this.breadcrumb, breadcrumb);
             return this;
+        }
+
+        /**
+         * Throws an exception if the item does not have a searchConfiguration (thus, is restored from a parcel)
+         */
+        private void assertNotParcel() {
+            if (searchConfiguration == null) {
+                throw new IllegalStateException("SearchIndexItems that are restored from parcel can not be modified.");
+            }
+        }
+
+        @XmlRes int getResId() {
+            return resId;
+        }
+
+        String getBreadcrumb() {
+            return breadcrumb;
+        }
+
+        public static final Creator<SearchIndexItem> CREATOR = new Creator<SearchIndexItem>() {
+            @Override
+            public SearchIndexItem createFromParcel(Parcel in) {
+                return new SearchIndexItem(in);
+            }
+
+            @Override
+            public SearchIndexItem[] newArray(int size) {
+                return new SearchIndexItem[size];
+            }
+        };
+
+        private SearchIndexItem(Parcel parcel){
+            this.breadcrumb = parcel.readString();
+            this.resId = parcel.readInt();
+            this.searchConfiguration = null;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.breadcrumb);
+            dest.writeInt(this.resId);
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
         }
     }
 }

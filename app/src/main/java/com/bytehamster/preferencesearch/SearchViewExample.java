@@ -38,7 +38,7 @@ public class SearchViewExample extends AppCompatActivity implements SearchPrefer
         getMenuInflater().inflate(R.menu.menu, menu);
         searchPreferenceActionView = (SearchPreferenceActionView) menu.findItem(R.id.search).getActionView();
         SearchConfiguration searchConfiguration = searchPreferenceActionView.getSearchConfiguration();
-        searchConfiguration.index().addFile(R.xml.preferences);
+        searchConfiguration.index(R.xml.preferences);
         searchPreferenceActionView.setActivity(this);
 
         final MenuItem searchPreferenceMenuItem = menu.findItem(R.id.search);
