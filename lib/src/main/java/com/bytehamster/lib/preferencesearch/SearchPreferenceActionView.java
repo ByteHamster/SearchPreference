@@ -96,8 +96,10 @@ public class SearchPreferenceActionView extends SearchView {
     }
 
     private void removeFragment() {
-        FragmentManager fm = activity.getSupportFragmentManager();
-        fm.popBackStack(SearchPreferenceFragment.NAME, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        if (searchFragment.isVisible()) {
+            FragmentManager fm = activity.getSupportFragmentManager();
+            fm.popBackStack(SearchPreferenceFragment.NAME, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
     }
 
     public void setActivity(AppCompatActivity activity) {
