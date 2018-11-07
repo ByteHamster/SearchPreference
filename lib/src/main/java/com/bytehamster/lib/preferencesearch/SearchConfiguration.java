@@ -152,7 +152,6 @@ public class SearchConfiguration {
                 color);
     }
 
-
     /**
      * Display a reveal animation
      * @param centerX Origin of the reveal animation

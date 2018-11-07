@@ -106,9 +106,8 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
         }
 
         RevealAnimationSetting anim = searchConfiguration.getRevealAnimationSetting();
-        if (searchConfiguration.getRevealAnimationSetting() != null) {
+        if (anim != null) {
             AnimationUtils.registerCircularRevealAnimation(getContext(), rootView, anim);
-
         }
 
         return rootView;
