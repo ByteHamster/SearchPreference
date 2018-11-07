@@ -21,7 +21,6 @@ public class SearchConfiguration {
     private static final String ARGUMENT_SEARCH_BAR_ENABLED = "search_bar_enabled";
     private static final String ARGUMENT_BREADCRUMBS_ENABLED = "breadcrumbs_enabled";
     private static final String ARGUMENT_REVEAL_ANIMATION_SETTING = "reveal_anim_setting";
-    private static final String ARGUMENT_BACKGROUND_COLOR = "background_color";
 
     private ArrayList<SearchIndexItem> itemsToIndex = new ArrayList<>();
     private boolean historyEnabled = true;

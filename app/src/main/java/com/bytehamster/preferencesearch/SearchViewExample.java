@@ -22,6 +22,7 @@ public class SearchViewExample extends AppCompatActivity implements SearchPrefer
     private static final String KEY_SEARCH_QUERY = "search_query";
     private static final String KEY_SEARCH_ENABLED = "search_enabled";
     private SearchPreferenceActionView searchPreferenceActionView;
+    private MenuItem searchPreferenceMenuItem;
     private String savedInstanceSearchQuery;
     private boolean savedInstanceSearchEnabled;
     private PrefsFragment prefsFragment;
@@ -43,7 +44,8 @@ public class SearchViewExample extends AppCompatActivity implements SearchPrefer
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
-        searchPreferenceActionView = (SearchPreferenceActionView) menu.findItem(R.id.search).getActionView();
+        searchPreferenceMenuItem = menu.findItem(R.id.search);
+        searchPreferenceActionView = (SearchPreferenceActionView) searchPreferenceMenuItem.getActionView();
         SearchConfiguration searchConfiguration = searchPreferenceActionView.getSearchConfiguration();
         searchConfiguration.index(R.xml.preferences);
 
@@ -87,6 +89,7 @@ public class SearchViewExample extends AppCompatActivity implements SearchPrefer
     @Override
     public void onSearchResultClicked(@NonNull final SearchPreferenceResult result) {
         searchPreferenceActionView.cancelSearch();
+        searchPreferenceMenuItem.collapseActionView();
         result.highlight(prefsFragment);
     }
 

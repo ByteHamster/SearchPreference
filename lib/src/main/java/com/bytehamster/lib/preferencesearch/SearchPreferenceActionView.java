@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.AttributeSet;
 import android.view.View;
-import com.bytehamster.lib.preferencesearch.ui.AnimationUtils;
 
 public class SearchPreferenceActionView extends SearchView {
     private SearchPreferenceFragment searchFragment;
@@ -77,18 +76,18 @@ public class SearchPreferenceActionView extends SearchView {
             didSomething = true;
         }
         if (searchFragment != null && searchFragment.isVisible()) {
-            if (getSearchConfiguration().getRevealAnimationSetting() != null) {
-                AnimationUtils.startCircularExitAnimation(getContext(), searchFragment.getView(),
-                        getSearchConfiguration().getRevealAnimationSetting(),
-                        new AnimationUtils.OnDismissedListener() {
-                    @Override
-                    public void onDismissed() {
-                        removeFragment();
-                    }
-                });
-            } else {
-                removeFragment();
-            }
+            removeFragment();
+
+            /*
+            AnimationUtils.startCircularExitAnimation(getContext(), searchFragment.getView(),
+                    getSearchConfiguration().getRevealAnimationSetting(),
+                    new AnimationUtils.OnDismissedListener() {
+                @Override
+                public void onDismissed() {
+                    removeFragment();
+                }
+            });
+            */
 
             didSomething = true;
         }
@@ -98,6 +97,7 @@ public class SearchPreferenceActionView extends SearchView {
     private void removeFragment() {
         if (searchFragment.isVisible()) {
             FragmentManager fm = activity.getSupportFragmentManager();
+            fm.beginTransaction().remove(searchFragment).commit();
             fm.popBackStack(SearchPreferenceFragment.NAME, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
     }
