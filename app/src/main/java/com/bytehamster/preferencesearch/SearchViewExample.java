@@ -45,7 +45,7 @@ public class SearchViewExample extends AppCompatActivity implements SearchPrefer
         searchPreferenceMenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                searchPreferenceActionView.onBackPressed();
+                searchPreferenceActionView.cancelSearch();
                 return true;
             }
 
@@ -71,13 +71,13 @@ public class SearchViewExample extends AppCompatActivity implements SearchPrefer
 
     @Override
     public void onSearchResultClicked(@NonNull final SearchPreferenceResult result) {
-        searchPreferenceActionView.close();
+        searchPreferenceActionView.cancelSearch();
         Toast.makeText(this, result.getKey(), Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onBackPressed() {
-        if (!searchPreferenceActionView.onBackPressed()) {
+        if (!searchPreferenceActionView.cancelSearch()) {
             super.onBackPressed();
         }
     }
@@ -86,7 +86,7 @@ public class SearchViewExample extends AppCompatActivity implements SearchPrefer
     public void onSaveInstanceState(Bundle outState) {
         outState.putString(KEY_SEARCH_QUERY, searchPreferenceActionView.getQuery().toString());
         outState.putBoolean(KEY_SEARCH_ENABLED, !searchPreferenceActionView.isIconified());
-        searchPreferenceActionView.onBackPressed();
+        searchPreferenceActionView.cancelSearch();
         super.onSaveInstanceState(outState);
     }
 }

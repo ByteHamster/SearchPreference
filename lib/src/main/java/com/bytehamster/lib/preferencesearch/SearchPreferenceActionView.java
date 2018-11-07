@@ -63,13 +63,14 @@ public class SearchPreferenceActionView extends SearchView {
     }
 
     /**
-     * Notifies the search function that the back button was pressed. This hides the fragment.
-     * @return true if something was done, so the calling activity should not go back itself.
+     * Hides the search fragment
+     * @return true if it was hidden, so the calling activity should not go back itself.
      */
-    public boolean onBackPressed() {
+    public boolean cancelSearch() {
+        setQuery("", false);
+
         boolean didSomething = false;
         if (!isIconified()) {
-            setQuery("", false);
             setIconified(true);
             didSomething = true;
         }
@@ -83,13 +84,5 @@ public class SearchPreferenceActionView extends SearchView {
     public void setActivity(AppCompatActivity activity) {
         searchConfiguration.setActivity(activity);
         this.activity = activity;
-    }
-
-    public void close() {
-        setQuery("", false);
-        setIconified(true);
-        if (searchFragment.isVisible()) {
-            activity.getSupportFragmentManager().popBackStack();
-        }
     }
 }
