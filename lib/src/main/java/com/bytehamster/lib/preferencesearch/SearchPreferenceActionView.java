@@ -97,14 +97,7 @@ public class SearchPreferenceActionView extends SearchView {
 
     private void removeFragment() {
         FragmentManager fm = activity.getSupportFragmentManager();
-        fm.beginTransaction()
-                .remove(fm.findFragmentByTag(SearchPreferenceFragment.NAME))
-                .commit();
-        int index = fm.getBackStackEntryCount() - 1;
-        while (index >= 0 && SearchPreferenceFragment.NAME.equals(fm.getBackStackEntryAt(index).getName())) {
-            fm.popBackStackImmediate();
-            index--;
-        }
+        fm.popBackStack(SearchPreferenceFragment.NAME, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
     public void setActivity(AppCompatActivity activity) {
