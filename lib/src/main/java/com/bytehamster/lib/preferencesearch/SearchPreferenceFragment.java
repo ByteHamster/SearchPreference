@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.bytehamster.lib.preferencesearch.ui.AnimationUtils;
 import com.bytehamster.lib.preferencesearch.ui.RevealAnimationSetting;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchPreferenceFragment extends Fragment implements SearchPreferenceAdapter.SearchClickListener {
-    static final String TAG = "SearchPreferenceFragment";
+    static final String NAME = "SearchPreferenceFragment";
 
     private static final String SHARED_PREFS_FILE = "preferenceSearch";
     private static final int MAX_HISTORY = 5;
@@ -60,7 +61,6 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.searchpreference_fragment, container, false);
         viewHolder = new SearchViewHolder(rootView);
-
 
         viewHolder.clearButton.setOnClickListener(new View.OnClickListener() {
             @Override

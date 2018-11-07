@@ -1,6 +1,7 @@
 package com.bytehamster.lib.preferencesearch;
 
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.AttributeSet;
@@ -82,16 +83,28 @@ public class SearchPreferenceActionView extends SearchView {
                         new AnimationUtils.OnDismissedListener() {
                     @Override
                     public void onDismissed() {
-                        activity.getSupportFragmentManager().popBackStack();
+                        removeFragment();
                     }
                 });
             } else {
-                activity.getSupportFragmentManager().popBackStack();
+                removeFragment();
             }
 
             didSomething = true;
         }
         return didSomething;
+    }
+
+    private void removeFragment() {
+        FragmentManager fm = activity.getSupportFragmentManager();
+        fm.beginTransaction()
+                .remove(fm.findFragmentByTag(SearchPreferenceFragment.NAME))
+                .commit();
+        int index = fm.getBackStackEntryCount() - 1;
+        while (index >= 0 && SearchPreferenceFragment.NAME.equals(fm.getBackStackEntryAt(index).getName())) {
+            fm.popBackStackImmediate();
+            index--;
+        }
     }
 
     public void setActivity(AppCompatActivity activity) {

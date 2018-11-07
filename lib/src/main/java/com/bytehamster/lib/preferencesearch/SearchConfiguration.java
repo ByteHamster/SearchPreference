@@ -21,6 +21,7 @@ public class SearchConfiguration {
     private static final String ARGUMENT_SEARCH_BAR_ENABLED = "search_bar_enabled";
     private static final String ARGUMENT_BREADCRUMBS_ENABLED = "breadcrumbs_enabled";
     private static final String ARGUMENT_REVEAL_ANIMATION_SETTING = "reveal_anim_setting";
+    private static final String ARGUMENT_BACKGROUND_COLOR = "background_color";
 
     private ArrayList<SearchIndexItem> itemsToIndex = new ArrayList<>();
     private boolean historyEnabled = true;
@@ -56,8 +57,8 @@ public class SearchConfiguration {
         SearchPreferenceFragment fragment = new SearchPreferenceFragment();
         fragment.setArguments(arguments);
         activity.getSupportFragmentManager().beginTransaction()
-                .replace(containerResId, fragment, SearchPreferenceFragment.TAG)
-                .addToBackStack("SearchPreferenceFragment")
+                .add(containerResId, fragment, SearchPreferenceFragment.NAME)
+                .addToBackStack(SearchPreferenceFragment.NAME)
                 .commit();
         return fragment;
     }
@@ -140,28 +141,14 @@ public class SearchConfiguration {
 
     /**
      * Display a reveal animation
-     * @param origin Where the animation should start
-     * @param container Container that should be covered
-     */
-    public void useAnimation(View origin, View container, @ColorInt int color) {
-        revealAnimationSetting = new RevealAnimationSetting(
-                (int) (origin.getX() + origin.getWidth() / 2),
-                (int) (origin.getY() + origin.getHeight() / 2),
-                container.getWidth(),
-                container.getHeight(),
-                color);
-    }
-
-    /**
-     * Display a reveal animation
      * @param centerX Origin of the reveal animation
      * @param centerY Origin of the reveal animation
      * @param width Size of the main container
      * @param height Size of the main container
-     * @param color Accent color to use
+     * @param colorAccent Accent color to use
      */
-    public void useAnimation(int centerX, int centerY, int width, int height, @ColorInt int color) {
-        revealAnimationSetting = new RevealAnimationSetting(centerX, centerY, width, height, color);
+    public void useAnimation(int centerX, int centerY, int width, int height, @ColorInt int colorAccent) {
+        revealAnimationSetting = new RevealAnimationSetting(centerX, centerY, width, height, colorAccent);
     }
 
     /**

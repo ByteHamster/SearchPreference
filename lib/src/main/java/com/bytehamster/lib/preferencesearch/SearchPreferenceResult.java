@@ -4,6 +4,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.annotation.ColorInt;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
@@ -104,6 +105,7 @@ public class SearchPreferenceResult {
      * @param activity The current activity
      */
     public void closeSearchPage(AppCompatActivity activity) {
-        activity.getSupportFragmentManager().popBackStack();
+        FragmentManager fm = activity.getSupportFragmentManager();
+        fm.beginTransaction().remove(fm.findFragmentByTag(SearchPreferenceFragment.NAME)).commit();
     }
 }

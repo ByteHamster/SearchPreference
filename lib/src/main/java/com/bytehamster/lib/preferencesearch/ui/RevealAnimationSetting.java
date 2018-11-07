@@ -4,14 +4,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class RevealAnimationSetting implements Parcelable {
-    private int centerX, centerY, width, height, color;
+    private int centerX, centerY, width, height, colorAccent;
 
-    public RevealAnimationSetting(int centerX, int centerY, int width, int height, int color) {
+    public RevealAnimationSetting(int centerX, int centerY, int width, int height, int colorAccent) {
         this.centerX = centerX;
         this.centerY = centerY;
         this.width = width;
         this.height = height;
-        this.color = color;
+        this.colorAccent = colorAccent;
     }
 
     private RevealAnimationSetting(Parcel in) {
@@ -19,7 +19,7 @@ public class RevealAnimationSetting implements Parcelable {
         centerY = in.readInt();
         width = in.readInt();
         height = in.readInt();
-        color = in.readInt();
+        colorAccent = in.readInt();
     }
 
     public static final Creator<RevealAnimationSetting> CREATOR = new Creator<RevealAnimationSetting>() {
@@ -50,8 +50,8 @@ public class RevealAnimationSetting implements Parcelable {
         return height;
     }
 
-    public int getColor() {
-        return color;
+    public int getColorAccent() {
+        return colorAccent;
     }
 
     @Override
@@ -65,6 +65,6 @@ public class RevealAnimationSetting implements Parcelable {
         dest.writeInt(centerY);
         dest.writeInt(width);
         dest.writeInt(height);
-        dest.writeInt(color);
+        dest.writeInt(colorAccent);
     }
 }

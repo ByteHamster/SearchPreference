@@ -6,6 +6,9 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.view.View;
@@ -13,8 +16,8 @@ import android.view.ViewAnimationUtils;
 
 public class AnimationUtils {
     public static void registerCircularRevealAnimation(final Context context, final View view, final RevealAnimationSetting revealSettings) {
-        final int startColor = revealSettings.getColor();
-        final int endColor = (startColor & 0xffffff);
+        final int startColor = revealSettings.getColorAccent();
+        final int endColor = getBackgroundColor(view);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             view.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
@@ -54,8 +57,8 @@ public class AnimationUtils {
     }
 
     public static void startCircularExitAnimation(final Context context, final View view, final RevealAnimationSetting revealSettings, final OnDismissedListener listener) {
-        final int endColor = revealSettings.getColor();
-        final int startColor = (endColor & 0xffffff);
+        final int startColor = getBackgroundColor(view);
+        final int endColor = revealSettings.getColorAccent();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             int cx = revealSettings.getCenterX();
@@ -80,6 +83,15 @@ public class AnimationUtils {
         } else {
             listener.onDismissed();
         }
+    }
+
+    private static int getBackgroundColor(View view) {
+        int color = Color.TRANSPARENT;
+        Drawable background = view.getBackground();
+        if (background instanceof ColorDrawable) {
+            color = ((ColorDrawable) background).getColor();
+        }
+        return color;
     }
 
     public interface OnDismissedListener {

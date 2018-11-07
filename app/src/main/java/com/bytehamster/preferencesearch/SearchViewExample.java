@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceFragmentCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 import com.bytehamster.lib.preferencesearch.SearchConfiguration;
+import com.bytehamster.lib.preferencesearch.SearchPreference;
 import com.bytehamster.lib.preferencesearch.SearchPreferenceActionView;
 import com.bytehamster.lib.preferencesearch.SearchPreferenceResult;
 import com.bytehamster.lib.preferencesearch.SearchPreferenceResultListener;
@@ -22,6 +24,7 @@ public class SearchViewExample extends AppCompatActivity implements SearchPrefer
     private SearchPreferenceActionView searchPreferenceActionView;
     private String savedInstanceSearchQuery;
     private boolean savedInstanceSearchEnabled;
+    private PrefsFragment prefsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,10 @@ public class SearchViewExample extends AppCompatActivity implements SearchPrefer
             savedInstanceSearchQuery = savedInstanceState.getString(KEY_SEARCH_QUERY);
             savedInstanceSearchEnabled = savedInstanceState.getBoolean(KEY_SEARCH_ENABLED);
         }
+
+        prefsFragment = new PrefsFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(android.R.id.content, prefsFragment).commit();
     }
 
     @Override
@@ -41,7 +48,7 @@ public class SearchViewExample extends AppCompatActivity implements SearchPrefer
         searchConfiguration.index(R.xml.preferences);
 
         searchConfiguration.useAnimation(
-                findViewById(android.R.id.content).getWidth(),
+                findViewById(android.R.id.content).getWidth() - getSupportActionBar().getHeight()/2,
                 -getSupportActionBar().getHeight()/2,
                 findViewById(android.R.id.content).getWidth(),
                 findViewById(android.R.id.content).getHeight(),
@@ -80,7 +87,7 @@ public class SearchViewExample extends AppCompatActivity implements SearchPrefer
     @Override
     public void onSearchResultClicked(@NonNull final SearchPreferenceResult result) {
         searchPreferenceActionView.cancelSearch();
-        Toast.makeText(this, result.getKey(), Toast.LENGTH_LONG).show();
+        result.highlight(prefsFragment);
     }
 
     @Override
@@ -97,5 +104,14 @@ public class SearchViewExample extends AppCompatActivity implements SearchPrefer
         searchPreferenceActionView.cancelSearch();
         super.onSaveInstanceState(outState);
     }
-}
 
+    public static class PrefsFragment extends PreferenceFragmentCompat {
+        @Override
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+            addPreferencesFromResource(R.xml.preferences);
+
+            SearchPreference searchPreference = (SearchPreference) findPreference("searchPreference");
+            searchPreference.setVisible(false);
+        }
+    }
+}
