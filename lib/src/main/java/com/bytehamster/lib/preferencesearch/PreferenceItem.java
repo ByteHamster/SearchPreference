@@ -15,6 +15,7 @@ class PreferenceItem extends ListItem {
     String key;
     String entries;
     String breadcrumbs;
+    String keywords;
     ArrayList<String> keyBreadcrumbs = new ArrayList<>();
     int resId;
 
@@ -62,6 +63,9 @@ class PreferenceItem extends ListItem {
         }
         if (!TextUtils.isEmpty(breadcrumbs)) {
             infoBuilder.append("ø").append(breadcrumbs);
+        }
+        if (!TextUtils.isEmpty(keywords)) {
+            infoBuilder.append("ø").append(keywords);
         }
         return infoBuilder.toString();
     }

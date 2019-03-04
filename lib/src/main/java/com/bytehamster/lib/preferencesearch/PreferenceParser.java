@@ -121,9 +121,10 @@ class PreferenceParser {
     private PreferenceItem parseSearchResult(XmlPullParser xpp) {
         PreferenceItem result = new PreferenceItem();
         result.title = readString(getAttribute(xpp, "title"));
-        result.summary = readString(getAttribute(xpp,"summary"));
-        result.key = readString(getAttribute(xpp,"key"));
-        result.entries = readStringArray(getAttribute(xpp,"entries"));
+        result.summary = readString(getAttribute(xpp, "summary"));
+        result.key = readString(getAttribute(xpp, "key"));
+        result.entries = readStringArray(getAttribute(xpp, "entries"));
+        result.keywords = readString(getAttribute(xpp, NS_SEARCH, "keywords"));
 
         Log.d("PreferenceParser", "Found: " + xpp.getName() + "/" + result);
         return result;
