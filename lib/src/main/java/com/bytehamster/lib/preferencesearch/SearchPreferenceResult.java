@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.annotation.ColorInt;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.util.Log;
@@ -83,12 +84,7 @@ public class SearchPreferenceResult {
         final Drawable oldIcon = prefResult.getIcon();
         final boolean oldSpaceReserved = prefResult.isIconSpaceReserved();
 
-        Drawable arrow;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            arrow = prefsFragment.getContext().getDrawable(R.drawable.searchpreference_ic_arrow_right);
-        } else {
-            arrow = prefsFragment.getResources().getDrawable(R.drawable.searchpreference_ic_arrow_right);
-        }
+        Drawable arrow = AppCompatResources.getDrawable(prefsFragment.getContext(), R.drawable.searchpreference_ic_arrow_right);
         arrow.setColorFilter(color, PorterDuff.Mode.SRC_IN);
         prefResult.setIcon(arrow);
         new Handler().postDelayed(new Runnable() {
