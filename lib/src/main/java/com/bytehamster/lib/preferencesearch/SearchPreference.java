@@ -1,6 +1,7 @@
 package com.bytehamster.lib.preferencesearch;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceViewHolder;
 import android.text.InputType;
@@ -10,23 +11,45 @@ import android.widget.EditText;
 
 public class SearchPreference extends Preference implements View.OnClickListener {
     private SearchConfiguration searchConfiguration = new SearchConfiguration();
+    private String hint = null;
 
     @SuppressWarnings("unused")
     public SearchPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setLayoutResource(R.layout.searchpreference_preference);
+        parseAttrs(attrs);
     }
 
     @SuppressWarnings("unused")
     public SearchPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         setLayoutResource(R.layout.searchpreference_preference);
+        parseAttrs(attrs);
     }
 
     @SuppressWarnings("unused")
     public SearchPreference(Context context) {
         super(context);
         setLayoutResource(R.layout.searchpreference_preference);
+    }
+
+    private void parseAttrs(AttributeSet attrs) {
+        TypedArray a = getContext().obtainStyledAttributes(attrs, new int[] {R.attr.textHint});
+        if (a.getText(0) != null) {
+            hint = a.getText(0).toString();
+            searchConfiguration.setTextHint(a.getText(0).toString());
+        }
+        a.recycle();
+        a = getContext().obtainStyledAttributes(attrs, new int[] {R.attr.textClearHistory});
+        if (a.getText(0) != null) {
+            searchConfiguration.setTextClearHistory(a.getText(0).toString());
+        }
+        a.recycle();
+        a = getContext().obtainStyledAttributes(attrs, new int[] {R.attr.textNoResults});
+        if (a.getText(0) != null) {
+            searchConfiguration.setTextNoResults(a.getText(0).toString());
+        }
+        a.recycle();
     }
 
     @Override
@@ -37,6 +60,10 @@ public class SearchPreference extends Preference implements View.OnClickListener
         searchText.setFocusable(false);
         searchText.setInputType(InputType.TYPE_NULL);
         searchText.setOnClickListener(this);
+
+        if (hint != null) {
+            searchText.setHint(hint);
+        }
 
         holder.findViewById(R.id.search_card).setOnClickListener(this);
     }

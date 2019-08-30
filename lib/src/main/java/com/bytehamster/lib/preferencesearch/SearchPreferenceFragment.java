@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.bytehamster.lib.preferencesearch.ui.AnimationUtils;
 import com.bytehamster.lib.preferencesearch.ui.RevealAnimationSetting;
@@ -71,11 +70,20 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
         if (searchConfiguration.isHistoryEnabled()) {
             viewHolder.moreButton.setVisibility(View.VISIBLE);
         }
+        if (searchConfiguration.getTextHint() != null) {
+            viewHolder.searchView.setHint(searchConfiguration.getTextHint());
+        }
+        if (searchConfiguration.getTextNoResults() != null) {
+            viewHolder.noResults.setText(searchConfiguration.getTextNoResults());
+        }
         viewHolder.moreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PopupMenu popup = new PopupMenu(getContext(), viewHolder.moreButton);
                 popup.getMenuInflater().inflate(R.menu.searchpreference_more, popup.getMenu());
+                if (searchConfiguration.getTextClearHistory() != null) {
+                    popup.getMenu().findItem(R.id.clear_history).setTitle(searchConfiguration.getTextClearHistory());
+                }
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         if (item.getItemId() == R.id.clear_history) {
@@ -271,7 +279,7 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
         this.historyClickListener = historyClickListener;
     }
 
-    private class SearchViewHolder {
+    private static class SearchViewHolder {
         private ImageView clearButton;
         private ImageView moreButton;
         private EditText searchView;
