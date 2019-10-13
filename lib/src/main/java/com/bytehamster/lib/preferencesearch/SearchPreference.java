@@ -66,6 +66,8 @@ public class SearchPreference extends Preference implements View.OnClickListener
         }
 
         holder.findViewById(R.id.search_card).setOnClickListener(this);
+        holder.itemView.setOnClickListener(this);
+        holder.itemView.setBackgroundColor(0x0);
     }
 
     @Override
