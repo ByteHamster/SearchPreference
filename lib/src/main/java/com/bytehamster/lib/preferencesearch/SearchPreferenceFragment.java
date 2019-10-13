@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -97,7 +96,6 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
         });
 
         viewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        viewHolder.recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         adapter = new SearchPreferenceAdapter();
         adapter.setSearchConfiguration(searchConfiguration);
         adapter.setOnItemClickListener(this);

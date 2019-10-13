@@ -20,6 +20,7 @@ public class EnhancedExample extends AppCompatActivity implements SearchPreferen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         prefsFragment = new PrefsFragment();
         getSupportFragmentManager().beginTransaction()
                 .replace(android.R.id.content, prefsFragment).commit();
