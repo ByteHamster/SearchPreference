@@ -1,11 +1,12 @@
 package com.bytehamster.lib.preferencesearch;
 
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,24 +21,22 @@ class SearchPreferenceAdapter extends RecyclerView.Adapter<SearchPreferenceAdapt
         dataset = new ArrayList<>();
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        switch (viewType) {
-            case HistoryItem.TYPE:
-                return new HistoryViewHolder(
-                        LayoutInflater.from(parent.getContext()).inflate(
-                                R.layout.searchpreference_list_item_history, parent, false));
-            case PreferenceItem.TYPE:
-                return new PreferenceViewHolder(
-                        LayoutInflater.from(parent.getContext()).inflate(
-                                R.layout.searchpreference_list_item_result, parent, false));
-            default:
-                return null;
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == PreferenceItem.TYPE) {
+            return new PreferenceViewHolder(
+                    LayoutInflater.from(parent.getContext()).inflate(
+                            R.layout.searchpreference_list_item_result, parent, false));
+        } else {
+            return new HistoryViewHolder(
+                    LayoutInflater.from(parent.getContext()).inflate(
+                            R.layout.searchpreference_list_item_history, parent, false));
         }
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder h, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder h, final int position) {
         final ListItem listItem = dataset.get(position);
         if (getItemViewType(position) == HistoryItem.TYPE) {
             HistoryViewHolder holder = (HistoryViewHolder) h;

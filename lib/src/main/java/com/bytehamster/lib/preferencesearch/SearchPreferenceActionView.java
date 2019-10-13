@@ -1,11 +1,11 @@
 package com.bytehamster.lib.preferencesearch;
 
 import android.content.Context;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import android.util.AttributeSet;
 import android.view.View;
+import androidx.fragment.app.FragmentManager;
 
 public class SearchPreferenceActionView extends SearchView {
     private SearchPreferenceFragment searchFragment;

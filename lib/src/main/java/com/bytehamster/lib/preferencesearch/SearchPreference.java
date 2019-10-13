@@ -2,12 +2,12 @@ package com.bytehamster.lib.preferencesearch;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceViewHolder;
 import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.EditText;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceViewHolder;
 
 public class SearchPreference extends Preference implements View.OnClickListener {
     private SearchConfiguration searchConfiguration = new SearchConfiguration();
@@ -54,8 +54,6 @@ public class SearchPreference extends Preference implements View.OnClickListener
 
     @Override
     public void onBindViewHolder(PreferenceViewHolder holder) {
-        super.onBindViewHolder(holder);
-
         EditText searchText = (EditText) holder.findViewById(R.id.search);
         searchText.setFocusable(false);
         searchText.setInputType(InputType.TYPE_NULL);

@@ -10,9 +10,9 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
 public class AnimationUtils {
     public static void registerCircularRevealAnimation(final Context context, final View view, final RevealAnimationSetting revealSettings) {

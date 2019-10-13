@@ -1,7 +1,7 @@
 package com.bytehamster.lib.preferencesearch;
 
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import androidx.annotation.Nullable;
 
 class Breadcrumb {
     private Breadcrumb() {
