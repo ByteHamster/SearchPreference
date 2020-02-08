@@ -1,15 +1,22 @@
 package com.bytehamster.lib.preferencesearch;
 
+import android.annotation.TargetApi;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RippleDrawable;
+import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
-import androidx.annotation.ColorInt;
+import android.util.TypedValue;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceGroup;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 public class SearchPreferenceResult {
@@ -52,46 +59,83 @@ public class SearchPreferenceResult {
      * @param prefsFragment Fragment that contains the preference
      */
     public void highlight(final PreferenceFragmentCompat prefsFragment) {
-        highlight(prefsFragment, 0xff3F51B5);
-    }
-
-    /**
-     * Highlight the preference that was found
-     * @param prefsFragment Fragment that contains the preference
-     */
-    public void highlight(final PreferenceFragmentCompat prefsFragment, @ColorInt final int color) {
         new Handler().post(new Runnable() {
             @Override
             public void run() {
-                doHighlight(prefsFragment, color);
+                doHighlight(prefsFragment);
             }
         });
     }
 
-    private void doHighlight(PreferenceFragmentCompat prefsFragment, @ColorInt int color) {
+    private void doHighlight(final PreferenceFragmentCompat prefsFragment) {
         final Preference prefResult = prefsFragment.findPreference(getKey());
 
         if (prefResult == null) {
             Log.e("doHighlight", "Preference not found on given screen");
             return;
         }
-
-        if ((color & 0xff000000) == 0) {
-            color += 0xff000000;
+        final RecyclerView recyclerView = prefsFragment.getListView();
+        final RecyclerView.Adapter<?> adapter = recyclerView.getAdapter();
+        if (adapter instanceof PreferenceGroup.PreferencePositionCallback) {
+            PreferenceGroup.PreferencePositionCallback callback = (PreferenceGroup.PreferencePositionCallback) adapter;
+            final int position = callback.getPreferenceAdapterPosition(prefResult);
+            if (position != RecyclerView.NO_POSITION) {
+                recyclerView.scrollToPosition(position);
+                recyclerView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        RecyclerView.ViewHolder holder = recyclerView.findViewHolderForAdapterPosition(position);
+                        if (holder != null) {
+                            Drawable background = holder.itemView.getBackground();
+                            if (Build.VERSION.SDK_INT >= 21 && background instanceof RippleDrawable) {
+                                forceRippleAnimation((RippleDrawable) background);
+                                return;
+                            }
+                        }
+                        highlightFallback(prefsFragment, prefResult);
+                    }
+                }, 200);
+                return;
+            }
         }
+        highlightFallback(prefsFragment, prefResult);
+    }
 
-        prefsFragment.scrollToPreference(prefResult);
+    /**
+     * Alternative (old) highlight method if ripple does not work
+     */
+    private void highlightFallback(PreferenceFragmentCompat prefsFragment, final Preference prefResult) {
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = prefsFragment.getActivity().getTheme();
+        theme.resolveAttribute(android.R.attr.textColorPrimary, typedValue, true);
+        TypedArray arr = prefsFragment.getActivity().obtainStyledAttributes(typedValue.data, new int[]{
+                android.R.attr.textColorPrimary});
+        int color = arr.getColor(0, 0xff3F51B5);
+        arr.recycle();
+
         final Drawable oldIcon = prefResult.getIcon();
         final boolean oldSpaceReserved = prefResult.isIconSpaceReserved();
-
         Drawable arrow = AppCompatResources.getDrawable(prefsFragment.getContext(), R.drawable.searchpreference_ic_arrow_right);
         arrow.setColorFilter(color, PorterDuff.Mode.SRC_IN);
         prefResult.setIcon(arrow);
+        prefsFragment.scrollToPreference(prefResult);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 prefResult.setIcon(oldIcon);
                 prefResult.setIconSpaceReserved(oldSpaceReserved);
+            }
+        }, 1000);
+    }
+
+    @TargetApi(21)
+    protected void forceRippleAnimation(RippleDrawable background) {
+        final RippleDrawable rippleDrawable = background;
+        Handler handler = new Handler();
+        rippleDrawable.setState(new int[]{android.R.attr.state_pressed, android.R.attr.state_enabled});
+        handler.postDelayed(new Runnable() {
+            @Override public void run() {
+                rippleDrawable.setState(new int[]{});
             }
         }, 1000);
     }
