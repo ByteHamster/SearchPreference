@@ -60,12 +60,7 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
         View rootView = inflater.inflate(R.layout.searchpreference_fragment, container, false);
         viewHolder = new SearchViewHolder(rootView);
 
-        viewHolder.clearButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewHolder.searchView.setText("");
-            }
-        });
+        viewHolder.clearButton.setOnClickListener(view -> viewHolder.searchView.setText(""));
         if (searchConfiguration.isHistoryEnabled()) {
             viewHolder.moreButton.setVisibility(View.VISIBLE);
         }
@@ -75,24 +70,16 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
         if (searchConfiguration.getTextNoResults() != null) {
             viewHolder.noResults.setText(searchConfiguration.getTextNoResults());
         }
-        viewHolder.moreButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(getContext(), viewHolder.moreButton);
-                popup.getMenuInflater().inflate(R.menu.searchpreference_more, popup.getMenu());
-                if (searchConfiguration.getTextClearHistory() != null) {
-                    popup.getMenu().findItem(R.id.clear_history).setTitle(searchConfiguration.getTextClearHistory());
+        viewHolder.moreButton.setOnClickListener(v -> {
+            PopupMenu popup = new PopupMenu(getContext(), viewHolder.moreButton);
+            popup.getMenuInflater().inflate(R.menu.searchpreference_more, popup.getMenu());
+            popup.setOnMenuItemClickListener(item -> {
+                if (item.getItemId() == R.id.clear_history) {
+                    clearHistory();
                 }
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getItemId() == R.id.clear_history) {
-                            clearHistory();
-                        }
-                        return true;
-                    }
-                });
-                popup.show();
-            }
+                return true;
+            });
+            popup.show();
         });
 
         viewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -171,14 +158,11 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
     }
 
     private void showKeyboard() {
-        viewHolder.searchView.post(new Runnable() {
-            @Override
-            public void run() {
-                viewHolder.searchView.requestFocus();
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm != null) {
-                    imm.showSoftInput(viewHolder.searchView, InputMethodManager.SHOW_IMPLICIT);
-                }
+        viewHolder.searchView.post(() -> {
+            viewHolder.searchView.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.showSoftInput(viewHolder.searchView, InputMethodManager.SHOW_IMPLICIT);
             }
         });
     }
@@ -206,7 +190,7 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
         }
 
         results = searcher.searchFor(keyword, searchConfiguration.isFuzzySearchEnabled());
-        adapter.setContent(new ArrayList<ListItem>(results));
+        adapter.setContent(new ArrayList<>(results));
 
         setEmptyViewShown(results.isEmpty());
     }
@@ -225,7 +209,7 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
         viewHolder.noResults.setVisibility(View.GONE);
         viewHolder.recyclerView.setVisibility(View.VISIBLE);
 
-        adapter.setContent(new ArrayList<ListItem>(history));
+        adapter.setContent(new ArrayList<>(history));
         setEmptyViewShown(history.isEmpty());
     }
 

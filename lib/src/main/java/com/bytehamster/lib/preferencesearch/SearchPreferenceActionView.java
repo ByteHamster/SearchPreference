@@ -43,18 +43,10 @@ public class SearchPreferenceActionView extends SearchView {
                 return true;
             }
         });
-        setOnQueryTextFocusChangeListener(new OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus && (searchFragment == null || !searchFragment.isVisible())) {
-                    searchFragment = searchConfiguration.showSearchFragment();
-                    searchFragment.setHistoryClickListener(new SearchPreferenceFragment.HistoryClickListener() {
-                        @Override
-                        public void onHistoryEntryClicked(String entry) {
-                            setQuery(entry, false);
-                        }
-                    });
-                }
+        setOnQueryTextFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus && (searchFragment == null || !searchFragment.isVisible())) {
+                searchFragment = searchConfiguration.showSearchFragment();
+                searchFragment.setHistoryClickListener(entry -> setQuery(entry, false));
             }
         });
     }

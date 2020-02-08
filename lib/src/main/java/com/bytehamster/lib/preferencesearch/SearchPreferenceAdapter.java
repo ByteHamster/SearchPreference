@@ -65,12 +65,9 @@ class SearchPreferenceAdapter extends RecyclerView.Adapter<SearchPreferenceAdapt
 
         }
 
-        h.root.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onItemClickListener != null) {
-                    onItemClickListener.onItemClicked(listItem, h.getAdapterPosition());
-                }
+        h.root.setOnClickListener(v -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClicked(listItem, h.getAdapterPosition());
             }
         });
     }

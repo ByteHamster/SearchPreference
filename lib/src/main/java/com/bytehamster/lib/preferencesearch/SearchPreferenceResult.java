@@ -59,12 +59,7 @@ public class SearchPreferenceResult {
      * @param prefsFragment Fragment that contains the preference
      */
     public void highlight(final PreferenceFragmentCompat prefsFragment) {
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                doHighlight(prefsFragment);
-            }
-        });
+        new Handler().post(() -> doHighlight(prefsFragment));
     }
 
     private void doHighlight(final PreferenceFragmentCompat prefsFragment) {
@@ -81,19 +76,16 @@ public class SearchPreferenceResult {
             final int position = callback.getPreferenceAdapterPosition(prefResult);
             if (position != RecyclerView.NO_POSITION) {
                 recyclerView.scrollToPosition(position);
-                recyclerView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        RecyclerView.ViewHolder holder = recyclerView.findViewHolderForAdapterPosition(position);
-                        if (holder != null) {
-                            Drawable background = holder.itemView.getBackground();
-                            if (Build.VERSION.SDK_INT >= 21 && background instanceof RippleDrawable) {
-                                forceRippleAnimation((RippleDrawable) background);
-                                return;
-                            }
+                recyclerView.postDelayed(() -> {
+                    RecyclerView.ViewHolder holder = recyclerView.findViewHolderForAdapterPosition(position);
+                    if (holder != null) {
+                        Drawable background = holder.itemView.getBackground();
+                        if (Build.VERSION.SDK_INT >= 21 && background instanceof RippleDrawable) {
+                            forceRippleAnimation((RippleDrawable) background);
+                            return;
                         }
-                        highlightFallback(prefsFragment, prefResult);
                     }
+                    highlightFallback(prefsFragment, prefResult);
                 }, 200);
                 return;
             }
@@ -119,12 +111,9 @@ public class SearchPreferenceResult {
         arrow.setColorFilter(color, PorterDuff.Mode.SRC_IN);
         prefResult.setIcon(arrow);
         prefsFragment.scrollToPreference(prefResult);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                prefResult.setIcon(oldIcon);
-                prefResult.setIconSpaceReserved(oldSpaceReserved);
-            }
+        new Handler().postDelayed(() -> {
+            prefResult.setIcon(oldIcon);
+            prefResult.setIconSpaceReserved(oldSpaceReserved);
         }, 1000);
     }
 
@@ -133,11 +122,7 @@ public class SearchPreferenceResult {
         final RippleDrawable rippleDrawable = background;
         Handler handler = new Handler();
         rippleDrawable.setState(new int[]{android.R.attr.state_pressed, android.R.attr.state_enabled});
-        handler.postDelayed(new Runnable() {
-            @Override public void run() {
-                rippleDrawable.setState(new int[]{});
-            }
-        }, 1000);
+        handler.postDelayed(() -> rippleDrawable.setState(new int[]{}), 1000);
     }
 
     /**
