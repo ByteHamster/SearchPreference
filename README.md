@@ -53,3 +53,10 @@ And react to search results in your Activity:
             result.highlight(prefsFragment);
         }
     }
+
+## Translations
+
+This library currently contains only a limited number of translations. If you want to translate
+the texts shown by the library together with your app's other strings, you can just override
+the strings defined in `lib/src/main/res/values/strings.xml` in your own application by copying
+those lines to your app's `strings.xml`.
