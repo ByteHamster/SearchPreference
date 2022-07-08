@@ -31,7 +31,8 @@ class PreferenceItem extends ListItem {
     }
 
     boolean matches(String keyword) {
-        return getInfo().contains(keyword);
+        Locale locale = Locale.getDefault();
+        return getInfo().toLowerCase(locale).contains(keyword.toLowerCase(locale));
     }
 
     float getScore(String keyword) {
