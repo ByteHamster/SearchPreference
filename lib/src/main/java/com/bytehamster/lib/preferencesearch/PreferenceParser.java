@@ -30,6 +30,10 @@ class PreferenceParser {
         allEntries.addAll(parseFile(item));
     }
 
+    void addPreferenceItems(ArrayList<PreferenceItem> preferenceItems) {
+        allEntries.addAll(preferenceItems);
+    }
+
     private ArrayList<PreferenceItem> parseFile(SearchConfiguration.SearchIndexItem item) {
         java.util.ArrayList<PreferenceItem> results = new ArrayList<>();
         XmlPullParser xpp = context.getResources().getXml(item.getResId());

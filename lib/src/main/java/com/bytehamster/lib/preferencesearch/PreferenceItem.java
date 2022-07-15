@@ -3,12 +3,13 @@ package com.bytehamster.lib.preferencesearch;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
+import androidx.annotation.XmlRes;
 import org.apache.commons.text.similarity.FuzzyScore;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
-class PreferenceItem extends ListItem implements Parcelable {
+public class PreferenceItem extends ListItem implements Parcelable {
     static final int TYPE = 2;
     private static FuzzyScore fuzzyScore = new FuzzyScore(Locale.getDefault());
 
@@ -97,6 +98,44 @@ class PreferenceItem extends ListItem implements Parcelable {
         return infoBuilder.toString();
     }
 
+    public PreferenceItem withKey(String key) {
+        this.key = key;
+        return this;
+    }
+
+    public PreferenceItem withSummary(String summary) {
+        this.summary = summary;
+        return this;
+    }
+
+    public PreferenceItem withTitle(String title) {
+        this.title = title;
+        return this;
+    }
+
+    public PreferenceItem withEntries(String entries) {
+        this.entries = entries;
+        return this;
+    }
+
+    public PreferenceItem withKeywords(String keywords) {
+        this.keywords = keywords;
+        return this;
+    }
+
+    public PreferenceItem withResId(@XmlRes Integer resId) {
+        this.resId = resId;
+        return this;
+    }
+
+    /**
+     * @param breadcrumb The breadcrumb to add
+     * @return For chaining
+     */
+    public PreferenceItem addBreadcrumb(String breadcrumb) {
+        this.breadcrumbs = Breadcrumb.concat(this.breadcrumbs, breadcrumb);
+        return this;
+    }
 
     @Override
     public String toString() {

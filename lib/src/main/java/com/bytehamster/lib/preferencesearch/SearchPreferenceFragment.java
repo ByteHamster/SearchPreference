@@ -52,6 +52,7 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
         for (SearchConfiguration.SearchIndexItem file : files) {
             searcher.addResourceFile(file);
         }
+        searcher.addPreferenceItems(searchConfiguration.getPreferencesToIndex());
         loadHistory();
     }
 
