@@ -1,12 +1,14 @@
 package com.bytehamster.lib.preferencesearch;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import org.apache.commons.text.similarity.FuzzyScore;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
-class PreferenceItem extends ListItem {
+class PreferenceItem extends ListItem implements Parcelable {
     static final int TYPE = 2;
     private static FuzzyScore fuzzyScore = new FuzzyScore(Locale.getDefault());
 
@@ -21,6 +23,30 @@ class PreferenceItem extends ListItem {
 
     private float lastScore = 0;
     private String lastKeyword = null;
+
+    PreferenceItem() {
+    }
+
+    private PreferenceItem(Parcel in) {
+        this.title = in.readString();
+        this.summary = in.readString();
+        this.key = in.readString();
+        this.breadcrumbs = in.readString();
+        this.keywords = in.readString();
+        this.resId = in.readInt();
+    }
+
+    public static final Creator<PreferenceItem> CREATOR = new Creator<PreferenceItem>() {
+        @Override
+        public PreferenceItem createFromParcel(Parcel in) {
+            return new PreferenceItem(in);
+        }
+
+        @Override
+        public PreferenceItem[] newArray(int size) {
+            return new PreferenceItem[size];
+        }
+    };
 
     boolean hasData() {
         return title != null || summary != null;
@@ -81,4 +107,20 @@ class PreferenceItem extends ListItem {
     public int getType() {
         return TYPE;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(title);
+        parcel.writeString(summary);
+        parcel.writeString(key);
+        parcel.writeString(breadcrumbs);
+        parcel.writeString(keywords);
+        parcel.writeInt(resId);
+    }
+
 }
