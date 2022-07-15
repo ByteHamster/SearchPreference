@@ -14,7 +14,7 @@ import com.bytehamster.lib.preferencesearch.ui.RevealAnimationSetting;
 import java.util.ArrayList;
 
 public class SearchConfiguration {
-    private static final String ARGUMENT_INDEX_ITEMS = "items";
+    private static final String ARGUMENT_INDEX_FILES = "items";
     private static final String ARGUMENT_FUZZY_ENABLED = "fuzzy";
     private static final String ARGUMENT_HISTORY_ENABLED = "history_enabled";
     private static final String ARGUMENT_SEARCH_BAR_ENABLED = "search_bar_enabled";
@@ -24,7 +24,7 @@ public class SearchConfiguration {
     private static final String ARGUMENT_TEXT_CLEAR_HISTORY = "text_clear_history";
     private static final String ARGUMENT_TEXT_NO_RESULTS = "text_no_results";
 
-    private ArrayList<SearchIndexItem> itemsToIndex = new ArrayList<>();
+    private ArrayList<SearchIndexItem> filesToIndex = new ArrayList<>();
     private boolean historyEnabled = true;
     private boolean breadcrumbsEnabled = false;
     private boolean fuzzySearchEnabled = true;
@@ -69,7 +69,7 @@ public class SearchConfiguration {
 
     private Bundle toBundle() {
         Bundle arguments = new Bundle();
-        arguments.putParcelableArrayList(ARGUMENT_INDEX_ITEMS, itemsToIndex);
+        arguments.putParcelableArrayList(ARGUMENT_INDEX_FILES, filesToIndex);
         arguments.putBoolean(ARGUMENT_HISTORY_ENABLED, historyEnabled);
         arguments.putParcelable(ARGUMENT_REVEAL_ANIMATION_SETTING, revealAnimationSetting);
         arguments.putBoolean(ARGUMENT_FUZZY_ENABLED, fuzzySearchEnabled);
@@ -83,7 +83,7 @@ public class SearchConfiguration {
 
     static SearchConfiguration fromBundle(Bundle bundle) {
         SearchConfiguration config = new SearchConfiguration();
-        config.itemsToIndex = bundle.getParcelableArrayList(ARGUMENT_INDEX_ITEMS);
+        config.filesToIndex = bundle.getParcelableArrayList(ARGUMENT_INDEX_FILES);
         config.historyEnabled = bundle.getBoolean(ARGUMENT_HISTORY_ENABLED);
         config.revealAnimationSetting = bundle.getParcelable(ARGUMENT_REVEAL_ANIMATION_SETTING);
         config.fuzzySearchEnabled = bundle.getBoolean(ARGUMENT_FUZZY_ENABLED);
@@ -167,12 +167,12 @@ public class SearchConfiguration {
      */
     public SearchIndexItem index(@XmlRes int resId) {
         SearchIndexItem item = new SearchIndexItem(resId, this);
-        itemsToIndex.add(item);
+        filesToIndex.add(item);
         return item;
     }
 
     ArrayList<SearchIndexItem> getFiles() {
-        return itemsToIndex;
+        return filesToIndex;
     }
 
     boolean isHistoryEnabled() {
