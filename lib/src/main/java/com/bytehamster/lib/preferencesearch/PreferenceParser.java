@@ -51,12 +51,13 @@ class PreferenceParser {
                     PreferenceItem result = parseSearchResult(xpp);
                     result.resId = item.getResId();
 
-                    if (!BLACKLIST.contains(xpp.getName()) && result.hasData()) {
+                    if (!BLACKLIST.contains(xpp.getName())
+                            && result.hasData()
+                            && !"true".equals(getAttribute(xpp, NS_SEARCH, "ignore"))
+                    ) {
                         result.breadcrumbs = joinBreadcrumbs(breadcrumbs);
                         result.keyBreadcrumbs = cleanupKeyBreadcrumbs(keyBreadcrumbs);
-                        if (!"true".equals(getAttribute(xpp, NS_SEARCH, "ignore"))) {
-                            results.add(result);
-                        }
+                        results.add(result);
                     }
                     if (CONTAINERS.contains(xpp.getName())) {
                         breadcrumbs.add(result.title == null ? "" : result.title);
