@@ -30,6 +30,7 @@ public class SearchConfiguration {
 
     private ArrayList<SearchIndexItem> filesToIndex = new ArrayList<>();
     private ArrayList<PreferenceItem> preferencesToIndex = new ArrayList<>();
+    private ArrayList<String> bannedKeys = new ArrayList<>();
     private boolean historyEnabled = true;
     private boolean breadcrumbsEnabled = false;
     private boolean fuzzySearchEnabled = true;
@@ -217,6 +218,17 @@ public class SearchConfiguration {
         return preferenceItem;
     }
 
+    ArrayList<String> getBannedKeys() {
+        return bannedKeys;
+    }
+
+    /**
+     * @param key of the preference to be ignored
+     */
+    public void ignorePreference(@NonNull String key) {
+        bannedKeys.add(key);
+    }
+
     ArrayList<SearchIndexItem> getFiles() {
         return filesToIndex;
     }
@@ -322,6 +334,10 @@ public class SearchConfiguration {
 
         String getBreadcrumb() {
             return breadcrumb;
+        }
+
+        SearchConfiguration getSearchConfiguration() {
+            return searchConfiguration;
         }
 
         public static final Creator<SearchIndexItem> CREATOR = new Creator<SearchIndexItem>() {
