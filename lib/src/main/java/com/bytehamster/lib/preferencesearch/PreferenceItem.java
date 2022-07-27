@@ -1,12 +1,15 @@
 package com.bytehamster.lib.preferencesearch;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
+import androidx.annotation.XmlRes;
 import org.apache.commons.text.similarity.FuzzyScore;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
-class PreferenceItem extends ListItem {
+public class PreferenceItem extends ListItem implements Parcelable {
     static final int TYPE = 2;
     private static FuzzyScore fuzzyScore = new FuzzyScore(Locale.getDefault());
 
@@ -21,6 +24,30 @@ class PreferenceItem extends ListItem {
 
     private float lastScore = 0;
     private String lastKeyword = null;
+
+    PreferenceItem() {
+    }
+
+    private PreferenceItem(Parcel in) {
+        this.title = in.readString();
+        this.summary = in.readString();
+        this.key = in.readString();
+        this.breadcrumbs = in.readString();
+        this.keywords = in.readString();
+        this.resId = in.readInt();
+    }
+
+    public static final Creator<PreferenceItem> CREATOR = new Creator<PreferenceItem>() {
+        @Override
+        public PreferenceItem createFromParcel(Parcel in) {
+            return new PreferenceItem(in);
+        }
+
+        @Override
+        public PreferenceItem[] newArray(int size) {
+            return new PreferenceItem[size];
+        }
+    };
 
     boolean hasData() {
         return title != null || summary != null;
@@ -71,6 +98,44 @@ class PreferenceItem extends ListItem {
         return infoBuilder.toString();
     }
 
+    public PreferenceItem withKey(String key) {
+        this.key = key;
+        return this;
+    }
+
+    public PreferenceItem withSummary(String summary) {
+        this.summary = summary;
+        return this;
+    }
+
+    public PreferenceItem withTitle(String title) {
+        this.title = title;
+        return this;
+    }
+
+    public PreferenceItem withEntries(String entries) {
+        this.entries = entries;
+        return this;
+    }
+
+    public PreferenceItem withKeywords(String keywords) {
+        this.keywords = keywords;
+        return this;
+    }
+
+    public PreferenceItem withResId(@XmlRes Integer resId) {
+        this.resId = resId;
+        return this;
+    }
+
+    /**
+     * @param breadcrumb The breadcrumb to add
+     * @return For chaining
+     */
+    public PreferenceItem addBreadcrumb(String breadcrumb) {
+        this.breadcrumbs = Breadcrumb.concat(this.breadcrumbs, breadcrumb);
+        return this;
+    }
 
     @Override
     public String toString() {
@@ -81,4 +146,20 @@ class PreferenceItem extends ListItem {
     public int getType() {
         return TYPE;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(title);
+        parcel.writeString(summary);
+        parcel.writeString(key);
+        parcel.writeString(breadcrumbs);
+        parcel.writeString(keywords);
+        parcel.writeInt(resId);
+    }
+
 }

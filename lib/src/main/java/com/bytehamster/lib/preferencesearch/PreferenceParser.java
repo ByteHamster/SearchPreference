@@ -30,9 +30,14 @@ class PreferenceParser {
         allEntries.addAll(parseFile(item));
     }
 
+    void addPreferenceItems(ArrayList<PreferenceItem> preferenceItems) {
+        allEntries.addAll(preferenceItems);
+    }
+
     private ArrayList<PreferenceItem> parseFile(SearchConfiguration.SearchIndexItem item) {
         java.util.ArrayList<PreferenceItem> results = new ArrayList<>();
         XmlPullParser xpp = context.getResources().getXml(item.getResId());
+        List<String> bannedKeys = item.getSearchConfiguration().getBannedKeys();
 
         try {
             xpp.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
@@ -47,12 +52,13 @@ class PreferenceParser {
                     PreferenceItem result = parseSearchResult(xpp);
                     result.resId = item.getResId();
 
-                    if (!BLACKLIST.contains(xpp.getName()) && result.hasData()) {
+                    if (!BLACKLIST.contains(xpp.getName())
+                            && result.hasData()
+                            && !"true".equals(getAttribute(xpp, NS_SEARCH, "ignore"))
+                            && !bannedKeys.contains(result.key)) {
                         result.breadcrumbs = joinBreadcrumbs(breadcrumbs);
                         result.keyBreadcrumbs = cleanupKeyBreadcrumbs(keyBreadcrumbs);
-                        if (!"true".equals(getAttribute(xpp, NS_SEARCH, "ignore"))) {
-                            results.add(result);
-                        }
+                        results.add(result);
                     }
                     if (CONTAINERS.contains(xpp.getName())) {
                         breadcrumbs.add(result.title == null ? "" : result.title);

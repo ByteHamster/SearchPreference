@@ -9,12 +9,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.annotation.XmlRes;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
 import com.bytehamster.lib.preferencesearch.ui.RevealAnimationSetting;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class SearchConfiguration {
-    private static final String ARGUMENT_INDEX_ITEMS = "items";
+    private static final String ARGUMENT_INDEX_FILES = "items";
+    private static final String ARGUMENT_INDEX_INDIVIDUAL_PREFERENCES = "individual_prefs";
     private static final String ARGUMENT_FUZZY_ENABLED = "fuzzy";
     private static final String ARGUMENT_HISTORY_ENABLED = "history_enabled";
     private static final String ARGUMENT_SEARCH_BAR_ENABLED = "search_bar_enabled";
@@ -24,7 +28,9 @@ public class SearchConfiguration {
     private static final String ARGUMENT_TEXT_CLEAR_HISTORY = "text_clear_history";
     private static final String ARGUMENT_TEXT_NO_RESULTS = "text_no_results";
 
-    private ArrayList<SearchIndexItem> itemsToIndex = new ArrayList<>();
+    private ArrayList<SearchIndexItem> filesToIndex = new ArrayList<>();
+    private ArrayList<PreferenceItem> preferencesToIndex = new ArrayList<>();
+    private ArrayList<String> bannedKeys = new ArrayList<>();
     private boolean historyEnabled = true;
     private boolean breadcrumbsEnabled = false;
     private boolean fuzzySearchEnabled = true;
@@ -69,7 +75,8 @@ public class SearchConfiguration {
 
     private Bundle toBundle() {
         Bundle arguments = new Bundle();
-        arguments.putParcelableArrayList(ARGUMENT_INDEX_ITEMS, itemsToIndex);
+        arguments.putParcelableArrayList(ARGUMENT_INDEX_FILES, filesToIndex);
+        arguments.putParcelableArrayList(ARGUMENT_INDEX_INDIVIDUAL_PREFERENCES, preferencesToIndex);
         arguments.putBoolean(ARGUMENT_HISTORY_ENABLED, historyEnabled);
         arguments.putParcelable(ARGUMENT_REVEAL_ANIMATION_SETTING, revealAnimationSetting);
         arguments.putBoolean(ARGUMENT_FUZZY_ENABLED, fuzzySearchEnabled);
@@ -83,7 +90,8 @@ public class SearchConfiguration {
 
     static SearchConfiguration fromBundle(Bundle bundle) {
         SearchConfiguration config = new SearchConfiguration();
-        config.itemsToIndex = bundle.getParcelableArrayList(ARGUMENT_INDEX_ITEMS);
+        config.filesToIndex = bundle.getParcelableArrayList(ARGUMENT_INDEX_FILES);
+        config.preferencesToIndex = bundle.getParcelableArrayList(ARGUMENT_INDEX_INDIVIDUAL_PREFERENCES);
         config.historyEnabled = bundle.getBoolean(ARGUMENT_HISTORY_ENABLED);
         config.revealAnimationSetting = bundle.getParcelable(ARGUMENT_REVEAL_ANIMATION_SETTING);
         config.fuzzySearchEnabled = bundle.getBoolean(ARGUMENT_FUZZY_ENABLED);
@@ -167,12 +175,66 @@ public class SearchConfiguration {
      */
     public SearchIndexItem index(@XmlRes int resId) {
         SearchIndexItem item = new SearchIndexItem(resId, this);
-        itemsToIndex.add(item);
+        filesToIndex.add(item);
         return item;
     }
 
+    /**
+     * Indexes a single preference
+     * @return the indexed PreferenceItem to configure it with chaining
+     * @see PreferenceItem for the available methods for configuring it
+     */
+    public PreferenceItem indexItem() {
+        PreferenceItem preferenceItem = new PreferenceItem();
+        preferencesToIndex.add(preferenceItem);
+        return preferenceItem;
+    }
+
+    /**
+     * Indexes a single android preference
+     * @param preference to get its key, summary, title and entries
+     * @return the indexed PreferenceItem to configure it with chaining
+     * @see PreferenceItem for the available methods for configuring it
+     */
+    public PreferenceItem indexItem(@NonNull Preference preference) {
+        PreferenceItem preferenceItem = new PreferenceItem();
+
+        if (preference.getKey() != null) {
+            preferenceItem.key = preference.getKey();
+        }
+        if (preference.getSummary() != null) {
+            preferenceItem.summary = preference.getSummary().toString();
+        }
+        if (preference.getTitle() != null) {
+            preferenceItem.title = preference.getTitle().toString();
+        }
+        if (preference instanceof ListPreference) {
+            ListPreference listPreference = ((ListPreference) preference);
+            if (listPreference.getEntries() != null) {
+                preferenceItem.entries = Arrays.toString(listPreference.getEntries());
+            }
+        }
+        preferencesToIndex.add(preferenceItem);
+        return preferenceItem;
+    }
+
+    ArrayList<String> getBannedKeys() {
+        return bannedKeys;
+    }
+
+    /**
+     * @param key of the preference to be ignored
+     */
+    public void ignorePreference(@NonNull String key) {
+        bannedKeys.add(key);
+    }
+
     ArrayList<SearchIndexItem> getFiles() {
-        return itemsToIndex;
+        return filesToIndex;
+    }
+
+    ArrayList<PreferenceItem> getPreferencesToIndex() {
+        return preferencesToIndex;
     }
 
     boolean isHistoryEnabled() {
@@ -272,6 +334,10 @@ public class SearchConfiguration {
 
         String getBreadcrumb() {
             return breadcrumb;
+        }
+
+        SearchConfiguration getSearchConfiguration() {
+            return searchConfiguration;
         }
 
         public static final Creator<SearchIndexItem> CREATOR = new Creator<SearchIndexItem>() {
