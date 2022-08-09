@@ -8,9 +8,9 @@ import android.view.View;
 import androidx.fragment.app.FragmentManager;
 
 public class SearchPreferenceActionView extends SearchView {
-    private SearchPreferenceFragment searchFragment;
-    private SearchConfiguration searchConfiguration = new SearchConfiguration();
-    private AppCompatActivity activity;
+    protected SearchPreferenceFragment searchFragment;
+    protected SearchConfiguration searchConfiguration = new SearchConfiguration();
+    protected AppCompatActivity activity;
 
     public SearchPreferenceActionView(Context context) {
         super(context);
@@ -86,7 +86,7 @@ public class SearchPreferenceActionView extends SearchView {
         return didSomething;
     }
 
-    private void removeFragment() {
+    protected void removeFragment() {
         if (searchFragment.isVisible()) {
             FragmentManager fm = activity.getSupportFragmentManager();
             fm.beginTransaction().remove(searchFragment).commit();
