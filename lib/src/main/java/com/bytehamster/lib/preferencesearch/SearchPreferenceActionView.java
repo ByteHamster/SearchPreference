@@ -90,7 +90,7 @@ public class SearchPreferenceActionView extends SearchView {
         if (searchFragment.isVisible()) {
             FragmentManager fm = activity.getSupportFragmentManager();
             fm.beginTransaction().remove(searchFragment).commit();
-            fm.popBackStack(SearchPreferenceFragment.NAME, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            fm.popBackStack(SearchPreferenceFragment.TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
     }
 
