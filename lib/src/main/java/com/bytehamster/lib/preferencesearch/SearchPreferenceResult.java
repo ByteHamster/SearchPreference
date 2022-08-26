@@ -131,6 +131,6 @@ public class SearchPreferenceResult {
      */
     public void closeSearchPage(AppCompatActivity activity) {
         FragmentManager fm = activity.getSupportFragmentManager();
-        fm.beginTransaction().remove(fm.findFragmentByTag(SearchPreferenceFragment.NAME)).commit();
+        fm.beginTransaction().remove(fm.findFragmentByTag(SearchPreferenceFragment.TAG)).commit();
     }
 }
