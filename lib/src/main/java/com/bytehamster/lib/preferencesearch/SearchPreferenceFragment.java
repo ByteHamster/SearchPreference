@@ -224,12 +224,12 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
                 historyClickListener.onHistoryEntryClicked(text.toString());
             }
         } else {
-            addHistoryEntry(viewHolder.searchView.getText().toString());
             hideKeyboard();
 
             try {
                 final SearchPreferenceResultListener callback = (SearchPreferenceResultListener) getActivity();
                 PreferenceItem r = results.get(position);
+                addHistoryEntry(r.title);
                 String screen = null;
                 if (!r.keyBreadcrumbs.isEmpty()) {
                     screen = r.keyBreadcrumbs.get(r.keyBreadcrumbs.size() - 1);
