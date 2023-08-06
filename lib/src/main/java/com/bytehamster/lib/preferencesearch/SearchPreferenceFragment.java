@@ -114,20 +114,44 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
             return;
         }
 
-        int size = prefs.getInt("history_size", 0);
+        int size = prefs.getInt(historySizeKey(), 0);
         for (int i = 0; i < size; i++) {
-            String title = prefs.getString("history_" + i, null);
+            String title = prefs.getString(historyEntryKey(i), null);
             history.add(new HistoryItem(title));
         }
     }
 
     private void saveHistory() {
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt("history_size", history.size());
+        editor.putInt(historySizeKey(), history.size());
         for (int i = 0; i < history.size(); i++) {
-            editor.putString("history_" + i, history.get(i).getTerm());
+            editor.putString(historyEntryKey(i), history.get(i).getTerm());
         }
         editor.apply();
+    }
+
+    /**
+     * Gets the preference key for the history size, prefixed with the history ID, if set.
+     * @return the preference key for the history size
+     */
+    private String historySizeKey() {
+        if (searchConfiguration.getHistoryId() != null) {
+            return searchConfiguration.getHistoryId() + "_history_size";
+        } else {
+            return "history_size";
+        }
+    }
+
+    /**
+     * Gets the preference key for a history entry, prefixed with the history ID, if set.
+     * @return the preference key for the history entry
+     */
+    private String historyEntryKey(int i) {
+        if (searchConfiguration.getHistoryId() != null) {
+            return searchConfiguration.getHistoryId() + "_history_" + i;
+        } else {
+            return "history_" + i;
+        }
     }
 
     private void clearHistory() {

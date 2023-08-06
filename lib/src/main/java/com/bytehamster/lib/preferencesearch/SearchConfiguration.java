@@ -21,6 +21,7 @@ public class SearchConfiguration {
     private static final String ARGUMENT_INDEX_INDIVIDUAL_PREFERENCES = "individual_prefs";
     private static final String ARGUMENT_FUZZY_ENABLED = "fuzzy";
     private static final String ARGUMENT_HISTORY_ENABLED = "history_enabled";
+    private static final String ARGUMENT_HISTORY_ID = "history_id";
     private static final String ARGUMENT_SEARCH_BAR_ENABLED = "search_bar_enabled";
     private static final String ARGUMENT_BREADCRUMBS_ENABLED = "breadcrumbs_enabled";
     private static final String ARGUMENT_REVEAL_ANIMATION_SETTING = "reveal_anim_setting";
@@ -32,6 +33,7 @@ public class SearchConfiguration {
     private ArrayList<PreferenceItem> preferencesToIndex = new ArrayList<>();
     private ArrayList<String> bannedKeys = new ArrayList<>();
     private boolean historyEnabled = true;
+    private String historyId = null;
     private boolean breadcrumbsEnabled = false;
     private boolean fuzzySearchEnabled = true;
     private boolean searchBarEnabled = true;
@@ -85,6 +87,7 @@ public class SearchConfiguration {
         arguments.putString(ARGUMENT_TEXT_HINT, textHint);
         arguments.putString(ARGUMENT_TEXT_CLEAR_HISTORY, textClearHistory);
         arguments.putString(ARGUMENT_TEXT_NO_RESULTS, textNoResults);
+        arguments.putString(ARGUMENT_HISTORY_ID, historyId);
         return arguments;
     }
 
@@ -100,6 +103,7 @@ public class SearchConfiguration {
         config.textHint = bundle.getString(ARGUMENT_TEXT_HINT);
         config.textClearHistory = bundle.getString(ARGUMENT_TEXT_CLEAR_HISTORY);
         config.textNoResults = bundle.getString(ARGUMENT_TEXT_NO_RESULTS);
+        config.historyId = bundle.getString(ARGUMENT_HISTORY_ID);
         return config;
     }
 
@@ -120,6 +124,15 @@ public class SearchConfiguration {
      */
     public void setHistoryEnabled(boolean historyEnabled) {
         this.historyEnabled = historyEnabled;
+    }
+
+    /**
+     * Sets the id to use for saving the history. Preference screens with the same history id will share the same
+     * history. The default id is null (no id).
+     * @param historyId the history id
+     */
+    public void setHistoryId(String historyId) {
+        this.historyId = historyId;
     }
 
     /**
@@ -239,6 +252,10 @@ public class SearchConfiguration {
 
     boolean isHistoryEnabled() {
         return historyEnabled;
+    }
+
+    String getHistoryId() {
+        return historyId;
     }
 
     boolean isBreadcrumbsEnabled() {
