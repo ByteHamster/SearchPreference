@@ -38,7 +38,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.github.ByteHamster'
                 artifactId = 'SearchPreference'
-                version = 'v2.3.0'
+                version = 'v2.4.0'
             }
         }
     }
