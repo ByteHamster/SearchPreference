@@ -70,6 +70,12 @@ class SearchPreferenceAdapter extends RecyclerView.Adapter<SearchPreferenceAdapt
                 onItemClickListener.onItemClicked(listItem, h.getAdapterPosition());
             }
         });
+        h.root.setOnLongClickListener(v -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemDeleteClicked(h.getAdapterPosition());
+            }
+            return false;
+        });
     }
 
     void setContent(List<ListItem> items) {
@@ -97,6 +103,7 @@ class SearchPreferenceAdapter extends RecyclerView.Adapter<SearchPreferenceAdapt
 
     interface SearchClickListener {
         void onItemClicked(ListItem item, int position);
+        void onItemDeleteClicked(int position);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

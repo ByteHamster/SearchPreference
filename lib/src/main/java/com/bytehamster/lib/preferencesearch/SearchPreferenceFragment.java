@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
@@ -264,6 +265,31 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
             } catch (ClassCastException e) {
                 throw new ClassCastException(getActivity().toString() + " must implement SearchPreferenceResultListener");
             }
+        }
+    }
+
+    @Override
+    public void onItemDeleteClicked(int position) {
+        if (searchConfiguration.isHistoryEnabled()) {
+            showDeleteConfirmationDialog(position);
+        }
+    }
+
+    private void showDeleteConfirmationDialog(final int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setMessage("Delete this search history ?");
+        builder.setPositiveButton("Delete", (dialog, which) -> deleteHistoryItem(position));
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void deleteHistoryItem(int position) {
+        if (position >= 0 && position < history.size()) {
+            history.remove(position);
+            saveHistory();
+            updateSearchResults(viewHolder.searchView.getText().toString());
         }
     }
 
