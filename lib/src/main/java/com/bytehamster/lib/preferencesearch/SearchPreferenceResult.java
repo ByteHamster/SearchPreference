@@ -1,12 +1,10 @@
 package com.bytehamster.lib.preferencesearch;
 
-import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.RippleDrawable;
-import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
@@ -17,7 +15,6 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceGroup;
 import androidx.recyclerview.widget.RecyclerView;
-
 
 public class SearchPreferenceResult {
     private final String key;
@@ -79,11 +76,11 @@ public class SearchPreferenceResult {
                 recyclerView.postDelayed(() -> {
                     RecyclerView.ViewHolder holder = recyclerView.findViewHolderForAdapterPosition(position);
                     if (holder != null) {
-                        Drawable background = holder.itemView.getBackground();
-                        if (Build.VERSION.SDK_INT >= 21 && background instanceof RippleDrawable) {
-                            forceRippleAnimation((RippleDrawable) background);
-                            return;
-                        }
+                        Drawable oldBackground = holder.itemView.getBackground();
+                        int color = getColorFromAttr(prefsFragment.getContext(), android.R.attr.textColorPrimary);
+                        holder.itemView.setBackgroundColor(color & 0xffffff | 0x33000000);
+                        new Handler().postDelayed(() -> holder.itemView.setBackgroundDrawable(oldBackground), 1000);
+                        return;
                     }
                     highlightFallback(prefsFragment, prefResult);
                 }, 200);
@@ -94,20 +91,13 @@ public class SearchPreferenceResult {
     }
 
     /**
-     * Alternative (old) highlight method if ripple does not work
+     * Alternative highlight method if accessing the view did not work
      */
     private void highlightFallback(PreferenceFragmentCompat prefsFragment, final Preference prefResult) {
-        TypedValue typedValue = new TypedValue();
-        Resources.Theme theme = prefsFragment.getActivity().getTheme();
-        theme.resolveAttribute(android.R.attr.textColorPrimary, typedValue, true);
-        TypedArray arr = prefsFragment.getActivity().obtainStyledAttributes(typedValue.data, new int[]{
-                android.R.attr.textColorPrimary});
-        int color = arr.getColor(0, 0xff3F51B5);
-        arr.recycle();
-
         final Drawable oldIcon = prefResult.getIcon();
         final boolean oldSpaceReserved = prefResult.isIconSpaceReserved();
         Drawable arrow = AppCompatResources.getDrawable(prefsFragment.getContext(), R.drawable.searchpreference_ic_arrow_right);
+        int color = getColorFromAttr(prefsFragment.getContext(), android.R.attr.textColorPrimary);
         arrow.setColorFilter(color, PorterDuff.Mode.SRC_IN);
         prefResult.setIcon(arrow);
         prefsFragment.scrollToPreference(prefResult);
@@ -117,12 +107,15 @@ public class SearchPreferenceResult {
         }, 1000);
     }
 
-    @TargetApi(21)
-    protected void forceRippleAnimation(RippleDrawable background) {
-        final RippleDrawable rippleDrawable = background;
-        Handler handler = new Handler();
-        rippleDrawable.setState(new int[]{android.R.attr.state_pressed, android.R.attr.state_enabled});
-        handler.postDelayed(() -> rippleDrawable.setState(new int[]{}), 1000);
+    private int getColorFromAttr(Context context, int attr) {
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+        theme.resolveAttribute(attr, typedValue, true);
+        TypedArray arr = context.obtainStyledAttributes(typedValue.data, new int[]{
+                android.R.attr.textColorPrimary});
+        int color = arr.getColor(0, 0xff3F51B5);
+        arr.recycle();
+        return color;
     }
 
     /**
