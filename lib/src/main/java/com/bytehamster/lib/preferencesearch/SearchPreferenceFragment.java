@@ -1,5 +1,6 @@
 package com.bytehamster.lib.preferencesearch;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,7 +8,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -57,6 +57,7 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
         loadHistory();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.searchpreference_fragment, container, false);
@@ -104,7 +105,7 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
         if (anim != null) {
             AnimationUtils.registerCircularRevealAnimation(getContext(), rootView, anim);
         }
-
+        rootView.setOnTouchListener((v, event) -> true);
         return rootView;
     }
 
