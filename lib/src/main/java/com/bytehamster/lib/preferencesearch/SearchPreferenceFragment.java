@@ -82,6 +82,9 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
                 }
                 return true;
             });
+            if (searchConfiguration.getTextClearHistory() != null) {
+                popup.getMenu().findItem(R.id.clear_history).setTitle(searchConfiguration.getTextClearHistory());
+            }
             popup.show();
         });
 
