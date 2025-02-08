@@ -1,12 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 30
+    namespace "com.bytehamster.preferencesearch"
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.bytehamster.preferencesearch"
-        minSdkVersion 14
-        targetSdkVersion 30
+        minSdk 14
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 

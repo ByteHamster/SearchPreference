@@ -2,11 +2,12 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 
 android {
-    compileSdkVersion 30
+    namespace "com.bytehamster.lib.preferencesearch"
+    compileSdk 34
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 30
+        minSdk 14
+        targetSdk 34
         vectorDrawables.useSupportLibrary = true
     }
 
@@ -35,7 +36,7 @@ afterEvaluate {
         publications {
             // Creates a Maven publication called "release".
             release(MavenPublication) {
-                from components.release
+                from components.findByName('release')
                 groupId = 'com.github.ByteHamster'
                 artifactId = 'SearchPreference'
                 version = 'v2.5.1'
