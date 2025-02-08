@@ -39,7 +39,7 @@ afterEvaluate {
                 from components.findByName('release')
                 groupId = 'com.github.ByteHamster'
                 artifactId = 'SearchPreference'
-                version = 'v2.6.0'
+                version = 'v2.6.1'
             }
         }
     }
