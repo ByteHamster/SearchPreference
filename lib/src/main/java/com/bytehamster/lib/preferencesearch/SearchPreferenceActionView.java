@@ -4,7 +4,6 @@ import android.content.Context;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import android.util.AttributeSet;
-import android.view.View;
 import androidx.fragment.app.FragmentManager;
 
 public class SearchPreferenceActionView extends SearchView {
