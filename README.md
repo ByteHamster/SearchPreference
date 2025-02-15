@@ -57,6 +57,7 @@ And react to search results in your Activity:
 ## Translations
 
 This library currently contains only a limited number of translations. If you want to translate
-the texts shown by the library together with your app's other strings, you can just override
-the strings defined in `lib/src/main/res/values/strings.xml` in your own application by copying
-those lines to your app's `strings.xml`.
+the texts shown by the library together with your app's other strings, you can override
+the strings in the preference xml file using attributes like `search:textNoResults`.
+Refer to [`attrs.xml`](lib/src/main/res/values/attrs.xml) for details.
+You can also overwrite the strings when constructing the SearchConfiguration object.

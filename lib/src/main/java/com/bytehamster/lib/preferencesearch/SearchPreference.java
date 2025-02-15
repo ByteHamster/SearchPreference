@@ -50,6 +50,16 @@ public class SearchPreference extends Preference implements View.OnClickListener
             searchConfiguration.setTextNoResults(a.getText(0).toString());
         }
         a.recycle();
+        a = getContext().obtainStyledAttributes(attrs, new int[] {R.attr.textClearInput});
+        if (a.getText(0) != null) {
+            searchConfiguration.setTextClearInput(a.getText(0).toString());
+        }
+        a.recycle();
+        a = getContext().obtainStyledAttributes(attrs, new int[] {R.attr.textMore});
+        if (a.getText(0) != null) {
+            searchConfiguration.setTextMore(a.getText(0).toString());
+        }
+        a.recycle();
     }
 
     @Override

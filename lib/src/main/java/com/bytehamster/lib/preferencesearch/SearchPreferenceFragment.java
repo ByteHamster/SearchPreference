@@ -73,6 +73,12 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
         if (searchConfiguration.getTextNoResults() != null) {
             viewHolder.noResults.setText(searchConfiguration.getTextNoResults());
         }
+        if (searchConfiguration.getTextClearInput() != null) {
+            viewHolder.clearButton.setContentDescription(searchConfiguration.getTextClearInput());
+        }
+        if (searchConfiguration.getTextMore() != null) {
+            viewHolder.moreButton.setContentDescription(searchConfiguration.getTextMore());
+        }
         viewHolder.moreButton.setOnClickListener(v -> {
             PopupMenu popup = new PopupMenu(getContext(), viewHolder.moreButton);
             popup.getMenuInflater().inflate(R.menu.searchpreference_more, popup.getMenu());

@@ -28,6 +28,8 @@ public class SearchConfiguration {
     private static final String ARGUMENT_TEXT_HINT = "text_hint";
     private static final String ARGUMENT_TEXT_CLEAR_HISTORY = "text_clear_history";
     private static final String ARGUMENT_TEXT_NO_RESULTS = "text_no_results";
+    private static final String ARGUMENT_TEXT_CLEAR_INPUT = "text_clear_input";
+    private static final String ARGUMENT_TEXT_MORE = "text_more";
 
     private ArrayList<SearchIndexItem> filesToIndex = new ArrayList<>();
     private ArrayList<PreferenceItem> preferencesToIndex = new ArrayList<>();
@@ -43,6 +45,8 @@ public class SearchConfiguration {
     private String textClearHistory;
     private String textNoResults;
     private String textHint;
+    private String textClearInput;
+    private String textMore;
 
     SearchConfiguration() {
 
@@ -87,6 +91,8 @@ public class SearchConfiguration {
         arguments.putString(ARGUMENT_TEXT_HINT, textHint);
         arguments.putString(ARGUMENT_TEXT_CLEAR_HISTORY, textClearHistory);
         arguments.putString(ARGUMENT_TEXT_NO_RESULTS, textNoResults);
+        arguments.putString(ARGUMENT_TEXT_CLEAR_INPUT, textClearInput);
+        arguments.putString(ARGUMENT_TEXT_MORE, textMore);
         arguments.putString(ARGUMENT_HISTORY_ID, historyId);
         return arguments;
     }
@@ -103,6 +109,8 @@ public class SearchConfiguration {
         config.textHint = bundle.getString(ARGUMENT_TEXT_HINT);
         config.textClearHistory = bundle.getString(ARGUMENT_TEXT_CLEAR_HISTORY);
         config.textNoResults = bundle.getString(ARGUMENT_TEXT_NO_RESULTS);
+        config.textClearInput = bundle.getString(ARGUMENT_TEXT_CLEAR_INPUT);
+        config.textMore = bundle.getString(ARGUMENT_TEXT_MORE);
         config.historyId = bundle.getString(ARGUMENT_HISTORY_ID);
         return config;
     }
@@ -296,6 +304,22 @@ public class SearchConfiguration {
 
     public void setTextHint(String textHint) {
         this.textHint = textHint;
+    }
+
+    public String getTextClearInput() {
+        return textClearInput;
+    }
+
+    public void setTextClearInput(String textClearInput) {
+        this.textClearInput = textClearInput;
+    }
+
+    public String getTextMore() {
+        return textMore;
+    }
+
+    public void setTextMore(String textMore) {
+        this.textMore = textMore;
     }
 
     /**
