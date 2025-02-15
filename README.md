@@ -1,6 +1,9 @@
 # SearchPreference
 
-This is a library for Android apps that allows to search inside Preference xml files. The library provides a subclass of `Preference` that can be integrated into existing apps easily.
+[![](https://jitpack.io/v/ByteHamster/SearchPreference.svg)](https://jitpack.io/#ByteHamster/SearchPreference)
+
+This is a library for Android apps that allows to search inside Preference xml files.
+The library provides a subclass of `Preference` that can be integrated into existing apps easily.
 
 <img width="200" src="https://raw.githubusercontent.com/ByteHamster/PreferenceSearch/master/screenshots/main.png" /> <img width="200" src="https://raw.githubusercontent.com/ByteHamster/PreferenceSearch/master/screenshots/history.png" /> <img width="200" src="https://raw.githubusercontent.com/ByteHamster/PreferenceSearch/master/screenshots/suggestions.png" /> <img width="200" src="https://raw.githubusercontent.com/ByteHamster/PreferenceSearch/master/screenshots/result.png" />
 
