@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -101,6 +102,13 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
         viewHolder.recyclerView.setAdapter(adapter);
 
         viewHolder.searchView.addTextChangedListener(textWatcher);
+        viewHolder.searchView.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                hideKeyboard();
+                return true;
+            }
+            return false;
+        });
 
         if (!searchConfiguration.isSearchBarEnabled()) {
             viewHolder.cardView.setVisibility(View.GONE);
@@ -208,6 +216,7 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (view != null && imm != null) {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            view.clearFocus();
         }
     }
 
