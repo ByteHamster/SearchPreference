@@ -273,7 +273,9 @@ public class SearchPreferenceFragment extends Fragment implements SearchPreferen
             try {
                 final SearchPreferenceResultListener callback = (SearchPreferenceResultListener) getActivity();
                 PreferenceItem r = results.get(position);
-                addHistoryEntry(r.title);
+                if (r.title != null) {
+                    addHistoryEntry(r.title);
+                }
                 String screen = null;
                 if (!r.keyBreadcrumbs.isEmpty()) {
                     screen = r.keyBreadcrumbs.get(r.keyBreadcrumbs.size() - 1);
