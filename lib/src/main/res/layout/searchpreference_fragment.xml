@@ -5,7 +5,8 @@
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:clipToPadding="false"
-        android:background="?android:attr/windowBackground">
+        android:background="?android:attr/windowBackground"
+        android:fitsSystemWindows="true">
 
     <include layout="@layout/searchpreference_searchbar"
              android:layout_marginLeft="8dp"
