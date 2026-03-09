@@ -1,6 +1,7 @@
 # SearchPreference
 
 [![](https://jitpack.io/v/ByteHamster/SearchPreference.svg)](https://jitpack.io/#ByteHamster/SearchPreference)
+[![Maven Central](https://img.shields.io/maven-central/v/com.bytehamster/lib.preferencesearch.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/com.bytehamster/lib.preferencesearch)
 
 This is a library for Android apps that allows to search inside Preference xml files.
 The library provides a subclass of `Preference` that can be integrated into existing apps easily.
@@ -12,16 +13,7 @@ The library provides a subclass of `Preference` that can be integrated into exis
 Add PreferenceSearch to your `app/build.gradle`:
 
     dependencies {
-        implementation 'com.github.ByteHamster:SearchPreference:2.7.0'
-    }
-
-Add PreferenceSearch to your `build.gradle`:
-
-    allprojects {
-        repositories {
-            // ...
-            maven { url 'https://jitpack.io' }
-        }
+        implementation 'com.bytehamster:lib.preferencesearch:2.7.3'
     }
 
 Add search bar to your `preferences.xml` file:
@@ -64,3 +56,4 @@ the texts shown by the library together with your app's other strings, you can o
 the strings in the preference xml file using attributes like `search:textNoResults`.
 Refer to [`attrs.xml`](lib/src/main/res/values/attrs.xml) for details.
 You can also overwrite the strings when constructing the SearchConfiguration object.
+
